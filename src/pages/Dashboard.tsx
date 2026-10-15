@@ -17,6 +17,7 @@ import { LevelCard, Quests } from '../components/Game';
 import { Reveal } from '../components/motion';
 import { unfinished } from '../lib/resume';
 import { JourneyCodeCard } from '../components/JourneyCode';
+import { dueOutcomeCheckIns } from '../lib/outcomes';
 
 export default function Dashboard() {
   const { profile } = useStore();
@@ -37,6 +38,7 @@ export default function Dashboard() {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
   const resume = unfinished(profile);
+  const followUps = useMemo(() => dueOutcomeCheckIns(profile), [profile]);
 
   return (
     <div className="wrap dash">
@@ -70,6 +72,16 @@ export default function Dashboard() {
         </section>
       )}
 
+      {followUps.length > 0 && (
+        <section className="callout callout--evidence dash__follow-up" aria-labelledby="follow-up-h">
+          <Icon name="check" size={20} />
+          <div>
+            <strong id="follow-up-h" className="callout__title">A follow-up is ready</strong>
+            <div>Tell us what happened after a simulation. It takes about one minute and never changes your match score. <Link to="/research/check-in">Check in now</Link></div>
+          </div>
+        </section>
+      )}
+
       <section className="dash__game">
         <LevelCard />
         <Quests />
@@ -93,16 +105,16 @@ export default function Dashboard() {
         </div>
 
         <div className="dash__next">
-          <h2 className="h3">Continue my journey</h2>
+          <h2 className="h3">Best next step</h2>
           <ol className="next-list">
             {actions.map((a) => (
-              <li key={a.id}>
+              <li key={a.id} className={a === actions[0] ? 'is-best' : ''}>
                 <Link to={a.to} className="next-item">
                   <span className={`next-item__kind kind-${a.kind}`} aria-hidden="true">
                     <Icon name={a.kind === 'path' ? 'path' : a.kind === 'careers' ? 'careers' : a.kind} size={18} />
                   </span>
                   <span>
-                    <span className="next-item__title">{a.title}</span>
+                    <span className="next-item__title">{a === actions[0] ? `Recommended: ${a.title}` : a.title}</span>
                     <span className="next-item__why">{a.why}</span>
                   </span>
                   <Icon name="arrowRight" size={18} />

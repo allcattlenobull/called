@@ -6,7 +6,7 @@ Called is a free, private career-discovery and purpose platform for anyone worki
 
 > We are not trying to tell people what they should become. We are helping them become wise enough to choose.
 
-Live site (after the first deploy): `https://<username>.github.io/called/`
+Live site: `https://allcattlenobull.github.io/called/`
 
 ---
 
@@ -22,6 +22,8 @@ Live site (after the first deploy): `https://<username>.github.io/called/`
 - [Recommendation methodology](#recommendation-methodology)
 - [Research and trust audit](docs/RESEARCH.md)
 - [Instrument selection and validation pilot](docs/INSTRUMENT_SELECTION.md)
+- [Simulation validation protocol](docs/VALIDATION_PROTOCOL.md)
+- [Usability and trust study](docs/USABILITY_STUDY.md)
 - [Project structure](#project-structure)
 - [Testing](#testing)
 - [Future roadmap](#future-roadmap)
@@ -48,21 +50,21 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 | Area | What it does |
 | --- | --- |
 | **Onboarding** | Explains that Called collects evidence rather than handing down answers. No account, no giant questionnaire. Start exploring or build a Purpose Compass. |
-| **Discover** | Six assessments: interests (30 activities), skills (14, evidence-anchored), aptitudes (15 interactive puzzles across 5 kinds of thinking), work style (12 this-or-that choices), values (sort 14 into tiers), lifestyle (11 priorities). |
-| **Purpose Compass** | A living profile with 11 dimensions (interests, skills, aptitudes, work style, values, lifestyle, experience, feedback, gifts, service, problems), each with a strength and an evidence level, drawn as a signature “bloom”. |
+| **Discover** | Six exploration activities: interests, self-rated skills, unscored reasoning practice plus a separate OMIB pilot, work style, values and lifestyle. Every activity links to its evidence status and limits. |
+| **Purpose Compass** | A living profile with 11 dimensions (including explicitly labeled reasoning practice), each with a strength and an evidence level, drawn as a signature “bloom”. |
 | **Purpose** | Guided reflections: gifts, problems I care about, who I want to help, experiences, what others see in me, biblical principles, a private journal, and a versioned *current* purpose statement. |
 | **Career Explorer** | 178 careers across 15 families and every training level (none, certificate, apprenticeship, associate, bachelor’s, master’s, doctoral). Search plus 11 filters and 5 sorts. |
 | **Career pages** | Explainable match on 8 visible dimensions, reasons, potential conflicts, a reality check (“what people imagine” vs. “what the work looks like”), day-to-day, pay range, outlook, training routes, working conditions, related careers, sources. |
-| **Try It** | 20 browser-based career simulations across finance, people work, teaching, technology, media, science, design, operations, entrepreneurship, healthcare, hospitality and skilled trades, with reflection that updates recommendations. |
+| **Try It** | 20 searchable and filterable career simulations across six work categories. Versioned evidence labels are public; reflections update recommendations while unvalidated response scoring stays in a consent-only shadow validation stream. |
 | **Purpose experiments** | 12 real-world experiments (teach a skill, interview a professional, volunteer, fix something…) with return questions. |
 | **Compare** | Up to three careers side by side across fit, money, education and work-life, with the standout in each row called out. |
 | **Education ROI** | A transparent model of cost, opportunity cost, loan payments, break-even and 10-year net, with every assumption editable. Covers college, community college, certifications, trade school, apprenticeships, military, entrepreneurship and direct-to-work. |
 | **My Path** | Decision support for the paths you’re testing: evidence level and checklist, why it fits, unanswered questions, the next best step and why, decision gates, leading paths, stage-aware roadmaps (Now, 6 months, 12 months) that check themselves off, and what you’ve learned about yourself. |
-| **My Called report** | A shareable summary for parents and counselors. The user chooses what’s included; the journal is never included. Print, save as PDF, download or copy. |
+| **My Called report** | A shareable summary for parents and counselors. The user chooses what’s included; the journal is never included. Print, save as PDF, download, copy, or create a client-encrypted seven-day link. |
 | **Achievements** | Your career evidence (self-understanding, career exposure, real-world experience, decision readiness) first; levels, 20 insight-led badges, weekly quests and evidence points underneath. |
 | **Journey codes** | Every journey has a code like `CALL-7KQ2-M9XD-4HPA-R2TW`. Enter it to return to a journey on a shared device or, with the optional sync service, on any device. |
 | **Resume** | Half-finished assessments and simulations are saved; the dashboard offers to pick them back up. |
-| **Your data** | Export, import, switch and delete journeys. Auto, light and dark themes; faith-lens and backup settings. |
+| **Your data** | Export, import, switch and delete journeys. Research and analytics are separate explicit opt-ins with withdrawal/deletion controls. Includes auto/light/dark themes, plain reading mode, faith-lens and backup settings. |
 
 ## Tech stack and architecture
 
@@ -143,13 +145,13 @@ Many people using Called are still in school, so privacy is a design constraint,
 - **No accounts.** Nothing to sign up for. Each journey has a journey code instead.
 - **Stored on this device.** All profile data lives in the browser (IndexedDB, with localStorage as a fallback).
 - **Optional encrypted backup.** If the sync worker is deployed, the journey is encrypted in the browser with a key derived from the journey code (PBKDF2 then AES-256-GCM) before upload. The server stores only ciphertext under a hash of the code and cannot read anything. Users can turn backups off; deleting data also deletes the backup.
-- **No analytics, ads or third-party scripts.** Fonts are bundled.
+- **No default analytics, ads or third-party scripts.** Fonts are bundled. Minimal page analytics and validation events are separate explicit opt-ins using a random research ID.
 - **User control.** Export my journey, Import my journey, and Delete my data are on the *Your data* page.
-- **Reports are built in the browser** and never uploaded; the journal is never included.
+- **Reports are built in the browser.** Downloads stay local. Optional seven-day links upload only browser-encrypted report text; the decryption key stays in the URL fragment. The journal is never included.
 
 ## Recommendation methodology
 
-Each career gets eight component scores (0 to 100, or empty when evidence is missing): **Interest, Skills, Aptitude, Values, Lifestyle, Purpose, Education fit, Financial fit**. The overall score is the weighted average of the components that exist, adjusted by experience (simulations, reality checks, purpose experiments and how the user marks careers), capped at +20 / −30.
+Each career can receive seven decision-support scores (0 to 100, or empty when evidence is missing): **Interest, Skills, Values, Lifestyle, Purpose, Education fit, Financial fit**. Aptitude is reserved and excluded until an exact instrument is validated for this use. The overall score is the weighted average of the components that exist, adjusted by reflection and experience, capped at +20 / −30.
 
 Every result shows its components, the reasons it appeared, potential conflicts, and an evidence label (*Early signal*, *Growing evidence*, *Solid evidence*). The rules are written by people and are not a validated psychometric instrument; the UI says so. Full details and weights: [docs/RECOMMENDATIONS.md](docs/RECOMMENDATIONS.md).
 
@@ -161,7 +163,7 @@ called/
 ├── docs/                    DATA.md, RECOMMENDATIONS.md
 ├── public/                  favicon, manifest, brand/ logo files
 ├── scripts/
-│   ├── postbuild.mjs        404.html + .nojekyll (+ CNAME) for GitHub Pages
+│   ├── postbuild.mjs        route shells, sitemap, robots, 404 + .nojekyll for GitHub Pages
 │   ├── update-career-data.mjs  BLS wage refresh
 │   └── brand-pdf.mjs        renders the internal brand page to a PDF
 ├── server/sync-worker/      optional encrypted journey sync (Cloudflare Worker)
@@ -198,10 +200,10 @@ called/
 ## Future roadmap
 
 - Generate the career catalog from the O*NET database and BLS projections, scaling to hundreds of occupations with state-level pay.
-- More simulations, including multi-step, branching scenarios.
+- Occupation-expert review and pre-registered validation of versioned simulations before any response score influences matching.
 - Optional AI assistance, kept off the critical path: reflection prompts, purpose-statement drafting, career explanations, roadmap generation and mentor-interview preparation. The engine’s structured inputs and reasons are designed to ground such features.
 - Counselor and classroom tools that respect student control over what is shared.
-- Spanish and other languages.
+- Spanish and other languages, following the translation and instrument-validation gates in `docs/LOCALIZATION.md`.
 - College Scorecard integration for program-level cost and earnings.
 
 ## Contributing

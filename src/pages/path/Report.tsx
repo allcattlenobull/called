@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
 import { useStore } from '../../state/store';
-import { topAptitudes, topInterests, topSkills, topValues, insights } from '../../lib/compass';
+import { topInterests, topSkills, topValues, insights } from '../../lib/compass';
 import { suggestions } from '../../lib/matching';
 import { progressCounts } from '../../lib/next';
-import { APTITUDES, GIFTS, INTERESTS, SKILLS, VALUES } from '../../data/vocab';
+import { GIFTS, INTERESTS, SKILLS, VALUES } from '../../data/vocab';
 import { LIFESTYLE_QUESTIONS } from '../../data/assessments';
 import { CAREER_BY_ID } from '../../data/careers';
 import { SIM_BY_ID } from '../../data/simulations';
@@ -15,6 +15,7 @@ import { Icon } from '../../components/Icon';
 import { Logo } from '../../components/ui';
 import { isDone, learnedInsights, nextBestAction, pathEvidence } from '../../lib/path';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
+import { createSharedReport, revokeSharedReport, sharedReportsAvailable, type SharedReportLink } from '../../lib/sharedReport';
 
 const SECTIONS = [
   { id: 'interests', label: 'Current interests' },
@@ -37,12 +38,13 @@ export default function Report() {
   const [include, setInclude] = useState<Record<SectionId, boolean>>(() => Object.fromEntries(SECTIONS.map((s) => [s.id, true])) as Record<SectionId, boolean>);
   const [showName, setShowName] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState<SharedReportLink | null>(null);
+  const [shareMessage, setShareMessage] = useState('');
   const reportRef = useRef<HTMLElement>(null);
 
   const data = useMemo(() => {
     const strengths = [
       ...topSkills(profile, 4).map((s) => SKILLS[s].label),
-      ...topAptitudes(profile).slice(0, 2).map((a) => `${APTITUDES[a].label} (puzzles)`),
       ...giftSignals(profile).all.slice(0, 4).map((g) => `${GIFTS[g].label} (gift)`),
     ];
     const lifestyle = LIFESTYLE_QUESTIONS.filter((q) => profile.lifestyle[q.key]).map((q) => ({ q: q.question, a: q.options.find((o) => o.value === profile.lifestyle[q.key])?.label ?? '' }));
@@ -261,8 +263,33 @@ export default function Report() {
             >
               {copied ? 'Copied' : 'Copy as text'}
             </button>
+            {sharedReportsAvailable && (
+              shared ? (
+                <div className="card stack share-link">
+                  <label className="field">Private link<input className="input" readOnly value={shared.url} onFocus={(event) => event.currentTarget.select()} /></label>
+                  <p className="small muted">Expires {formatDate(shared.expiresAt)}. Anyone with the complete link can read this snapshot.</p>
+                  <div className="row">
+                    <button type="button" className="btn btn--secondary btn--sm" onClick={async () => { await navigator.clipboard.writeText(shared.url); setShareMessage('Link copied.'); }}>Copy link</button>
+                    <button type="button" className="btn btn--quiet btn--sm" onClick={async () => { await revokeSharedReport(shared.id); setShared(null); setShareMessage('Link revoked.'); }}>Revoke</button>
+                  </div>
+                </div>
+              ) : (
+                <button type="button" className="btn btn--secondary btn--block" onClick={async () => {
+                  try {
+                    setShareMessage('Creating private link…');
+                    setShared(await createSharedReport(asText()));
+                    setShareMessage('Private link created.');
+                  } catch (reason) {
+                    setShareMessage(reason instanceof Error ? reason.message : 'The private link could not be created.');
+                  }
+                }}>
+                  <Icon name="lock" size={18} /> Create 7-day private link
+                </button>
+              )
+            )}
+            {shareMessage && <p className="small" role="status">{shareMessage}</p>}
           </div>
-          <Callout>Nothing is uploaded. The report is built in your browser, and you decide who sees it.</Callout>
+          <Callout>The report is built in your browser. Downloads stay on your device. If you create a private link, only encrypted text is uploaded and the link expires after seven days.</Callout>
         </aside>
       </div>
     </div>

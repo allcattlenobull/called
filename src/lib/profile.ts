@@ -1,6 +1,6 @@
 import type { Profile, Settings } from '../types';
 
-export const PROFILE_VERSION = 2 as const;
+export const PROFILE_VERSION = 3 as const;
 
 export function emptyProfile(): Profile {
   const now = new Date().toISOString();
@@ -31,6 +31,7 @@ export function emptyProfile(): Profile {
     compare: [],
     reality: {},
     simulations: [],
+    outcomeCheckIns: [],
     experiments: [],
     roadmaps: [],
     comparisons: 0,
@@ -65,7 +66,14 @@ export function normalizeCode(input: string): string | null {
   return `CALL-${mapped.slice(0, 4)}-${mapped.slice(4, 8)}-${mapped.slice(8, 12)}-${mapped.slice(12, 16)}`;
 }
 
-export const DEFAULT_SETTINGS: Settings = { faithLens: true, theme: 'system', cloudBackup: true };
+export const DEFAULT_SETTINGS: Settings = {
+  faithLens: true,
+  theme: 'system',
+  cloudBackup: true,
+  researchParticipation: false,
+  productAnalytics: false,
+  readingMode: 'standard',
+};
 
 /** Fill any fields missing from an older or imported profile so the app never crashes on shape. */
 export function normalizeProfile(input: unknown): Profile {
@@ -74,7 +82,7 @@ export function normalizeProfile(input: unknown): Profile {
   const p = input as Partial<Profile>;
   const out: Profile = { ...base, ...p, version: PROFILE_VERSION } as Profile;
   // Guard every array and record so malformed imports degrade gracefully.
-  const arrays: (keyof Profile)[] = ['gifts', 'serves', 'problems', 'experiences', 'feedback', 'journal', 'statements', 'careerViews', 'saved', 'compare', 'simulations', 'experiments', 'roadmaps', 'activeDays', 'seenBadges', 'roiChecked', 'conversations'];
+  const arrays: (keyof Profile)[] = ['gifts', 'serves', 'problems', 'experiences', 'feedback', 'journal', 'statements', 'careerViews', 'saved', 'compare', 'simulations', 'outcomeCheckIns', 'experiments', 'roadmaps', 'activeDays', 'seenBadges', 'roiChecked', 'conversations'];
   for (const k of arrays) if (!Array.isArray(out[k])) (out as unknown as Record<string, unknown>)[k] = [];
   const records: (keyof Profile)[] = ['interests', 'skills', 'aptitudes', 'workStyle', 'values', 'lifestyle', 'completed', 'principleNotes', 'careerStatus', 'reality', 'drafts'];
   for (const k of records) {

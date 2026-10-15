@@ -19,10 +19,10 @@ import { marketFor } from './market';
 
 export type DimensionId = 'interest' | 'skills' | 'aptitude' | 'values' | 'lifestyle' | 'purpose' | 'education' | 'financial';
 
+/** Dimensions currently allowed to influence and appear in career matching. */
 export const DIMENSIONS: { id: DimensionId; label: string; weight: number; family: 'self' | 'life' | 'purpose' }[] = [
   { id: 'interest', label: 'Interest', weight: 1.5, family: 'self' },
   { id: 'skills', label: 'Skills', weight: 0.75, family: 'self' },
-  { id: 'aptitude', label: 'Aptitude', weight: 0.75, family: 'self' },
   { id: 'values', label: 'Values', weight: 1.25, family: 'life' },
   { id: 'lifestyle', label: 'Lifestyle', weight: 1, family: 'life' },
   { id: 'purpose', label: 'Purpose', weight: 1.25, family: 'purpose' },

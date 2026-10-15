@@ -276,6 +276,8 @@ export type RealityResponse = 'definitely' | 'maybe' | 'unsure' | 'probablyNot';
 export type CareerStatus = 'curious' | 'exploring' | 'strong' | 'notForMe';
 
 export interface SimulationResult {
+  /** Distinguishes repeat attempts of the same simulation. */
+  runId?: string;
   simulationId: string;
   completedAt: string;
   /** 1 to 5 */
@@ -286,6 +288,26 @@ export interface SimulationResult {
   natural: string;
   /** Legacy field retained for imported journeys; unvalidated editorial scores are no longer used. */
   quality?: number;
+  /** Version of the simulation content completed, for reproducible validation research. */
+  instrumentVersion?: string;
+  /** Optional immediate outcome measures. These do not affect career matching. */
+  outcome?: {
+    understanding: number;
+    clarity: number;
+    nextStep: 'explore' | 'compare' | 'talk' | 'pause';
+    completedAt: string;
+  };
+}
+
+export interface OutcomeCheckIn {
+  id: string;
+  simulationId: string;
+  simulationRunId: string;
+  window: '7d' | '30d' | '90d';
+  clarity: number;
+  confidence: number;
+  action: 'researched' | 'talked' | 'tried' | 'applied' | 'paused' | 'none';
+  completedAt: string;
 }
 
 export interface ExperimentLog {
@@ -391,6 +413,7 @@ export interface Profile {
   compare: string[];
   reality: Record<string, RealityResponse>;
   simulations: SimulationResult[];
+  outcomeCheckIns: OutcomeCheckIn[];
   experiments: ExperimentLog[];
   roadmaps: Roadmap[];
   comparisons: number;
@@ -415,4 +438,10 @@ export interface Settings {
   theme: 'system' | 'light' | 'dark';
   /** Keep an encrypted backup tied to the journey code (only when a sync service is configured). */
   cloudBackup: boolean;
+  /** Explicit opt-in to send de-identified assessment events for validation research. */
+  researchParticipation: boolean;
+  /** Separate opt-in for minimal page and completion analytics. */
+  productAnalytics: boolean;
+  /** A roomier, simpler presentation for readers who want less density. */
+  readingMode: 'standard' | 'plain';
 }

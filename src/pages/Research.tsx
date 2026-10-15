@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Callout, PageHeader } from '../components/ui';
 import { INSTRUMENT_CANDIDATES, RESEARCH_AUDIT, RESEARCH_SOURCES, researchSourceById, type InstrumentCandidateStatus, type ResearchStatus } from '../data/research';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
@@ -19,6 +20,10 @@ const CANDIDATE_TONE: Record<InstrumentCandidateStatus, string> = {
 
 export default function Research() {
   useDocumentTitle('Research and trust');
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' });
+  }, [hash]);
 
   return (
     <div className="wrap wrap--narrow research-page">
@@ -30,7 +35,7 @@ export default function Research() {
 
       <section className="prose" aria-labelledby="standard-h">
         <h2 id="standard-h">Our evidence standard</h2>
-        <p>We use “high efficacy” narrowly. A method must match the intended construct and outcome, have peer-reviewed evidence, and be administered and scored the way the research studied it. A paper about validated interest inventories does not validate Called’s custom interest prompts. A paper about situational-judgment tests does not validate an untested scenario score.</p>
+        <p>We use “high efficacy” narrowly. A method must match the intended construct and outcome, have at least five directly relevant peer-reviewed studies, and be administered and scored the way the research studied it. A paper about validated interest inventories does not validate Called’s custom interest prompts. A paper about situational-judgment tests does not validate an untested scenario score.</p>
         <div className="research-principles">
           <div className="research-principle"><strong>Construct validity</strong><span>Are we measuring the thing we name?</span></div>
           <div className="research-principle"><strong>Reliability</strong><span>Would the signal be reasonably stable and precise?</span></div>
@@ -53,7 +58,7 @@ export default function Research() {
         <div className="section-heading"><div><span className="eyebrow">Component by component</span><h2 id="audit-h">The full audit</h2></div><span className="small muted">{RESEARCH_AUDIT.length} areas reviewed</span></div>
         <div className="research-audit__list">
           {RESEARCH_AUDIT.map((item) => (
-            <article className="card research-card" key={item.id}>
+            <article className="card research-card" key={item.id} id={item.id}>
               <div className="row row--between research-card__head"><h3 className="h3">{item.area}</h3><span className={['tag', STATUS_TONE[item.status]].join(' ')}>{item.status}</span></div>
               <dl className="research-card__facts">
                 <div><dt>What Called does</dt><dd>{item.current}</dd></div>
@@ -65,6 +70,13 @@ export default function Research() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="prose" aria-labelledby="validation-h">
+        <h2 id="validation-h">How validation works in the live product</h2>
+        <p>Every simulation now has a visible version, construct map, and review status. With explicit consent, Called can copy choice IDs and a hidden research score into a separate de-identified research stream. Free-text answers, names, journals, and journey codes are excluded. The research score does not affect recommendations.</p>
+        <p>Immediate questions measure understanding and decision clarity. Optional 7-, 30-, and 90-day follow-ups record whether someone researched, talked with a professional, tried a real activity, applied, or paused. This creates the outcome evidence needed to test reliability, usefulness, fairness, and incremental value before any performance score is allowed into matching.</p>
+        <p><Link to="/data#research">Choose research settings</Link> · <Link to="/feedback">Join the usability study</Link></p>
       </section>
 
       <section className="research-audit" aria-labelledby="candidates-h">

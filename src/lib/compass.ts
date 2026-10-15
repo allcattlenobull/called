@@ -37,7 +37,7 @@ const clamp = (n: number) => Math.min(1, Math.max(0, n));
 export const COMPASS_ORDER: { id: CompassDimId; label: string; question: string; family: CompassFamily; href: string }[] = [
   { id: 'interests', label: 'Interests', question: 'What captures your attention?', family: 'self', href: '/discover/interests' },
   { id: 'skills', label: 'Skills', question: 'What can you currently do well?', family: 'self', href: '/discover/skills' },
-  { id: 'aptitudes', label: 'Aptitudes', question: 'What may come naturally to you?', family: 'self', href: '/discover/aptitudes' },
+  { id: 'aptitudes', label: 'Reasoning practice', question: 'What thinking exercises have you practiced?', family: 'self', href: '/discover/aptitudes' },
   { id: 'workStyle', label: 'Work style', question: 'How do you prefer to work?', family: 'self', href: '/discover/workStyle' },
   { id: 'values', label: 'Values', question: 'What matters to you in work and life?', family: 'life', href: '/discover/values' },
   { id: 'lifestyle', label: 'Lifestyle', question: 'What kind of life are you trying to create?', family: 'life', href: '/discover/lifestyle' },
@@ -111,11 +111,8 @@ export function computeCompass(p: Profile): CompassDim[] {
       case 'aptitudes': {
         const done = Object.values(p.aptitudes).reduce((s, v) => s + (v?.total ?? 0), 0);
         evidence = clamp(done / APTITUDE_ITEMS.length);
-        const a = aptitudeSignals(p);
-        strength = Math.max(0, ...Object.values(a).map((v) => v ?? 0));
-        const top = topAptitudes(p);
-        if (top.length) summary = list(top.slice(0, 2).map((t) => APTITUDES[t].label));
-        else if (done) summary = 'No standout yet';
+        strength = evidence;
+        if (done) summary = 'Practice only—not scored for fit';
         break;
       }
       case 'workStyle': {

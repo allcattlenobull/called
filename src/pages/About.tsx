@@ -9,7 +9,7 @@ import { useDocumentTitle } from '../lib/useDocumentTitle';
 const EXPLAIN: Record<string, string> = {
   interest: 'How strongly you responded to the kinds of activities this work centers on, blended with how much those interests stand out for you. Enjoyed experiences, simulations and experiments nudge it.',
   skills: 'Your self-rated skill levels for the skills this work uses most. Missing skills lower it, but skills can be learned, so it carries less weight.',
-  aptitude: 'Your results on the short puzzles for the kinds of thinking this work draws on. A small sample, so it carries less weight.',
+  aptitude: 'Reserved for a future validated measure. The current practice puzzles and OMIB pilot do not affect career ranking.',
   values: 'Whether this career tends to support or strain the values you ranked essential and important.',
   lifestyle: 'How the schedule, remote options, physical demands, travel, stress, business potential, income stability and location fit what you said you want, plus your work-style preferences.',
   purpose: 'Overlap between your gifts (including what others notice), who you want to serve and the problems you care about, and the same things for this career.',
@@ -54,7 +54,7 @@ export default function About() {
 
         <h2 id="how-matching-works">How matching works</h2>
         <p>
-          Every career gets eight component scores from 0 to 100. A component stays empty, drawn as a dashed bar, until you’ve given Called evidence for it. The overall score is a weighted average of the components that exist, then adjusted by your experience: simulations, reality checks, purpose experiments and how you’ve marked careers. Experience is capped at plus 20 or minus 30 so one reaction can’t overwhelm everything else.
+          Every career can receive seven current decision-support scores from 0 to 100. A component stays empty until you’ve given Called evidence for it. Aptitude is deliberately excluded until an exact instrument is validated for this use. The overall score is a weighted average of the components that exist, then adjusted by your experience: simulation reflections, reality checks, purpose experiments and how you’ve marked careers. Experience is capped at plus 20 or minus 30 so one reaction can’t overwhelm everything else.
         </p>
         <div className="table-wrap">
           <table className="table">
@@ -110,7 +110,7 @@ export default function About() {
 
         <h2>Privacy</h2>
         <p>
-          Called has no accounts. Your profile, journal and results are stored in your browser on this device, and every journey has its own journey code. If cross-device restore is turned on, an encrypted copy is saved under a scrambled version of your code; it is locked with your code before it leaves your browser, so no one else, including Called, can read it. Fonts are bundled with the app, and there are no analytics or advertising scripts. You can <Link to="/data">export, import, switch or delete everything</Link> at any time.
+          Called has no accounts. Your profile, journal and results are stored in your browser on this device, and every journey has its own journey code. If cross-device restore is turned on, an encrypted copy is saved under a scrambled version of your code; it is locked with your code before it leaves your browser. Research events and minimal page analytics are separate, de-identified, and off until you explicitly opt in. Fonts are bundled with the app and there are no advertising scripts. You can <Link to="/data">export, import, switch, withdraw research consent, or delete data</Link> at any time.
         </p>
 
         <h2>For parents, counselors, teachers and mentors</h2>

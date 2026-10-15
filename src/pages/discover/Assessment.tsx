@@ -2,7 +2,7 @@ import type { ComponentType } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ASSESSMENTS } from '../../data/assessments';
 import type { AssessmentId } from '../../types';
-import { PageHeader } from '../../components/ui';
+import { Callout, PageHeader } from '../../components/ui';
 import NotFound from '../NotFound';
 import { InterestsAssessment } from './InterestsAssessment';
 import { SkillsAssessment } from './SkillsAssessment';
@@ -11,6 +11,7 @@ import { WorkStyleAssessment } from './WorkStyleAssessment';
 import { ValuesAssessment } from './ValuesAssessment';
 import { LifestyleAssessment } from './LifestyleAssessment';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
+import { RESEARCH_AUDIT } from '../../data/research';
 
 const VIEWS: Record<AssessmentId, ComponentType> = {
   interests: InterestsAssessment,
@@ -27,9 +28,15 @@ export default function Assessment() {
   useDocumentTitle(meta?.title);
   if (!meta) return <NotFound />;
   const View = VIEWS[meta.id];
+  const audit = RESEARCH_AUDIT.find((item) => item.id === (meta.id === 'workStyle' ? 'work-style' : meta.id));
   return (
     <div className="wrap">
       <PageHeader title={meta.question} lead={meta.blurb} back={{ to: '/discover', label: 'Discover' }} />
+      {audit && (
+        <Callout tone={audit.status === 'Called-specific evidence missing' ? 'warn' : 'evidence'} title={audit.status}>
+          {audit.limit} <Link to={`/research#${audit.id}`}>See the research and limits</Link>.
+        </Callout>
+      )}
       <View />
     </div>
   );

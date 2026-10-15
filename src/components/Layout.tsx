@@ -6,18 +6,22 @@ import { Celebrations, LevelChip } from './Game';
 import { ThemeToggle } from './ThemeToggle';
 import { useStore } from '../state/store';
 import { hasStarted } from '../lib/profile';
+import { flushResearchQueue, recordResearchEvent } from '../lib/researchParticipation';
 
-const NAV: { to: string; label: string; icon: IconName; end?: boolean }[] = [
+const PRIMARY_NAV: { to: string; label: string; icon: IconName; end?: boolean }[] = [
   { to: '/', label: 'Home', icon: 'home', end: true },
   { to: '/discover', label: 'Discover', icon: 'discover' },
   { to: '/purpose', label: 'Purpose', icon: 'purpose' },
   { to: '/careers', label: 'Careers', icon: 'careers' },
   { to: '/try', label: 'Try It', icon: 'try' },
-  { to: '/compare', label: 'Compare', icon: 'compare' },
   { to: '/path', label: 'My Path', icon: 'path' },
+];
+
+const MORE_NAV: { to: string; label: string; icon: IconName; end?: boolean }[] = [
+  { to: '/compare', label: 'Compare careers', icon: 'compare' },
   { to: '/network', label: 'Connections', icon: 'purpose' },
   { to: '/about', label: 'About', icon: 'about' },
-  { to: '/research', label: 'Research', icon: 'about' },
+  { to: '/research', label: 'Research and trust', icon: 'about' },
 ];
 
 const TABS = ['/', '/discover', '/purpose', '/careers', '/try'];
@@ -25,7 +29,7 @@ const TABS = ['/', '/discover', '/purpose', '/careers', '/try'];
 export function Layout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const { profile } = useStore();
+  const { profile, settings } = useStore();
   const started = hasStarted(profile);
   const mainRef = useRef<HTMLElement>(null);
   const first = useRef(true);
@@ -40,6 +44,15 @@ export function Layout({ children }: { children: ReactNode }) {
     window.scrollTo({ top: 0 });
     mainRef.current?.focus({ preventScroll: true });
   }, [location.pathname]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-reading', settings.readingMode);
+    void flushResearchQueue(settings);
+  }, [settings.productAnalytics, settings.readingMode, settings.researchParticipation]);
+
+  useEffect(() => {
+    void recordResearchEvent(settings, 'page_view', { path: location.pathname });
+  }, [location.pathname, settings]);
 
   useEffect(() => {
     if (!open) return;
@@ -63,7 +76,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <Logo />
           </Link>
           <nav className="topnav" aria-label="Primary">
-            {NAV.map((n) => (
+            {PRIMARY_NAV.map((n) => (
               <NavLink key={n.to} to={n.to} end={n.end} className="topnav__link">
                 {n.label}
               </NavLink>
@@ -93,7 +106,7 @@ export function Layout({ children }: { children: ReactNode }) {
             </div>
             <nav aria-label="All sections">
               <ul className="sheet__nav">
-                {NAV.map((n) => (
+                {PRIMARY_NAV.map((n) => (
                   <li key={n.to}>
                     <NavLink to={n.to} end={n.end}>
                       <Icon name={n.icon} />
@@ -103,6 +116,14 @@ export function Layout({ children }: { children: ReactNode }) {
                 ))}
               </ul>
               <ul className="sheet__nav sheet__nav--secondary">
+                {MORE_NAV.map((n) => (
+                  <li key={n.to}>
+                    <NavLink to={n.to} end={n.end}>
+                      <Icon name={n.icon} />
+                      {n.label}
+                    </NavLink>
+                  </li>
+                ))}
                 <li>
                   <NavLink to="/try/experiments">
                     <Icon name="flask" />
@@ -122,9 +143,9 @@ export function Layout({ children }: { children: ReactNode }) {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/research">
-                    <Icon name="about" />
-                    Research and trust
+                  <NavLink to="/feedback">
+                    <Icon name="spark" />
+                    Improve Called
                   </NavLink>
                 </li>
                 <li>
@@ -166,13 +187,14 @@ export function Layout({ children }: { children: ReactNode }) {
             <Link to="/about#sources">Data sources</Link>
             <Link to="/about#how-matching-works">How matching works</Link>
             <Link to="/research">Research and trust</Link>
+            <Link to="/feedback">Give feedback</Link>
             <Link to="/data">Your data</Link>
           </nav>
         </div>
       </footer>
 
       <nav className="tabbar" aria-label="Quick">
-        {NAV.filter((n) => TABS.includes(n.to)).map((n) => (
+        {PRIMARY_NAV.filter((n) => TABS.includes(n.to)).map((n) => (
           <NavLink key={n.to} to={n.to} end={n.end} className="tabbar__link">
             <Icon name={n.icon} size={22} />
             <span>{n.label}</span>

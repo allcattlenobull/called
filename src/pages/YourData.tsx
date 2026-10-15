@@ -8,6 +8,7 @@ import { Callout, OptionGroup, PageHeader } from '../components/ui';
 import { Icon } from '../components/Icon';
 import { formatDate } from '../lib/format';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
+import { queuedResearchEvents, researchServiceAvailable, withdrawResearchParticipation } from '../lib/researchParticipation';
 
 export default function YourData() {
   useDocumentTitle('Your data');
@@ -20,6 +21,7 @@ export default function YourData() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<{ tone: 'evidence' | 'warn'; text: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [confirmResearchDelete, setConfirmResearchDelete] = useState(false);
 
   const doExport = () => {
     const blob = new Blob([exportJourney(profile)], { type: 'application/json' });
@@ -44,7 +46,7 @@ export default function YourData() {
 
   return (
     <div className="wrap wrap--narrow">
-      <PageHeader title="Your data" lead="Your personal Called profile is stored on this device. It isn’t sent anywhere. You’re in control of it." />
+      <PageHeader title="Your data" lead="Your personal Called profile stays on this device unless you choose encrypted backup or voluntary research sharing. You’re in control." />
 
       {message && (
         <div role="status" style={{ marginBottom: 'var(--s-5)' }}>
@@ -57,7 +59,7 @@ export default function YourData() {
           Where your data lives
         </h2>
         <p>
-          Everything you enter, including assessments, reflections, journal entries, simulations and roadmaps, is saved in this browser’s storage on this device. If you clear your browser data or switch devices, it won’t follow you unless you export it.
+          Everything you enter, including assessments, reflections, journal entries, simulations and roadmaps, is saved in this browser’s storage on this device. If you clear browser data or switch devices, use an export{syncAvailable ? ' or your optional encrypted backup' : ''} to restore it.
         </p>
         <p className="small muted">
           Profile started {formatDate(profile.createdAt)}. Last saved {formatDate(profile.updatedAt)}.
@@ -177,6 +179,45 @@ export default function YourData() {
             { value: 'dark' as const, label: 'Dark' },
           ]}
         />
+        <OptionGroup
+          legend="Reading style"
+          layout="row"
+          value={settings.readingMode}
+          onChange={(v) => setSettings({ readingMode: v })}
+          options={[
+            { value: 'standard' as const, label: 'Standard' },
+            { value: 'plain' as const, label: 'Roomier and simpler' },
+          ]}
+        />
+      </section>
+
+      <section className="card stack" id="research" aria-labelledby="research-h" style={{ marginTop: 'var(--s-4)' }}>
+        <h2 id="research-h" className="h3">Voluntary research and analytics</h2>
+        <p>Called works fully with both choices off. If you opt in, a random research ID—not your journey code—is used. Names, journal entries, and free-text simulation responses are excluded from simulation validation data.</p>
+        {!researchServiceAvailable && <Callout tone="warn">The research service is not configured in this deployment. Opted-in events will remain queued on this device until it is available.</Callout>}
+        <label className="check">
+          <input type="checkbox" checked={settings.researchParticipation} onChange={(event) => setSettings({ researchParticipation: event.target.checked })} />
+          Share de-identified simulator outcomes and usability feedback for validation research
+        </label>
+        <label className="check">
+          <input type="checkbox" checked={settings.productAnalytics} onChange={(event) => setSettings({ productAnalytics: event.target.checked })} />
+          Share minimal page visits to help improve navigation
+        </label>
+        <p className="small muted">{queuedResearchEvents()} research event{queuedResearchEvents() === 1 ? '' : 's'} waiting on this device. Consent version: October 15, 2026.</p>
+        {confirmResearchDelete ? (
+          <div className="row">
+            <button type="button" className="btn btn--danger" onClick={async () => {
+              const removed = await withdrawResearchParticipation();
+              setSettings({ researchParticipation: false, productAnalytics: false });
+              setConfirmResearchDelete(false);
+              setMessage({ tone: removed ? 'evidence' : 'warn', text: removed ? 'Research participation stopped and stored research events were deleted.' : 'Sharing is now off and the local queue was cleared. The service could not confirm deletion of previously sent events.' });
+            }}>Yes, withdraw and delete</button>
+            <button type="button" className="btn btn--secondary" onClick={() => setConfirmResearchDelete(false)}>Keep participating</button>
+          </div>
+        ) : (
+          <div><button type="button" className="btn btn--secondary" onClick={() => setConfirmResearchDelete(true)}>Withdraw and delete research data</button></div>
+        )}
+        <p className="small"><a href={`${import.meta.env.BASE_URL}research#validation-h`}>Read the participant and validation information</a> · <a href={`${import.meta.env.BASE_URL}feedback`}>Give usability feedback</a></p>
       </section>
 
       <section className="card stack danger-zone" aria-labelledby="delete-h" style={{ marginTop: 'var(--s-4)' }}>

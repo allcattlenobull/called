@@ -13,8 +13,13 @@ export default defineConfig({
     sourcemap: false,
     rollupOptions: {
       output: {
-        manualChunks: {
-          react: ['react', 'react-dom', 'react-router-dom'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) return 'react-vendor';
+          if (id.includes('/src/data/careers/')) return 'career-data';
+          if (id.includes('/src/data/simulations/')) return 'simulation-data';
+          if (id.includes('/src/data/research')) return 'research-data';
+          if (id.includes('/src/data/scripture/') || id.includes('/src/data/purpose-')) return 'purpose-data';
+          return undefined;
         },
       },
     },

@@ -164,7 +164,7 @@ export default function CareerDetail() {
               </>
             )}
             <p className="small muted" style={{ marginTop: 'var(--s-4)', marginBottom: 0 }}>
-              Scores organize your evidence; they don’t predict your future. <Link to="/about#how-matching-works">How matching works</Link>
+              Called-specific decision support · not a validated prediction. Scores organize your evidence; they don’t predict your future. <Link to="/research#matching">Evidence and limits</Link>
             </p>
           </section>
 
@@ -513,10 +513,10 @@ export default function CareerDetail() {
                 <a href={blsUrl(career.soc)} target="_blank" rel="noreferrer">
                   BLS wage data
                 </a>{' '}
-                (SOC {career.soc}). Descriptions are written by Called and informed by O*NET.
+                (SOC {career.soc}). Wage snapshot: {DATA_SOURCES.wagesAsOf}. Descriptions are written by Called and informed by O*NET.
               </>
             ) : (
-              'This career spans many occupations, so pay is a rough estimate. Descriptions are written by Called.'
+              `This career spans many occupations, so pay is a rough estimate. Wage snapshot: ${DATA_SOURCES.wagesAsOf}. Descriptions are written by Called.`
             )}
           </Callout>
         </aside>

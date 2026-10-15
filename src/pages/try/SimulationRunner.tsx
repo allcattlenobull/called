@@ -12,6 +12,9 @@ import { OverallScore } from '../../components/Match';
 import NotFound from '../NotFound';
 import type { SimulationResult } from '../../types';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
+import { uid } from '../../lib/profile';
+import { SIMULATION_EVIDENCE } from '../../data/simulations/evidence';
+import { recordResearchEvent } from '../../lib/researchParticipation';
 
 type Answer = { picked: string[]; text?: string; submitted: boolean };
 
@@ -19,9 +22,9 @@ export default function SimulationRunner() {
   const { id = '' } = useParams();
   const sim = SIM_BY_ID[id];
   useDocumentTitle(sim ? `${sim.role} simulation` : undefined);
-  const { profile, update } = useStore();
+  const { profile, update, settings } = useStore();
   // The run is saved as a draft, so someone can close the tab mid-simulation and finish later.
-  type Run = { phase: 'intro' | 'steps' | 'reflect' | 'done'; stepIdx: number; answers: Record<string, Answer>; before: Record<string, number | null> };
+  type Run = { phase: 'intro' | 'steps' | 'reflect' | 'done'; stepIdx: number; answers: Record<string, Answer>; before: Record<string, number | null>; startedAt?: string };
   const [run, setRun, clearRun, resumed] = useDraft<Run>(`sim:${id}`, { phase: 'intro', stepIdx: 0, answers: {}, before: {} });
   const { phase, stepIdx, answers, before } = run;
   const setPhase = (ph: Run['phase']) => setRun((r) => ({ ...r, phase: ph }));
@@ -35,6 +38,10 @@ export default function SimulationRunner() {
   const [frustrated, setFrustrated] = useState<string[]>([]);
   const [regularly, setRegularly] = useState<SimulationResult['regularly'] | undefined>();
   const [natural, setNatural] = useState('');
+  const [understanding, setUnderstanding] = useState<number | undefined>();
+  const [clarity, setClarity] = useState<number | undefined>();
+  const [nextStep, setNextStep] = useState<NonNullable<SimulationResult['outcome']>['nextStep'] | undefined>();
+  const [outcomeSaved, setOutcomeSaved] = useState(false);
 
   useEffect(() => {
     headingRef.current?.focus();
@@ -58,7 +65,7 @@ export default function SimulationRunner() {
   const answer = step ? answers[step.id] : undefined;
 
   const start = () => {
-    setRun({ phase: 'steps', stepIdx: 0, answers: {}, before: Object.fromEntries(sim.careerIds.map((c) => [c, CAREER_BY_ID[c] ? matchCareer(CAREER_BY_ID[c], profile).overall : null])) });
+    setRun({ phase: 'steps', stepIdx: 0, answers: {}, before: Object.fromEntries(sim.careerIds.map((c) => [c, CAREER_BY_ID[c] ? matchCareer(CAREER_BY_ID[c], profile).overall : null])), startedAt: new Date().toISOString() });
   };
 
   const pick = (s: SimStep, optionId: string) => {
@@ -79,17 +86,34 @@ export default function SimulationRunner() {
 
   const finish = () => {
     if (!enjoyment || !regularly) return;
+    const completedAt = new Date().toISOString();
+    const runId = uid('simrun');
+    const evidence = SIMULATION_EVIDENCE[sim.id];
     update((p) => {
       p.simulations.push({
+        runId,
         simulationId: sim.id,
-        completedAt: new Date().toISOString(),
+        completedAt,
         enjoyment,
         enjoyed,
         frustrated,
         regularly,
         natural: natural.trim(),
-        quality: Math.round(quality * 100) / 100,
+        instrumentVersion: evidence.version,
       });
+    });
+    void recordResearchEvent(settings, 'simulation_completion', {
+      simulationId: sim.id,
+      runId,
+      instrumentVersion: evidence.version,
+      startedAt: run.startedAt,
+      completedAt,
+      responses: Object.fromEntries(Object.entries(answers).map(([stepId, value]) => [stepId, value.picked])),
+      shadowScore: Math.round(quality * 100) / 100,
+      enjoyment,
+      enjoyed,
+      frustrated,
+      regularly,
     });
     setPhase('done');
     clearRun();
@@ -116,6 +140,10 @@ export default function SimulationRunner() {
         </div>
         <Callout title="There’s no grade">
           You’ll see how professionals might think about each choice. What matters most is noticing what you enjoyed and what felt like a grind.
+        </Callout>
+        <Callout tone="evidence" title={`${SIMULATION_EVIDENCE[sim.id].evidenceStatus} · version ${SIMULATION_EVIDENCE[sim.id].version}`}>
+          This experience is designed for career exploration, not hiring or diagnosis. Its content is mapped to named work constructs; occupation-expert review and outcome validation are still pending.{' '}
+          <Link to="/research#simulations">See the evidence standard</Link>.
         </Callout>
         <div className="runner__nav">
           <span />
@@ -322,6 +350,17 @@ export default function SimulationRunner() {
 
   // done
   const after = sim.careerIds.map((c) => ({ career: CAREER_BY_ID[c], now: CAREER_BY_ID[c] ? matchCareer(CAREER_BY_ID[c], profile) : null })).filter((x) => x.career && x.now);
+  const pendingOutcome = [...profile.simulations].reverse().find((item) => item.simulationId === sim.id && !item.outcome);
+  const saveOutcome = () => {
+    if (!understanding || !clarity || !nextStep) return;
+    const completedAt = new Date().toISOString();
+    update((p) => {
+      const result = p.simulations.find((item) => item.runId === pendingOutcome?.runId) ?? [...p.simulations].reverse().find((item) => item.simulationId === sim.id && !item.outcome);
+      if (result) result.outcome = { understanding, clarity, nextStep, completedAt };
+    });
+    void recordResearchEvent(settings, 'simulation_outcome', { simulationId: sim.id, runId: pendingOutcome?.runId, instrumentVersion: SIMULATION_EVIDENCE[sim.id].version, understanding, clarity, nextStep });
+    setOutcomeSaved(true);
+  };
   return (
     <div className="wrap wrap--narrow sim">
       <span className="tag tag--done">
@@ -367,6 +406,24 @@ export default function SimulationRunner() {
       <p className="small muted" style={{ marginTop: 'var(--s-3)' }}>
         The scenario feedback is for learning, not scoring. Your reflection and reactions are the evidence saved to your path.
       </p>
+      <section className="card stack" aria-labelledby="outcome-h" style={{ marginTop: 'var(--s-5)' }}>
+        <h2 id="outcome-h" className="h3">Did this simulation help?</h2>
+        {outcomeSaved ? (
+          <Callout tone="evidence">Thanks. This outcome is saved separately and does not change your career score.</Callout>
+        ) : (
+          <>
+            <OptionGroup legend="I understand this kind of work better" layout="row" value={understanding} onChange={setUnderstanding} options={[1, 2, 3, 4, 5].map((value) => ({ value, label: String(value), hint: value === 1 ? 'Not yet' : value === 5 ? 'Much better' : undefined }))} />
+            <OptionGroup legend="I feel clearer about whether to explore it" layout="row" value={clarity} onChange={setClarity} options={[1, 2, 3, 4, 5].map((value) => ({ value, label: String(value), hint: value === 1 ? 'Not clear' : value === 5 ? 'Very clear' : undefined }))} />
+            <OptionGroup legend="What will you do next?" value={nextStep} onChange={setNextStep} options={[
+              { value: 'explore' as const, label: 'Explore this career more' },
+              { value: 'compare' as const, label: 'Compare it with another path' },
+              { value: 'talk' as const, label: 'Talk with someone in the field' },
+              { value: 'pause' as const, label: 'Pause this path for now' },
+            ]} />
+            <button type="button" className="btn btn--secondary" disabled={!understanding || !clarity || !nextStep} onClick={saveOutcome}>Save this check-in</button>
+          </>
+        )}
+      </section>
       <div className="row" style={{ marginTop: 'var(--s-5)' }}>
         <Link to="/try" className="btn btn--primary">
           Try another simulation
