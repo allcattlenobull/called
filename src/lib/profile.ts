@@ -38,6 +38,7 @@ export function emptyProfile(): Profile {
     interviews: 0,
     conversations: [],
     code: generateCode(),
+    counselorShareId: uid('learner'),
     activeDays: [],
     seenBadges: [],
     seenLevel: 0,
@@ -102,6 +103,7 @@ export function normalizeProfile(input: unknown): Profile {
   if (typeof out.seenLevel !== 'number') out.seenLevel = 0;
   // Older profiles get a code on first load; malformed codes are replaced.
   if (typeof out.code !== 'string' || !normalizeCode(out.code)) out.code = generateCode();
+  if (typeof out.counselorShareId !== 'string' || !/^learner_[a-z0-9-]{8,}$/i.test(out.counselorShareId)) out.counselorShareId = uid('learner');
   return out;
 }
 

@@ -16,6 +16,8 @@ import { Logo } from '../../components/ui';
 import { isDone, learnedInsights, nextBestAction, pathEvidence } from '../../lib/path';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { createSharedReport, revokeSharedReport, sharedReportsAvailable, type SharedReportLink } from '../../lib/sharedReport';
+import { counselorPacketFile, createCounselorPacket } from '../../lib/counselorReports';
+import { openEmailDraft, shareFile } from '../../lib/email';
 
 const SECTIONS = [
   { id: 'interests', label: 'Current interests' },
@@ -91,6 +93,19 @@ export default function Report() {
     a.download = `called-report-${new Date().toISOString().slice(0, 10)}.html`;
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const counselorPacket = () => counselorPacketFile(createCounselorPacket(profile, showName));
+
+  const downloadCounselorPacket = () => {
+    const file = counselorPacket();
+    const url = URL.createObjectURL(file);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = file.name;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    setShareMessage('Counselor packet downloaded.');
   };
 
   const empty = (s: string) => <p className="muted">{s}</p>;
@@ -248,6 +263,9 @@ export default function Report() {
             <button type="button" className="btn btn--secondary btn--block" onClick={download}>
               <Icon name="download" size={18} /> Download report
             </button>
+            <button type="button" className="btn btn--secondary btn--block" onClick={() => openEmailDraft(`${profile.name ? `${profile.name}’s` : 'My'} Called exploration report`, `${asText()}\n\nOpen Called: ${window.location.origin}${import.meta.env.BASE_URL}`)}>
+              <Icon name="mail" size={18} /> Email this report
+            </button>
             <button
               type="button"
               className="btn btn--quiet btn--block"
@@ -289,7 +307,20 @@ export default function Report() {
             )}
             {shareMessage && <p className="small" role="status">{shareMessage}</p>}
           </div>
-          <Callout>The report is built in your browser. Downloads stay on your device. If you create a private link, only encrypted text is uploaded and the link expires after seven days.</Callout>
+          <section className="card stack" aria-labelledby="counselor-share-h">
+            <h2 id="counselor-share-h" className="h3">Share with a counselor</h2>
+            <p className="small">A counselor packet includes the structured summary needed for a multi-student workspace. It excludes your journey code, journal, and private assessment responses.</p>
+            <button type="button" className="btn btn--secondary btn--block" onClick={downloadCounselorPacket}><Icon name="download" size={18} /> Download counselor packet</button>
+            <button type="button" className="btn btn--quiet btn--block" onClick={async () => {
+              try {
+                const result = await shareFile(counselorPacket(), 'Called counselor packet', 'A student-approved Called exploration summary.');
+                setShareMessage(result === 'shared' ? 'Counselor packet shared.' : 'Packet downloaded. Attach it to an email for your counselor.');
+              } catch (reason) {
+                if (!(reason instanceof DOMException && reason.name === 'AbortError')) setShareMessage('The packet could not be shared. You can download it instead.');
+              }
+            }}><Icon name="mail" size={18} /> Email or share counselor packet</button>
+          </section>
+          <Callout>The report is built in your browser. Downloads stay on your device. Email creates a draft in your mail app, where the report is readable to you and the recipient. Private links upload only encrypted text and expire after seven days.</Callout>
         </aside>
       </div>
     </div>

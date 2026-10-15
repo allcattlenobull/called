@@ -61,10 +61,13 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 | **Education ROI** | A transparent model of cost, opportunity cost, loan payments, break-even and 10-year net, with every assumption editable. Covers college, community college, certifications, trade school, apprenticeships, military, entrepreneurship and direct-to-work. |
 | **My Path** | Decision support for the paths you’re testing: evidence level and checklist, why it fits, unanswered questions, the next best step and why, decision gates, leading paths, stage-aware roadmaps (Now, 6 months, 12 months) that check themselves off, and what you’ve learned about yourself. |
 | **My Called report** | A shareable summary for parents and counselors. The user chooses what’s included; the journal is never included. Print, save as PDF, download, copy, or create a client-encrypted seven-day link. |
+| **Counselor workspace** | Counselors can combine student-approved summary packets, search across students, track follow-up status and keep local notes. Packets exclude journey codes, journals and private item responses; the workspace remains in the counselor’s browser. |
 | **Achievements** | Your career evidence (self-understanding, career exposure, real-world experience, decision readiness) first; levels, 20 insight-led badges, weekly quests and evidence points underneath. |
 | **Journey codes** | Every journey has a code like `CALL-7KQ2-M9XD-4HPA-R2TW`. Enter it to return to a journey on a shared device or, with the optional sync service, on any device. |
 | **Resume** | Half-finished assessments and simulations are saved; the dashboard offers to pick them back up. |
 | **Your data** | Export, import, switch and delete journeys. Research and analytics are separate explicit opt-ins with withdrawal/deletion controls. Includes auto/light/dark themes, plain reading mode, faith-lens and backup settings. |
+
+Career and simulation search is typo-tolerant and synonym-aware: close spellings and common related terms are ranked by relevance instead of requiring an exact substring.
 
 ## Tech stack and architecture
 
@@ -147,7 +150,9 @@ Many people using Called are still in school, so privacy is a design constraint,
 - **Optional encrypted backup.** If the sync worker is deployed, the journey is encrypted in the browser with a key derived from the journey code (PBKDF2 then AES-256-GCM) before upload. The server stores only ciphertext under a hash of the code and cannot read anything. Users can turn backups off; deleting data also deletes the backup.
 - **No default analytics, ads or third-party scripts.** Fonts are bundled. Minimal page analytics and validation events are separate explicit opt-ins using a random research ID.
 - **User control.** Export my journey, Import my journey, and Delete my data are on the *Your data* page.
+- **Email is user-controlled.** Called can open an email draft for a code or readable report and can hand a backup file to the device share sheet. Called does not collect the recipient address or send email itself.
 - **Reports are built in the browser.** Downloads stay local. Optional seven-day links upload only browser-encrypted report text; the decryption key stays in the URL fragment. The journal is never included.
+- **Counselor sharing is explicit.** A counselor sees only the packet a student exports; there is no automatic school roster or backdoor into a journey.
 
 ## Recommendation methodology
 

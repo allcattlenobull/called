@@ -110,12 +110,12 @@ export default function About() {
 
         <h2>Privacy</h2>
         <p>
-          Called has no accounts. Your profile, journal and results are stored in your browser on this device, and every journey has its own journey code. If cross-device restore is turned on, an encrypted copy is saved under a scrambled version of your code; it is locked with your code before it leaves your browser. Research events and minimal page analytics are separate, de-identified, and off until you explicitly opt in. Fonts are bundled with the app and there are no advertising scripts. You can <Link to="/data">export, import, switch, withdraw research consent, or delete data</Link> at any time.
+          Called has no accounts. Your profile, journal and results are stored in your browser on this device, and every journey has its own journey code. If cross-device restore is turned on, an encrypted copy is saved under a scrambled version of your code; it is locked with your code before it leaves your browser. Research events and minimal page analytics are separate, de-identified, and off until you explicitly opt in. Email buttons open a draft in your own mail app; Called does not collect the address or send the message. Fonts are bundled with the app and there are no advertising scripts. You can <Link to="/data">export, import, switch, withdraw research consent, or delete data</Link> at any time.
         </p>
 
         <h2>For parents, counselors, teachers and mentors</h2>
         <p>
-          Anyone using Called can share a <Link to="/path/report">Called report</Link> they choose the contents of. The most helpful thing you can do is ask good questions about it: What surprised you? What would you like to try? Who could you talk to? Then help them find real experiences: a job shadow, a volunteer shift, an interview with someone in the field.
+          Anyone using Called can share a <Link to="/path/report">Called report</Link> they choose the contents of. Students can also deliberately export a counselor packet that excludes journey codes, journals and private item responses. The <Link to="/counselor">counselor workspace</Link> combines those packets locally without creating a hidden student account. The most helpful thing you can do is ask good questions: What surprised you? What would you like to try? Who could you talk to? Then help them find real experiences: a job shadow, a volunteer shift, or an interview with someone in the field.
         </p>
       </section>
     </div>

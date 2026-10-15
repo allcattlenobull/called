@@ -42,6 +42,7 @@ const ROUTES = [
   'research',
   'research/check-in',
   'feedback',
+  'counselor',
   'share/not-a-real-id',
   'data',
   'achievements',

@@ -9,6 +9,7 @@ import { EmptyState, PageHeader } from '../../components/ui';
 import { Icon } from '../../components/Icon';
 import type { CareerFamily, EducationLevel, InterestId, Career } from '../../types';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
+import { smartSearchScore } from '../../lib/smartSearch';
 
 type Sort = 'match' | 'az' | 'pay' | 'outlook' | 'training';
 
@@ -30,8 +31,7 @@ const EMPTY: Filters = { maxEducation: '', minPay: 0, family: '', interest: '', 
 
 function applyFilters(c: Career, f: Filters, q: string, saved: string[]): boolean {
   if (q) {
-    const hay = `${c.title} ${c.summary} ${FAMILIES[c.family]} ${c.education.majors?.join(' ') ?? ''}`.toLowerCase();
-    if (!q.toLowerCase().split(/\s+/).every((w) => hay.includes(w))) return false;
+    if (careerSearchScore(c, q) < 0) return false;
   }
   if (f.maxEducation && EDUCATION_LEVELS[c.education.level].order > EDUCATION_LEVELS[f.maxEducation].order) return false;
   if (f.minPay && c.pay.median < f.minPay) return false;
@@ -48,6 +48,10 @@ function applyFilters(c: Career, f: Filters, q: string, saved: string[]): boolea
   if (f.entrepreneurial && c.entrepreneurial < 3) return false;
   if (f.saved && !saved.includes(c.id)) return false;
   return true;
+}
+
+function careerSearchScore(c: Career, q: string): number {
+  return smartSearchScore(q, [c.title, c.summary, FAMILIES[c.family], c.education.majors?.join(' '), c.responsibilities.join(' '), c.environment, c.alternativeRoutes.join(' ')]);
 }
 
 export default function Careers() {
@@ -69,7 +73,7 @@ export default function Careers() {
       outlook: (a, b) => OUTLOOK[b.career.outlook].rank - OUTLOOK[a.career.outlook].rank,
       training: (a, b) => a.career.education.years - b.career.education.years,
     };
-    return [...list].sort(by[sort]);
+    return [...list].sort((a, b) => q.trim() ? careerSearchScore(b.career, q) - careerSearchScore(a.career, q) || by[sort](a, b) : by[sort](a, b));
   }, [ranked, f, q, sort, profile.saved]);
 
   const [limit, setLimit] = useState(24);
@@ -91,7 +95,7 @@ export default function Careers() {
                 id="q"
                 type="search"
                 className="input"
-                placeholder="Try “nurse” or “design”"
+                placeholder="Try “nurse,” “coder,” or even a close spelling"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
               />
@@ -167,6 +171,7 @@ export default function Careers() {
               </span>
             </p>
           )}
+          {q.trim() && <p className="small muted search-help">Search understands close spellings and related terms such as “coder” for software work or “therapist” for counseling.</p>}
           {results.length ? (
             <>
               <div className="grid grid--2">

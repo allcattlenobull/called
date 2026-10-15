@@ -9,6 +9,7 @@ import { Icon } from '../components/Icon';
 import { formatDate } from '../lib/format';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
 import { queuedResearchEvents, researchServiceAvailable, withdrawResearchParticipation } from '../lib/researchParticipation';
+import { openEmailDraft, shareFile } from '../lib/email';
 
 export default function YourData() {
   useDocumentTitle('Your data');
@@ -77,6 +78,10 @@ export default function YourData() {
             : 'Type it on this device to come back to your journey, even if a sibling or classmate uses Called here too.'}
         </p>
         <CodeDisplay code={profile.code} />
+        <div>
+          <button type="button" className="btn btn--secondary btn--sm" onClick={() => openEmailDraft('My Called journey code', `Keep this private. My Called journey code is ${profile.code}.\n\n${syncAvailable ? `Restore it at ${window.location.origin}${import.meta.env.BASE_URL}data#code` : 'This code returns to the journey on the same device. I also need the exported backup file to restore elsewhere.'}`)}><Icon name="mail" size={16} /> Email code to myself</button>
+        </div>
+        <p className="small muted">Treat this code like a password. Email providers and anyone with access to the message may be able to read it.</p>
         {syncAvailable && (
           <label className="check">
             <input type="checkbox" checked={settings.cloudBackup} onChange={(e) => setSettings({ cloudBackup: e.target.checked })} />
@@ -145,6 +150,15 @@ export default function YourData() {
           <button type="button" className="btn btn--secondary" onClick={() => fileRef.current?.click()}>
             <Icon name="upload" size={18} /> Import my journey
           </button>
+          <button type="button" className="btn btn--secondary" onClick={async () => {
+            const file = new File([exportJourney(profile)], `called-journey-${new Date().toISOString().slice(0, 10)}.json`, { type: 'application/json' });
+            try {
+              const result = await shareFile(file, 'My Called journey backup', 'Private Called journey backup. Keep this file safe.');
+              setMessage({ tone: 'evidence', text: result === 'shared' ? 'Your backup was shared through the app you chose.' : 'Your backup was downloaded. Attach that file to an email to keep it there.' });
+            } catch (reason) {
+              if (!(reason instanceof DOMException && reason.name === 'AbortError')) setMessage({ tone: 'warn', text: 'The backup could not be shared. Use Export my journey instead.' });
+            }
+          }}><Icon name="mail" size={18} /> Email or share backup file</button>
           <input
             ref={fileRef}
             type="file"

@@ -35,7 +35,8 @@ export type IconName =
   | 'print'
   | 'up'
   | 'down'
-  | 'external';
+  | 'external'
+  | 'mail';
 
 const paths: Record<IconName, ReactElement> = {
   home: <path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" />,
@@ -141,6 +142,7 @@ const paths: Record<IconName, ReactElement> = {
   up: <path d="m6 15 6-6 6 6" />,
   down: <path d="m6 9 6 6 6-6" />,
   external: <path d="M14 5h5v5M19 5l-8 8M17 14v5H5V7h5" />,
+  mail: <path d="M4 6h16v12H4zM4 7l8 6 8-6" />,
 };
 
 export function Icon({ name, size = 20, ...rest }: { name: IconName; size?: number } & SVGProps<SVGSVGElement>) {

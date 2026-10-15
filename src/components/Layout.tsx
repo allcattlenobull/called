@@ -22,6 +22,7 @@ const MORE_NAV: { to: string; label: string; icon: IconName; end?: boolean }[] =
   { to: '/network', label: 'Connections', icon: 'purpose' },
   { to: '/about', label: 'About', icon: 'about' },
   { to: '/research', label: 'Research and trust', icon: 'about' },
+  { to: '/counselor', label: 'For counselors', icon: 'path' },
 ];
 
 const TABS = ['/', '/discover', '/purpose', '/careers', '/try'];
@@ -188,6 +189,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <Link to="/about#how-matching-works">How matching works</Link>
             <Link to="/research">Research and trust</Link>
             <Link to="/feedback">Give feedback</Link>
+            <Link to="/counselor">For counselors</Link>
             <Link to="/data">Your data</Link>
           </nav>
         </div>

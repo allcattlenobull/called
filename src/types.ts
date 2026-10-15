@@ -422,6 +422,8 @@ export interface Profile {
 
   /** Unique journey code, e.g. CALL-7KQ2-M9XD-4HPA-R2TW. Used to restore this journey. */
   code: string;
+  /** Random pseudonymous key used only to update a student-approved counselor packet. */
+  counselorShareId: string;
   /** Dates (YYYY-MM-DD) the user did something, for gentle weekly streaks. */
   activeDays: string[];
   /** Badges and level the user has already been celebrated for. */

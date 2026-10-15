@@ -9,6 +9,7 @@ import { PageHeader } from '../../components/ui';
 import { Icon } from '../../components/Icon';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { suggestions } from '../../lib/matching';
+import { smartSearchScore } from '../../lib/smartSearch';
 
 export default function TryIt() {
   useDocumentTitle('Try It');
@@ -26,7 +27,7 @@ export default function TryIt() {
   }, [profile]);
   const simulations = useMemo(() => {
     const done = new Set(profile.simulations.map((result) => result.simulationId));
-    const q = query.trim().toLowerCase();
+    const q = query.trim();
     return SIMULATIONS.filter((sim) => {
       const evidence = SIMULATION_EVIDENCE[sim.id];
       if (category && evidence.category !== category) return false;
@@ -34,8 +35,8 @@ export default function TryIt() {
       if (status === 'new' && done.has(sim.id)) return false;
       if (!q) return true;
       const careers = sim.careerIds.map((id) => CAREER_BY_ID[id]?.title ?? '').join(' ');
-      return `${sim.title} ${sim.role} ${sim.hook} ${careers} ${evidence.category} ${evidence.constructs.join(' ')}`.toLowerCase().includes(q);
-    }).sort((a, b) => (recommendationOrder.get(a.id) ?? 999) - (recommendationOrder.get(b.id) ?? 999));
+      return smartSearchScore(q, [sim.title, sim.role, sim.hook, careers, evidence.category, evidence.constructs.join(' ')]) >= 0;
+    }).sort((a, b) => q ? smartSearchScore(q, [b.title, b.role, b.hook, SIMULATION_EVIDENCE[b.id].constructs.join(' ')]) - smartSearchScore(q, [a.title, a.role, a.hook, SIMULATION_EVIDENCE[a.id].constructs.join(' ')]) : (recommendationOrder.get(a.id) ?? 999) - (recommendationOrder.get(b.id) ?? 999));
   }, [category, profile.simulations, query, recommendationOrder, status]);
   return (
     <div className="wrap">
@@ -46,7 +47,7 @@ export default function TryIt() {
           <label htmlFor="sim-search">Search simulations</label>
           <div className="search">
             <Icon name="search" size={18} />
-            <input id="sim-search" className="input" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try “science,” “helping,” or “writing”" />
+            <input id="sim-search" className="input" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try “science,” “helping,” or a close spelling" />
           </div>
         </div>
         <div className="field">

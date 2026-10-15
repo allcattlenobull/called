@@ -148,6 +148,19 @@ test('deep links load directly', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Talk to someone in this field near you' })).toBeVisible();
 });
 
+test('career and simulation searches handle misspellings and related terms', async ({ page }) => {
+  await page.goto('careers');
+  const careerSearch = page.getByLabel('Search', { exact: true });
+  await careerSearch.fill('programer');
+  await expect(page.getByRole('heading', { name: 'Software developer' })).toBeVisible();
+  await careerSearch.fill('nures');
+  await expect(page.getByRole('heading', { name: 'Registered nurse' })).toBeVisible();
+
+  await page.goto('try');
+  await page.getByLabel('Search simulations').fill('coder');
+  await expect(page.getByText('The discount bug', { exact: true })).toBeVisible();
+});
+
 test('the research-backed reasoning pilot records a result without closing career exploration', async ({ page }) => {
   await page.goto('discover/validated-aptitude');
   for (let i = 0; i < 10; i++) {
