@@ -9,7 +9,8 @@ import { CAREER_BY_ID } from '../data/careers';
 import { matchCareer } from '../lib/matching';
 import { emptyProfile } from '../lib/profile';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
-import { BadgeMedal, LevelRing } from '../components/Game';
+import { BadgeMedal, EvidenceMeter, LevelRing } from '../components/Game';
+import { EVIDENCE_META, band, type EvidenceId } from '../lib/evidence';
 import { BADGES } from '../lib/gamify';
 
 const PALETTE = [
@@ -271,8 +272,20 @@ export default function Brand() {
           Game layer
         </h3>
         <p>
-          Levels, badges, weekly quests and short celebrations make exploring feel rewarding at any age without trivializing life direction. Points come only from evidence (finishing a simulation, interviewing a professional, reflecting), never from clicks. Streaks are weekly, so missing a day never punishes anyone.
+          The game is gathering evidence about yourself. Four evidence meters lead; levels, badges, weekly quests and short celebrations sit underneath, and every celebration leads with what was learned. Evidence points come only from evidence (finishing a simulation, interviewing a professional, reflecting), never from clicks. Streaks are weekly, so missing a day never punishes anyone.
         </p>
+        <div style={{ maxWidth: 640, marginBottom: 'var(--s-5)' }}>
+          <EvidenceMeter
+            cats={(
+              [
+                ['self', 0.7],
+                ['exposure', 0.5],
+                ['real', 0.3],
+                ['decision', 0.4],
+              ] as [EvidenceId, number][]
+            ).map(([id, score]) => ({ id, ...EVIDENCE_META[id], score, band: band(score), parts: [] }))}
+          />
+        </div>
         <div className="row" style={{ gap: 'var(--s-5)', alignItems: 'center' }}>
           <LevelRing progress={0.62} size={110}>
             <span className="level-ring__n">3</span>
@@ -285,7 +298,7 @@ export default function Brand() {
             </span>
           ))}
         </div>
-        <p className="small muted">Levels: Curious, Explorer, Seeker, Pathfinder, Builder, Steward, Called. Medals take their color from the Self, Life and Purpose families; unearned medals are dashed outlines, like unexplored compass petals.</p>
+        <p className="small muted">Levels: Curious, Explorer, Seeker, Pathfinder, Builder, Steward, Wayfinder. “Called” names the platform, never a level. Medals take their color from the Self, Life and Purpose families; unearned medals are dashed outlines, like unexplored compass petals.</p>
 
         <h3 className="h4" style={{ marginTop: 'var(--s-5)' }}>
           Career card

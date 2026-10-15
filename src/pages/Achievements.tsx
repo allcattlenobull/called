@@ -1,7 +1,10 @@
 import { useStore } from '../state/store';
 import { BADGES, LEVELS, levelFor, pointLines, totalPoints, weeklyStreak } from '../lib/gamify';
-import { BadgeMedal, LevelRing, Quests } from '../components/Game';
-import { CountUp, Reveal } from '../components/motion';
+import { BadgeMedal, EvidenceMeter, LevelRing, Quests } from '../components/Game';
+import { EVIDENCE_META, evidenceProfile } from '../lib/evidence';
+import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
+import { Reveal } from '../components/motion';
 import { PageHeader } from '../components/ui';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
 
@@ -9,13 +12,30 @@ export default function Achievements() {
   useDocumentTitle('Achievements');
   const { profile } = useStore();
   const pts = totalPoints(profile);
-  const { level, next, progress, toNext } = levelFor(pts);
+  const { level, next, progress } = levelFor(pts);
+  const cats = useMemo(() => evidenceProfile(profile), [profile]);
   const lines = pointLines(profile);
   const streak = weeklyStreak(profile.activeDays);
 
   return (
     <div className="wrap">
-      <PageHeader title="Achievements" lead="Points come from real exploration: reflecting, trying the work and talking to people. They can’t tell you what to become, but they show how much evidence you’ve gathered." />
+      <PageHeader title="Achievements" lead="The game in Called is gathering evidence about yourself. Every badge marks something you learned by doing. Points just keep the tally underneath." />
+
+      <section className="card ev-card" aria-labelledby="ev-h">
+        <h2 id="ev-h" className="h3">
+          Your career evidence
+        </h2>
+        <EvidenceMeter cats={cats} />
+        <ul className="ev-next">
+          {cats
+            .filter((c) => c.next)
+            .map((c) => (
+              <li key={c.id}>
+                <span className="small muted">{c.label}:</span> <Link to={c.next!.to}>{c.next!.next}</Link>
+              </li>
+            ))}
+        </ul>
+      </section>
 
       <section className="achv-hero">
         <LevelRing progress={progress} size={160}>
@@ -27,17 +47,8 @@ export default function Achievements() {
           <p className="lead" style={{ marginBottom: 'var(--s-3)' }}>
             {level.blurb}
           </p>
-          <p className="achv-points">
-            <strong>
-              <CountUp value={pts} />
-            </strong>{' '}
-            points
-            {next && (
-              <span className="muted">
-                {' '}
-                ({toNext} more to reach {next.name})
-              </span>
-            )}
+          <p className="small muted">
+            {pts.toLocaleString('en-US')} evidence points{next ? ` · Next level: ${next.name}` : ''}
           </p>
           {streak > 0 && <p className="small">You’ve shown up {streak} week{streak === 1 ? '' : 's'} in a row.</p>}
         </div>
@@ -48,7 +59,6 @@ export default function Achievements() {
           <li key={l.n} className={l.n < level.n ? 'is-past' : l.n === level.n ? 'is-current' : ''}>
             <span className="level-track__dot">{l.n}</span>
             <span className="level-track__name">{l.name}</span>
-            <span className="level-track__min">{l.min.toLocaleString('en-US')}</span>
           </li>
         ))}
       </ol>
@@ -66,7 +76,8 @@ export default function Achievements() {
                 <Reveal as="li" key={b.id} className={`badge-card${earned ? ' is-earned' : ''}`} delay={i * 30}>
                   <BadgeMedal badge={b} earned={earned} />
                   <span className="badge-card__name">{b.name}</span>
-                  <span className="badge-card__desc">{b.description}</span>
+                  <span className="badge-card__desc">{earned ? b.insight.headline : b.description}</span>
+                  <span className="badge-card__ev">{EVIDENCE_META[b.evidence].label}</span>
                   {earned ? (
                     <span className="tag tag--done">Earned</span>
                   ) : (
@@ -83,10 +94,10 @@ export default function Achievements() {
           <Quests />
           <section className="card" aria-labelledby="pts-h">
             <h2 id="pts-h" className="h3">
-              Where your points come from
+              Where your evidence points come from
             </h2>
             <table className="table points-table">
-              <caption className="visually-hidden">Points by activity</caption>
+              <caption className="visually-hidden">Evidence points by activity</caption>
               <tbody>
                 {lines.map((l) => (
                   <tr key={l.id} className={l.points ? '' : 'is-zero'}>

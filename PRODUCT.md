@@ -103,16 +103,22 @@ The **Education ROI** tool models tuition, years of training, living costs, alte
 
 ## Progress and the game layer
 
-Exploring should feel rewarding without trivializing life direction, and never feel childish to an adult changing careers.
+**The game is gathering evidence about yourself, not earning points.** Points are the motivational layer underneath and always secondary. The feeling Called reinforces is “I’m one experience closer to understanding what fits me,” never “I need 80 more points.” Exploring should feel rewarding without trivializing life direction, and never feel childish to an adult changing careers.
 
-- **Points** are derived from the profile, so they always match real activity: assessments (60), simulations (80), purpose experiments (100), feedback from others (30), reflections, reality checks, roadmap steps and more. Repetitive actions are capped so points can’t be farmed by clicking.
-- **Levels:** Curious, Explorer, Seeker, Pathfinder, Builder, Steward, Called.
-- **Badges:** 20, from *First step* to *Full tour* (every simulation) and *Honest no* (ruling a career out, because knowing what doesn’t fit is progress).
-- **Weekly quests:** three suggestions each Monday, measured from the start of the week.
+- **Your career evidence** is the headline: four meters built only from what the user has done.
+  - *Self-understanding:* assessments, gifts, who and what you care about, what others see in you, reflections.
+  - *Career exposure:* careers explored, reality checks, simulations, comparisons.
+  - *Real-world experience:* interviews, real-world experiments, experiences reflected on.
+  - *Decision readiness:* paths being tested, evidence on the strongest path, interest check-ins, careers ruled out, training costs checked.
+  Each meter shows a plain band (Not started, Just starting, Building, Solid, Strong) and the one step that would add the most evidence.
+- **Evidence points** are derived from the profile, so they always match real activity: assessments (60), simulations (80), purpose experiments (100), feedback from others (30), reflections, reality checks, roadmap steps and more. Repetitive actions are capped so points can’t be farmed. The header shows the level, not the point total.
+- **Levels:** Curious, Explorer, Seeker, Pathfinder, Builder, Steward, Wayfinder. “Called” is the name of the platform, never a level, so no one is told they’ve arrived at their calling.
+- **Badges:** 20, each tied to a kind of evidence and to an insight. Earning one leads with what it means (“You tested the work instead of guessing.”), then names the badge. Names avoid religiously coded language; the values underneath (faithfulness, diligence, stewardship) show up as *Follow through*, *Steady* and *Honest no*.
+- **Weekly quests:** three suggestions each Monday, each labeled with the kind of evidence it builds.
 - **Streaks are weekly,** so missing a day never breaks anything.
 - **Celebrations** appear once per new badge or level.
 
-The *Achievements* page shows exactly where every point came from.
+The *Achievements* page shows the evidence meters first, then levels, badges and exactly where every point came from.
 
 ## Coming back
 

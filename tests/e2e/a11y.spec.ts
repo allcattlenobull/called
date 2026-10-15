@@ -81,8 +81,10 @@ test('celebration dialog is accessible', async ({ page }) => {
   await page.goto('welcome');
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByRole('button', { name: /Start exploring now/ }).click();
-  const dialog = page.getByRole('dialog', { name: /First step/ });
+  // Celebrations lead with what was learned, not the reward.
+  const dialog = page.getByRole('dialog', { name: 'You started gathering evidence.' });
   await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText('Badge earned: First step');
   const results = await new AxeBuilder({ page }).include('.celebrate').withTags(['wcag2a', 'wcag2aa']).analyze();
   expect(results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id)).toEqual([]);
   await page.getByRole('button', { name: 'Keep going', exact: true }).click();

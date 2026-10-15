@@ -88,3 +88,35 @@ describe('resume', () => {
     expect(items.map((i) => i.id)).toEqual(expect.arrayContaining(['interests', 'sim:software']));
   });
 });
+
+describe('evidence is the game', () => {
+  it('every badge explains what it taught and which evidence it builds', async () => {
+    const { BADGES } = await import('../src/lib/gamify');
+    for (const b of BADGES) {
+      expect(b.insight.headline.length).toBeGreaterThan(10);
+      expect(b.insight.body.length).toBeGreaterThan(30);
+      expect(['self', 'exposure', 'real', 'decision']).toContain(b.evidence);
+    }
+    expect(BADGES.find((b) => b.id === 'honest-no')?.insight.headline).toBe('Ruling something out is progress.');
+  });
+
+  it('keeps names free of destination or religiously coded language', async () => {
+    const { BADGES, LEVELS } = await import('../src/lib/gamify');
+    expect(LEVELS.map((l) => l.name)).not.toContain('Called');
+    expect(BADGES.map((b) => b.name)).not.toContain('Faithful steps');
+  });
+
+  it('activities raise the matching kind of evidence', async () => {
+    const { evidenceProfile } = await import('../src/lib/evidence');
+    const { emptyProfile } = await import('../src/lib/profile');
+    const p = emptyProfile();
+    const score = (id: string) => evidenceProfile(p).find((c) => c.id === id)!.score;
+    expect(evidenceProfile(p).every((c) => c.score === 0)).toBe(true);
+    p.experiments.push({ experimentId: 'interview-pro', status: 'done', startedAt: '' });
+    expect(score('real')).toBeGreaterThan(0);
+    expect(score('self')).toBe(0);
+    p.simulations.push({ simulationId: 'healthcare', completedAt: '', enjoyment: 4, enjoyed: [], frustrated: [], regularly: 'yes', natural: '', quality: 1 });
+    expect(score('exposure')).toBeGreaterThan(0);
+    expect(evidenceProfile(p).find((c) => c.id === 'decision')!.next?.to).toBeTruthy();
+  });
+});

@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../state/store';
 import { BADGES, currentWeek, earnedBadges, levelFor, pickQuests, questStatus, totalPoints, weeklyStreak, type Badge, type QuestSnapshot } from '../lib/gamify';
-import { CountUp, prefersReducedMotion, useMountedFlag } from './motion';
+import { prefersReducedMotion, useMountedFlag } from './motion';
 import { Icon } from './Icon';
+import { EVIDENCE_META, biggestGap, evidenceProfile, type EvidenceCategory } from '../lib/evidence';
 
 export function BadgeMedal({ badge, earned, size = 64 }: { badge: Badge; earned: boolean; size?: number }) {
   return (
@@ -34,52 +35,85 @@ export function LevelRing({ progress, size = 96, children }: { progress: number;
   );
 }
 
-/** Small header chip: level and points. */
+/** Small header chip: level number and name. Points stay secondary. */
 export function LevelChip() {
   const { profile } = useStore();
   const pts = totalPoints(profile);
   const { level } = levelFor(pts);
   return (
-    <Link to="/achievements" className="level-chip" aria-label={`Level ${level.n}, ${level.name}, ${pts} points. View achievements.`}>
+    <Link to="/achievements" className="level-chip" aria-label={`Level ${level.n}, ${level.name}. See your evidence and achievements.`}>
       <span className="level-chip__n">{level.n}</span>
-      <span className="level-chip__pts">
-        <CountUp value={pts} /> pts
-      </span>
+      <span className="level-chip__pts">{level.name}</span>
     </Link>
   );
 }
 
+/** Four bars showing the kinds of evidence gathered so far: the real game in Called. */
+export function EvidenceMeter({ cats, compact = false }: { cats: EvidenceCategory[]; compact?: boolean }) {
+  const mounted = useMountedFlag();
+  return (
+    <ul className={`ev-meter${compact ? ' ev-meter--compact' : ''}`}>
+      {cats.map((c) => {
+        const pct = Math.round(c.score * 100);
+        return (
+          <li key={c.id} className={`ev-meter__row ev-${c.id}`}>
+            <span className="ev-meter__label">
+              {c.label}
+              {!compact && <span className="ev-meter__blurb">{c.blurb}</span>}
+            </span>
+            <span className="ev-meter__bar" role="progressbar" aria-label={c.label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct} aria-valuetext={`${c.band}, ${pct}%`}>
+              <span style={{ width: `${mounted ? Math.max(pct, c.score > 0 ? 3 : 0) : 0}%` }} />
+            </span>
+            <span className="ev-meter__band">{c.band}</span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+/** Dashboard card: evidence first, level and points underneath. */
 export function LevelCard() {
   const { profile } = useStore();
   const pts = totalPoints(profile);
-  const { level, next, progress, toNext } = levelFor(pts);
+  const { level, next, progress } = levelFor(pts);
   const streak = weeklyStreak(profile.activeDays);
   const earned = earnedBadges(profile);
+  const cats = useMemo(() => evidenceProfile(profile), [profile]);
+  const gap = biggestGap(cats);
   return (
     <section className="card level-card" aria-labelledby="level-h">
-      <LevelRing progress={progress} size={104}>
-        <span className="level-ring__n">{level.n}</span>
-        <span className="level-ring__label">Level</span>
-      </LevelRing>
       <div className="level-card__body">
         <h2 id="level-h" className="h3" style={{ margin: 0 }}>
-          {level.name}
+          Your career evidence
         </h2>
-        <p className="muted small" style={{ margin: '2px 0 var(--s-2)' }}>
-          {level.blurb}
+        <p className="muted small" style={{ margin: '2px 0 var(--s-3)' }}>
+          Every experience brings you closer to understanding what fits you.
         </p>
-        <p className="level-card__pts">
-          <strong>
-            <CountUp value={pts} />
-          </strong>{' '}
-          points{next ? `, ${toNext} to ${next.name}` : ''}
-        </p>
-        <div className="row small">
-          <span className="tag tag--done">
-            <Icon name="spark" size={14} /> {earned.length} of {BADGES.length} badges
+        <EvidenceMeter cats={cats} compact />
+        {gap?.next && (
+          <p className="small level-card__next">
+            <strong>One experience closer:</strong> <Link to={gap.next.to}>{gap.next.next}</Link>
+            <span className="muted"> · builds {gap.label.toLowerCase()}</span>
+          </p>
+        )}
+      </div>
+      <div className="level-card__level">
+        <LevelRing progress={progress} size={72}>
+          <span className="level-ring__n">{level.n}</span>
+        </LevelRing>
+        <div>
+          <strong>{level.name}</strong>
+          <span className="small muted">
+            {pts.toLocaleString('en-US')} evidence points{next ? ` · next: ${next.name}` : ''}
           </span>
-          {streak > 0 && <span className="tag tag--primary">{streak}-week streak</span>}
-          <Link to="/achievements">See achievements</Link>
+          <span className="row small">
+            <span className="tag tag--done">
+              <Icon name="spark" size={14} /> {earned.length} of {BADGES.length} badges
+            </span>
+            {streak > 0 && <span className="tag tag--primary">{streak}-week streak</span>}
+            <Link to="/achievements">See achievements</Link>
+          </span>
         </div>
       </div>
     </section>
@@ -118,13 +152,14 @@ export function Quests() {
               <span className="visually-hidden">{isDone ? ' (done)' : ''}</span>
             </Link>
             <span className="quest-meta">
-              {target > 1 && !isDone ? `${have}/${target}, ` : ''}+{quest.points}
+              {target > 1 && !isDone ? `${have}/${target} · ` : ''}
+              {EVIDENCE_META[quest.evidence].label}
             </span>
           </li>
         ))}
       </ul>
       <p className="small muted" style={{ margin: 0 }}>
-        New quests every Monday.
+        Each quest adds a different kind of evidence. New quests every Monday.
       </p>
     </section>
   );
@@ -166,13 +201,14 @@ export function Celebrations() {
   };
 
   if (!open) return null;
-  const headline = levelUp ? `Level ${level.n}: ${level.name}` : fresh.length === 1 ? `Badge earned: ${fresh[0].name}` : `${fresh.length} badges earned`;
+  const lead = fresh[0];
+  const headline = levelUp && !lead ? `Level ${level.n}: ${level.name}` : (lead?.insight.headline ?? '');
   return (
     <div className="celebrate" role="dialog" aria-modal="true" aria-labelledby="celebrate-h">
       <div className="celebrate__scrim" onClick={dismiss} />
       {!prefersReducedMotion() && <Burst />}
       <div className="celebrate__card">
-        {levelUp ? (
+        {levelUp && !lead ? (
           <LevelRing progress={1} size={120}>
             <span className="level-ring__n">{level.n}</span>
             <span className="level-ring__label">Level</span>
@@ -185,12 +221,17 @@ export function Celebrations() {
           </div>
         )}
         <h2 id="celebrate-h">{headline}</h2>
-        <p className="muted">
-          {levelUp
-            ? level.blurb
-            : fresh.length === 1
-              ? fresh[0].description
-              : `${fresh.slice(0, 3).map((b) => b.name).join(', ')}${fresh.length > 3 ? ` and ${fresh.length - 3} more` : ''}.`}
+        <p>{levelUp && !lead ? `${level.blurb} You’re one experience closer to understanding what fits you.` : lead?.insight.body}</p>
+        <p className="small muted celebrate__meta">
+          {lead ? (
+            <>
+              Badge earned: {lead.name}
+              {fresh.length > 1 ? ` (and ${fresh.length - 1} more)` : ''} · Adds to {EVIDENCE_META[lead.evidence].label.toLowerCase()}
+              {levelUp ? ` · Level ${level.n}: ${level.name}` : ''}
+            </>
+          ) : (
+            'Levels track how much evidence you’ve gathered, not how far you are from an answer.'
+          )}
         </p>
         <div className="row" style={{ justifyContent: 'center' }}>
           <button type="button" className="btn btn--primary" onClick={dismiss} autoFocus>

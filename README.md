@@ -57,7 +57,7 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 | **Education ROI** | A transparent model of cost, opportunity cost, loan payments, break-even and 10-year net, with every assumption editable. Covers college, community college, certifications, trade school, apprenticeships, military, entrepreneurship and direct-to-work. |
 | **My Path** | Decision support for the paths you’re testing: evidence level and checklist, why it fits, unanswered questions, the next best step and why, decision gates, leading paths, stage-aware roadmaps (Now, 6 months, 12 months) that check themselves off, and what you’ve learned about yourself. |
 | **My Called report** | A shareable summary for parents and counselors. The user chooses what’s included; the journal is never included. Print, save as PDF, download or copy. |
-| **Achievements** | Levels, 20 badges, weekly quests and celebrations, all earned through real exploration. |
+| **Achievements** | Your career evidence (self-understanding, career exposure, real-world experience, decision readiness) first; levels, 20 insight-led badges, weekly quests and evidence points underneath. |
 | **Journey codes** | Every journey has a code like `CALL-7KQ2-M9XD-4HPA-R2TW`. Enter it to return to a journey on a shared device or, with the optional sync service, on any device. |
 | **Resume** | Half-finished assessments and simulations are saved; the dashboard offers to pick them back up. |
 | **Your data** | Export, import, switch and delete journeys. Auto, light and dark themes; faith-lens and backup settings. |

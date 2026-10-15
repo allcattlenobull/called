@@ -316,16 +316,88 @@
   }
 }
 .level-card {
-  display: flex;
-  gap: var(--s-5);
-  align-items: center;
-  flex-wrap: wrap;
+  display: grid;
+  gap: var(--s-4);
   background: linear-gradient(135deg, var(--primary-tint), var(--purpose-tint));
   border-color: transparent;
 }
-.level-card__body {
-  flex: 1;
-  min-width: 200px;
+.level-card__next {
+  margin: var(--s-3) 0 0;
+}
+.level-card__level {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+}
+.level-card__level > div {
+  display: grid;
+  gap: 2px;
+}
+
+/* Evidence meter: the real game */
+.ev-meter {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-3);
+}
+.ev-meter__row {
+  display: grid;
+  grid-template-columns: minmax(9.5rem, 13rem) 1fr 6.5rem;
+  gap: var(--s-3);
+  align-items: center;
+  margin: 0;
+}
+.ev-meter__label {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  display: grid;
+}
+.ev-meter__blurb {
+  font-weight: 400;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+.ev-meter__bar {
+  display: block;
+  height: 12px;
+  border-radius: var(--r-pill);
+  background: var(--bg-sunken);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.ev-meter__bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ev-c, var(--primary));
+  transition: width 900ms var(--ease-out);
+}
+.ev-self { --ev-c: var(--dim-self); }
+.ev-exposure { --ev-c: var(--dim-life); }
+.ev-real { --ev-c: var(--dim-purpose); }
+.ev-decision { --ev-c: var(--text); }
+.ev-meter__band {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.ev-meter--compact .ev-meter__row {
+  grid-template-columns: 9.5rem 1fr 5.5rem;
+}
+@media (max-width: 520px) {
+  .ev-meter__row,
+  .ev-meter--compact .ev-meter__row {
+    grid-template-columns: 1fr auto;
+    gap: var(--s-1) var(--s-3);
+  }
+  .ev-meter__bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
 }
 .level-card__pts {
   margin: 0 0 var(--s-3);
@@ -384,9 +456,10 @@
   color: var(--primary);
 }
 .quest-meta {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
   font-weight: 700;
   color: var(--evidence-text);
+  text-align: right;
 }
 
 .medal {
@@ -522,6 +595,29 @@
   color: var(--text-muted);
   flex: 1;
 }
+.badge-card.is-earned .badge-card__desc {
+  color: var(--text);
+}
+.badge-card__ev {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ev-card {
+  margin-bottom: var(--s-6);
+}
+.ev-next {
+  list-style: none;
+  padding: 0;
+  margin: var(--s-4) 0 0;
+  display: grid;
+  gap: var(--s-1);
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+.ev-next li {
+  margin: 0;
+}
 .badge-card__progress {
   display: block;
   width: 100%;
@@ -577,6 +673,10 @@
 }
 .celebrate__card p {
   margin: 0;
+}
+.celebrate__meta {
+  padding-top: var(--s-2);
+  border-top: 1px solid var(--border);
 }
 .celebrate__medals {
   display: flex;
