@@ -81,6 +81,7 @@ export function normalizeCode(input: string): string | null {
 export const DEFAULT_SETTINGS: Settings = {
   faithLens: true,
   theme: 'system',
+  textSize: 'standard',
   cloudBackup: true,
   researchParticipation: false,
   productAnalytics: false,

@@ -102,3 +102,33 @@ test('celebration dialog is accessible', async ({ page }) => {
   await page.getByRole('button', { name: 'Keep going', exact: true }).click();
   await expect(dialog).toBeHidden();
 });
+
+test('the accessibility options panel is keyboard and screen-reader accessible', async ({ page }) => {
+  await page.goto('');
+  await page.getByRole('button', { name: 'Accessibility options' }).click();
+  const panel = page.getByRole('dialog', { name: 'Accessibility options' });
+  await expect(panel).toBeVisible();
+  const results = await new AxeBuilder({ page }).include('#accessibility-panel').withTags(['wcag2a', 'wcag2aa']).analyze();
+  expect(results.violations.filter((violation) => violation.impact === 'serious' || violation.impact === 'critical').map((violation) => violation.id)).toEqual([]);
+  await page.keyboard.press('Escape');
+  await expect(panel).toBeHidden();
+});
+
+test('supported browsers can translate the current page on-device and restore English', async ({ page }) => {
+  await page.addInitScript(() => {
+    class MockTranslator {
+      static async availability() { return 'available'; }
+      static async create() { return { translate: async (value: string) => `ES: ${value}`, destroy() {} }; }
+    }
+    Object.defineProperty(globalThis, 'Translator', { value: MockTranslator, configurable: true });
+  });
+  await page.goto('');
+  await page.getByRole('button', { name: 'Accessibility options' }).click();
+  const panel = page.getByRole('dialog', { name: 'Accessibility options' });
+  await panel.getByRole('button', { name: 'Español — translate this page' }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+  await expect(page.locator('main h1')).toContainText('ES:');
+  await panel.getByRole('button', { name: 'English — show original' }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.locator('main h1')).not.toContainText('ES:');
+});

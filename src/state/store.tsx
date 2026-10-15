@@ -207,6 +207,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     meta?.setAttribute('content', dark ? '#0C1230' : '#FFFFFF');
   }, [settings.theme]);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    if (settings.textSize === 'standard') root.removeAttribute('data-text-size');
+    else root.setAttribute('data-text-size', settings.textSize);
+  }, [settings.textSize]);
+
   const value = useMemo(
     () => ({ ready, profile, update, replace, reset, settings, setSettings, saveState, syncState, otherJourneys, switchJourney, startNewJourney, forgetJourney, setDraft, clearDraft }),
     [ready, profile, update, replace, reset, settings, setSettings, saveState, syncState, otherJourneys, switchJourney, startNewJourney, forgetJourney, setDraft, clearDraft],

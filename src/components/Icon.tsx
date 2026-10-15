@@ -38,6 +38,7 @@ export type IconName =
   | 'external'
   | 'mail'
   | 'copy'
+  | 'accessibility'
   | 'user'
   | 'pin'
   | 'briefcase'
@@ -149,6 +150,7 @@ const paths: Record<IconName, ReactElement> = {
   external: <path d="M14 5h5v5M19 5l-8 8M17 14v5H5V7h5" />,
   mail: <path d="M4 6h16v12H4zM4 7l8 6 8-6" />,
   copy: <path d="M9 8h10v12H9zM5 16H4V4h10v1" />,
+  accessibility: <><circle cx="12" cy="5" r="2" /><path d="M5 9h14M12 9v5M8 21l4-7 4 7" /></>,
   briefcase: (
     <>
       <rect x="3.5" y="7" width="17" height="12" rx="2" />

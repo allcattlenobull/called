@@ -203,6 +203,17 @@ export default function YourData() {
             { value: 'plain' as const, label: 'Roomier and simpler' },
           ]}
         />
+        <OptionGroup
+          legend="Text size"
+          layout="row"
+          value={settings.textSize}
+          onChange={(v) => setSettings({ textSize: v })}
+          options={[
+            { value: 'standard' as const, label: 'Standard' },
+            { value: 'large' as const, label: 'Large' },
+            { value: 'xlarge' as const, label: 'Extra large' },
+          ]}
+        />
       </section>
 
       <section className="card stack" id="research" aria-labelledby="research-h" style={{ marginTop: 'var(--s-4)' }}>

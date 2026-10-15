@@ -387,15 +387,23 @@ test('places drive pay, cost of living and study costs', async ({ page }) => {
   await expect(looks.getByRole('link', { name: /IBEW near Texas/ })).toHaveAttribute('href', /google\.com\/maps\/search/);
 });
 
-test('theme toggle cycles auto, light and dark', async ({ page }) => {
+test('the accessibility menu controls appearance, text size and Spanish access', async ({ page }) => {
   await page.goto('');
-  const toggle = page.getByRole('button', { name: /^Theme:/ });
-  await toggle.click();
+  await page.getByRole('button', { name: 'Accessibility options' }).click();
+  const panel = page.getByRole('dialog', { name: 'Accessibility options' });
+  await expect(panel).toBeVisible();
+  await panel.getByRole('button', { name: 'Light / Claro', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await toggle.click();
+  await panel.getByRole('button', { name: 'Dark / Oscuro', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await panel.getByRole('button', { name: 'Extra large / Muy grande', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-text-size', 'xlarge');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+  await expect(panel.getByRole('link', { name: /Español/ }).or(panel.getByRole('button', { name: /Español/ }))).toBeVisible();
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await page.getByRole('button', { name: /^Theme:/ }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-text-size', 'xlarge');
+  await page.getByRole('button', { name: 'Accessibility options' }).click();
+  await page.getByRole('dialog', { name: 'Accessibility options' }).getByRole('button', { name: 'Auto', exact: true }).click();
   await expect(page.locator('html')).not.toHaveAttribute('data-theme', /.+/);
 });

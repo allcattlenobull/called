@@ -473,6 +473,8 @@ export interface Profile {
 export interface Settings {
   faithLens: boolean;
   theme: 'system' | 'light' | 'dark';
+  /** Scales the complete interface without relying on browser zoom. */
+  textSize: 'standard' | 'large' | 'xlarge';
   /** Keep an encrypted backup tied to the journey code (only when a sync service is configured). */
   cloudBackup: boolean;
   /** Explicit opt-in to send de-identified assessment events for validation research. */

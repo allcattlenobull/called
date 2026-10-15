@@ -243,28 +243,6 @@
     padding-right: 4px;
   }
 }
-.theme-toggle {
-  width: auto;
-  gap: 6px;
-  padding: 0 10px;
-  font-size: var(--fs-sm);
-}
-.theme-toggle svg {
-  transition: transform var(--dur-slow) var(--ease-out);
-}
-.theme-toggle:active svg {
-  transform: rotate(90deg);
-}
-@media (max-width: 700px) {
-  .theme-toggle__label {
-    display: none;
-  }
-  .theme-toggle {
-    width: 44px;
-    padding: 0;
-  }
-}
-
 .level-ring {
   position: relative;
   display: inline-grid;

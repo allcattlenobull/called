@@ -4,7 +4,7 @@ import { Icon } from './Icon';
 import { ACCOUNT_NAV, NAV, activeGroup, activeItem, type NavItem } from './nav';
 import { Logo } from './ui';
 import { Celebrations } from './Game';
-import { ThemeToggle } from './ThemeToggle';
+import { AccessibilityMenu } from './AccessibilityMenu';
 import { useStore } from '../state/store';
 import { flushResearchQueue, recordResearchEvent } from '../lib/researchParticipation';
 
@@ -113,7 +113,7 @@ export function Layout({ children }: { children: ReactNode }) {
             ))}
           </nav>
           <div className="topbar__actions">
-            <ThemeToggle />
+            <AccessibilityMenu />
             <NavLink to="/account" className={`btn btn--quiet topbar__account${group === 'account' ? ' active' : ''}`}>
               <Icon name="user" size={18} />
               <span>Account</span>

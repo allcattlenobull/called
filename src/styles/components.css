@@ -251,6 +251,77 @@
 .topbar__path.active {
   color: var(--primary);
 }
+.accessibility-control {
+  position: relative;
+}
+.accessibility-toggle {
+  width: auto;
+  gap: 6px;
+  padding: 0 10px;
+  font-size: var(--fs-sm);
+}
+.accessibility-panel {
+  position: absolute;
+  z-index: 80;
+  top: calc(100% + var(--s-3));
+  right: 0;
+  width: min(370px, calc(100vw - 2 * var(--gutter)));
+  padding: var(--s-4);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-2);
+}
+.accessibility-panel__head > div {
+  display: grid;
+}
+.accessibility-setting {
+  padding: var(--s-4) 0 0;
+  margin: var(--s-3) 0 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+.accessibility-setting legend {
+  padding: 0;
+  font-weight: 700;
+}
+.accessibility-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  margin-top: var(--s-2);
+}
+.accessibility-options button {
+  justify-content: center;
+  min-width: 0;
+  padding-inline: var(--s-2);
+}
+.accessibility-privacy,
+.accessibility-status {
+  margin: var(--s-2) 0 0;
+}
+.accessibility-status--error {
+  color: var(--danger);
+}
+@media (max-width: 700px) {
+  .accessibility-toggle {
+    width: 44px;
+    padding: 0;
+  }
+  .accessibility-toggle__label {
+    display: none;
+  }
+  .accessibility-panel {
+    position: fixed;
+    top: calc(var(--header-h) + var(--s-2));
+    right: var(--gutter);
+    left: var(--gutter);
+    width: auto;
+    max-height: calc(100dvh - var(--header-h) - 2 * var(--s-3));
+    overflow-y: auto;
+  }
+}
 @media (min-width: 1100px) {
   .topnav {
     display: flex;
