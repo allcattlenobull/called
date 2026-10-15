@@ -7,8 +7,19 @@ import { OMIB_PILOT_ITEMS } from '../src/data/assessments/omibPilot';
 import { FAMILIES } from '../src/data/vocab';
 import { readFileSync, readdirSync } from 'node:fs';
 import stateMarket from '../src/data/market/state-market.json';
+import { AI_WORK_SOURCES, aiWorkFor } from '../src/data/ai-work';
 
 describe('career dataset', () => {
+  it('gives every career evidence-informed AI task guidance', () => {
+    expect(AI_WORK_SOURCES.length).toBeGreaterThanOrEqual(5);
+    for (const career of CAREERS) {
+      const guide = aiWorkFor(career);
+      expect(guide.summary.length, career.id).toBeGreaterThan(80);
+      expect(guide.likelyAssistance.length, career.id).toBeGreaterThanOrEqual(2);
+      expect(guide.humanResponsibilities.length, career.id).toBeGreaterThanOrEqual(2);
+      expect(guide.actions.length, career.id).toBeGreaterThanOrEqual(3);
+    }
+  });
   it('has unique ids', () => {
     expect(new Set(CAREERS.map((c) => c.id)).size).toBe(CAREERS.length);
   });

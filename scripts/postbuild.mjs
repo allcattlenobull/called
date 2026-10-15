@@ -13,11 +13,14 @@ if (process.env.CUSTOM_DOMAIN && !existsSync('dist/CNAME')) {
 const basePath = (process.env.BASE_PATH ?? '/called/').replace(/^\/+|\/+$/g, '');
 const siteOrigin = (process.env.SITE_URL ?? (process.env.CUSTOM_DOMAIN ? `https://${process.env.CUSTOM_DOMAIN}` : 'https://allcattlenobull.github.io')).replace(/\/$/, '');
 const siteBase = `${siteOrigin}/${basePath}`.replace(/\/$/, '');
-const routes = new Set(['', 'discover', 'discover/validated-aptitude', 'purpose', 'careers', 'try', 'try/experiments', 'compare', 'compare/education', 'path', 'account', 'about', 'research', 'feedback', 'counselor', 'terms']);
+const routes = new Set(['', 'discover', 'discover/validated-aptitude', 'purpose', 'careers', 'try', 'try/experiments', 'compare', 'compare/education', 'path', 'account', 'account/ai-export', 'about', 'research', 'feedback', 'counselor', 'terms']);
 
 for (const file of readdirSync('src/data/careers').filter((name) => name.endsWith('.ts') && name !== 'index.ts')) {
   const source = readFileSync(join('src/data/careers', file), 'utf8');
-  for (const match of source.matchAll(/^\s{4}id:\s*'([^']+)'/gm)) routes.add(`careers/${match[1]}`);
+  for (const match of source.matchAll(/^\s{4}id:\s*'([^']+)'/gm)) {
+    routes.add(`careers/${match[1]}`);
+    routes.add(`careers/${match[1]}/interview`);
+  }
 }
 const evidenceSource = readFileSync('src/data/simulations/evidence.ts', 'utf8').split('export const SIMULATION_EVIDENCE')[1]?.split('\n};')[0] ?? '';
 for (const match of evidenceSource.matchAll(/^  (?:'([^']+)'|([a-z][\w-]*)):/gm)) routes.add(`try/${match[1] ?? match[2]}`);

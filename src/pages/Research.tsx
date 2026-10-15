@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Callout, PageHeader } from '../components/ui';
 import { INSTRUMENT_CANDIDATES, RESEARCH_AUDIT, RESEARCH_SOURCES, researchSourceById, type InstrumentCandidateStatus, type ResearchStatus } from '../data/research';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
+import { AI_WORK_REVIEWED, AI_WORK_SOURCES } from '../data/ai-work';
 
 const STATUS_TONE: Record<ResearchStatus, string> = {
   'Evidence-backed construct': 'tag--done',
@@ -104,6 +105,21 @@ export default function Research() {
         <p>Until then, Called will use the safer label: <strong>evidence to explore</strong>. The app can help someone ask a better question or choose a next experiment; it cannot certify a career choice.</p>
         <Callout tone="info" title="For counselors, parents, and educators">Use Called as a conversation and exploration aid. Pair it with a qualified counselor, current local information, and real exposure to the work. Never use Called’s custom signals for admissions, employment selection, diagnosis, or high-stakes placement.</Callout>
         <p><Link to="/about">Read how Called works today</Link> or <Link to="/data">review your privacy and data controls</Link>.</p>
+      </section>
+
+      <section className="research-audit" id="ai-work" aria-labelledby="ai-work-h">
+        <div className="section-heading"><div><span className="eyebrow">Future of work · reviewed {AI_WORK_REVIEWED}</span><h2 id="ai-work-h">How Called describes AI and careers</h2></div><span className="tag tag--purpose">Not used in matching</span></div>
+        <div className="card research-card">
+          <dl className="research-card__facts">
+            <div><dt>Unit of analysis</dt><dd>Tasks, skills, work context, and human responsibility—not a prediction that an occupation will survive or disappear.</dd></div>
+            <div><dt>How the career guidance is built</dt><dd>Called combines each career’s documented responsibilities, physical and interpersonal context, remote-work pattern, family, and key skills with broad findings from O*NET, ILO, OECD, and peer-reviewed workplace studies.</dd></div>
+            <div><dt>What the signal means</dt><dd>“Digitized tasks changing quickly,” “mixed task change,” and “hands-on or human-context work” are transparent descriptive rules. They are not validated scores, probabilities of replacement, or labor-demand forecasts.</dd></div>
+            <div><dt>Why it stays outside matching</dt><dd>Current AI capability is jagged, adoption differs by workplace, and exposure does not establish displacement. Adding a numerical resilience weight would imply more certainty than the evidence supports.</dd></div>
+            <div><dt>Update rule</dt><dd>Review the method and sources at least quarterly and after a major O*NET, ILO, OECD, or BLS release. The existing monthly data workflow continues to refresh official wage and market inputs separately.</dd></div>
+          </dl>
+          <div className="research-card__sources"><span className="small muted">Method sources</span><div className="chips chips--static">{AI_WORK_SOURCES.map((source) => <a className="tag tag--source" key={source.id} href={source.url} target="_blank" rel="noreferrer">{source.authors.split(',')[0]} {source.year}</a>)}</div></div>
+        </div>
+        <div className="research-sources__list ai-work__sources">{AI_WORK_SOURCES.map((source) => <article className="research-source" key={source.id}><div className="row row--between"><h3 className="h4"><a href={source.url} target="_blank" rel="noreferrer">{source.title}</a></h3><span className="small muted">{source.year}</span></div><p className="small muted">{source.authors} · {source.venue}</p><p>{source.finding}</p></article>)}</div>
       </section>
 
       <section className="research-sources" aria-labelledby="sources-h">

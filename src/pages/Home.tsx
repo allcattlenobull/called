@@ -58,7 +58,7 @@ export default function Home() {
                 </span>
               ))}
             </h1>
-            <p className="hero__lead">Discover your gifts, explore careers, try real work, and build a path that fits who you’re becoming.</p>
+            <p className="hero__lead"><strong>AI gives everyone answers. Called helps you gather the evidence to trust your own.</strong> Try real work, test assumptions, and build a path that fits who you’re becoming.</p>
             <div className="row">
               <Link to="/welcome" className="btn btn--primary btn--lg">
                 Start your journey
@@ -77,6 +77,18 @@ export default function Home() {
               An example <strong>Purpose Compass</strong>. Each petal is one part of you. It grows as you collect evidence.
             </figcaption>
           </figure>
+        </div>
+      </section>
+
+      <section className="section section--mist">
+        <div className="wrap">
+          <div className="intro-split"><h2>Information is easy. Evidence is earned.</h2><p className="lead">A chatbot can describe a career. Called is built for the parts you have to do: try the work, talk to people, notice what fits, rule paths out, and keep a record that becomes more useful over time.</p></div>
+          <div className="grid grid--4 moat-grid">
+            <article className="card"><Icon name="try" size={22} /><h3>Do the work</h3><p>Simulations, experiments, interviews, observations, and job shadows turn curiosity into evidence.</p></article>
+            <article className="card"><Icon name="path" size={22} /><h3>Keep the record</h3><p>Your reactions, conflicts, decisions, and changing interest stay structured instead of disappearing into a chat.</p></article>
+            <article className="card"><Icon name="alert" size={22} /><h3>Invite pushback</h3><p>Reality checks and visible conflicts help slow down a flattering or premature answer.</p></article>
+            <article className="card"><Icon name="user" size={22} /><h3>Bring in people</h3><p>Counselors, parents, mentors, employers, unions, and associations add context a general assistant cannot supply.</p></article>
+          </div>
         </div>
       </section>
 

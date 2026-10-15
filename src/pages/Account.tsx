@@ -132,6 +132,15 @@ export default function Account() {
           <Link to="/counselor" className="small">I’m a counselor</Link>
         </section>
       </div>
+      <section className="card account-ai" aria-labelledby="account-ai-h">
+        <div>
+          <span className="tag tag--purpose">Optional</span>
+          <h2 id="account-ai-h" className="h3">Take your evidence to an AI</h2>
+          <p>Generate a privacy-reduced prompt that leaves out your identity, journey code, location, journal, counselor records, and free-text responses.</p>
+          <p className="small muted">AI output never changes your Called scores. Only evidence you deliberately record does.</p>
+        </div>
+        <Link to="/account/ai-export" className="btn btn--secondary"><Icon name="spark" size={17} /> Build a private prompt</Link>
+      </section>
     </div>
   );
 }

@@ -16,6 +16,7 @@ import { Callout, OptionGroup } from '../../components/ui';
 import type { CareerStatus, RealityResponse } from '../../types';
 import NotFound from '../NotFound';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
+import { aiWorkFor } from '../../data/ai-work';
 
 const STATUS: { value: CareerStatus; label: string }[] = [
   { value: 'curious', label: 'Curious' },
@@ -60,6 +61,7 @@ export default function CareerDetail() {
   const range = { min: 20000, max: 240000 };
   const pos = (n: number) => `${Math.max(0, Math.min(100, ((n - range.min) / (range.max - range.min)) * 100))}%`;
   const roadmap = profile.roadmaps.find((r) => r.careerId === id);
+  const aiWork = aiWorkFor(career);
 
   return (
     <div className="wrap career">
@@ -238,6 +240,18 @@ export default function CareerDetail() {
                 </ul>
               </div>
             </div>
+          </section>
+
+          <section aria-labelledby="ai-work-h" className="ai-work">
+            <div className="section-heading"><div><span className="eyebrow">Evidence-informed · reviewed {aiWork.reviewed}</span><h2 id="ai-work-h">How AI is changing this work</h2></div><span className="tag tag--purpose">{aiWork.signal}</span></div>
+            <Callout tone="info" title="Task exposure is not a job forecast">{aiWork.summary} This section is informational and does not affect your match score.</Callout>
+            <div className="grid grid--2 ai-work__grid">
+              <article className="card"><h3 className="h4">Where tools may assist</h3><ul>{aiWork.likelyAssistance.map((item) => <li key={item}>{item}</li>)}</ul></article>
+              <article className="card"><h3 className="h4">Where people still own the outcome</h3><ul>{aiWork.humanResponsibilities.map((item) => <li key={item}>{item}</li>)}</ul></article>
+              <article className="card"><h3 className="h4">Skills that hold up</h3><div className="chips chips--static">{aiWork.durableSkills.map((item) => <span className="tag" key={item}>{item}</span>)}</div></article>
+              <article className="card"><h3 className="h4">How to prepare</h3><ul>{aiWork.actions.map((item) => <li key={item}>{item}</li>)}</ul></article>
+            </div>
+            <div className="row"><Link to={`/careers/${career.id}/interview`} className="btn btn--secondary">Practice an informational interview</Link><Link to="/research#ai-work" className="btn btn--quiet">Method and sources</Link></div>
           </section>
 
           <section aria-labelledby="pay-h">

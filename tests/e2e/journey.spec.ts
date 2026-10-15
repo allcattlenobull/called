@@ -156,6 +156,20 @@ test('career and simulation searches handle misspellings and related terms', asy
   await page.goto('try');
   await page.getByLabel('Search simulations').fill('coder');
   await expect(page.getByText('The discount bug', { exact: true })).toBeVisible();
+
+  await page.goto('network');
+  await page.getByLabel('Search careers').fill('nures');
+  await page.getByRole('button', { name: /Registered nurse/ }).click();
+  await expect(page.getByText(/gathering evidence about Registered nurse/)).toBeVisible();
+});
+
+test('career pages explain AI change and offer evidence-first interview practice', async ({ page }) => {
+  await page.goto('careers/registered-nurse');
+  await expect(page.getByRole('heading', { name: 'How AI is changing this work' })).toBeVisible();
+  await expect(page.getByText('Task exposure is not a job forecast')).toBeVisible();
+  await page.getByRole('link', { name: /Practice an informational interview/ }).click();
+  await expect(page.getByRole('heading', { name: 'Practice an interview about Registered nurse' })).toBeVisible();
+  await expect(page.getByText(/Practice does not affect your matches/)).toBeVisible();
 });
 
 test('the path page finds careers with smart search and has no reflection prompt', async ({ page }) => {

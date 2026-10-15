@@ -4,8 +4,9 @@ import { Icon } from '../components/Icon';
 import { Callout, PageHeader } from '../components/ui';
 import { CAREERS, CAREER_BY_ID } from '../data/careers';
 import { formatDate } from '../lib/format';
-import { conversationsForCareer, localContext, outreachScript, resourcesForCareer } from '../lib/network';
+import { conversationsForCareer, interviewQuestions, localContext, outreachScript, resourcesForCareer, shadowRequestScript } from '../lib/network';
 import { uid } from '../lib/profile';
+import { smartSearchScore } from '../lib/smartSearch';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
 import { useStore } from '../state/store';
 
@@ -95,12 +96,17 @@ export default function Network() {
   const selectedId = params.get('career') ?? '';
   const career = CAREER_BY_ID[selectedId];
   const [picker, setPicker] = useState(selectedId);
+  const [careerQuery, setCareerQuery] = useState(career?.title ?? '');
   const chosen = CAREER_BY_ID[picker];
   const active = chosen ?? career;
   const resources = useMemo(() => active ? resourcesForCareer(active, profile.stage) : [], [active, profile.stage]);
   const conversations = active ? conversationsForCareer(active.id, profile) : [];
+  const careerMatches = useMemo(() => {
+    if (!careerQuery.trim()) return CAREERS.slice(0, 8);
+    return CAREERS.map((item) => ({ item, score: smartSearchScore(careerQuery, [item.title, item.family, item.summary, item.skills.join(' ')]) })).filter(({ score }) => score >= 0).sort((a, b) => b.score - a.score).slice(0, 8).map(({ item }) => item);
+  }, [careerQuery]);
 
-  const selectCareer = (id: string) => { setPicker(id); setParams(id ? { career: id } : {}, { replace: true }); };
+  const selectCareer = (id: string) => { setPicker(id); setCareerQuery(CAREER_BY_ID[id]?.title ?? ''); setParams(id ? { career: id } : {}, { replace: true }); };
 
   return (
     <div className="wrap network-page">
@@ -110,9 +116,10 @@ export default function Network() {
       <div className="grid grid--2">
         <LocationForm />
         <section className="card" aria-labelledby="career-choice-h">
-          <h2 id="career-choice-h" className="h3">Choose a field to explore</h2>
-          <p className="small muted">The resources and outreach script will adapt to the career and stage of life you choose.</p>
-          <label className="field" htmlFor="network-career"><span>Career</span><select id="network-career" className="select" value={active?.id ?? ''} onChange={(e) => selectCareer(e.target.value)}><option value="">Choose a career</option>{CAREERS.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}</select></label>
+          <h2 id="career-choice-h" className="h3">Find a field to explore</h2>
+          <p className="small muted">Search by title, close spelling, field, skill, or related words. The resources and scripts will adapt to your choice.</p>
+          <label className="field" htmlFor="network-career"><span>Search careers</span><input id="network-career" className="input" type="search" value={careerQuery} onChange={(event) => setCareerQuery(event.target.value)} placeholder="Try nures, coder, helping people…" autoComplete="off" /></label>
+          {careerQuery !== active?.title && <div className="smart-results" aria-label="Career connection matches">{careerMatches.map((item) => <button type="button" className="smart-result" key={item.id} onClick={() => selectCareer(item.id)}><span><strong>{item.title}</strong><span className="small muted">{item.summary}</span></span><span className="tag">Choose</span></button>)}</div>}
           {active && <p className="small" style={{ marginTop: 'var(--s-4)' }}>You’re gathering evidence about <strong>{active.title}</strong> {localContext(profile)}.</p>}
         </section>
       </div>
@@ -122,9 +129,10 @@ export default function Network() {
           <div className="grid grid--3">{resources.map((resource) => <article className="card network-resource" key={resource.id}><span className="tag">{resource.kind === 'student' ? 'Student opportunity' : resource.kind === 'career' ? 'Career resource' : 'General resource'}</span><h3>{resource.name}</h3><p className="small muted">{resource.description}</p><a className="btn btn--quiet btn--sm" href={resource.url} target="_blank" rel="noreferrer">Open resource <Icon name="external" size={15} /></a></article>)}</div>
         </section>
         <section className="grid grid--2 network-evidence">
-          <div className="card"><h2 className="h3">Talk to someone in this field near you</h2><p>Use this as a small evidence-building step. You’re asking to learn what the work is really like, not asking a stranger for a job.</p><div className="callout callout--evidence"><Icon name="journal" size={20} /><div><strong className="callout__title">A script you can adapt</strong><p>{outreachScript(active, profile)}</p><button type="button" className="btn btn--quiet btn--sm" onClick={() => navigator.clipboard?.writeText(outreachScript(active, profile))}>Copy script</button></div></div>{profile.stage === 'highSchool' && <Callout tone="info" title="A note about safety">Prefer school, employer, union, association, or organization channels. Meet at an official workplace, event, or public place. Tell a parent, teacher, counselor, or trusted adult, and avoid sharing unnecessary private information with strangers.</Callout>}</div>
+          <div className="card stack"><h2 className="h3">Talk to someone in this field near you</h2><p>Use this as a small evidence-building step. You’re asking to learn what the work is really like, not asking a stranger for a job.</p><div className="callout callout--evidence"><Icon name="journal" size={20} /><div><strong className="callout__title">Ask for a conversation</strong><p>{outreachScript(active, profile)}</p><button type="button" className="btn btn--quiet btn--sm" onClick={() => navigator.clipboard?.writeText(outreachScript(active, profile))}>Copy conversation script</button></div></div><div className="callout"><Icon name="careers" size={20} /><div><strong className="callout__title">Ask for a safe way to observe</strong><p>{shadowRequestScript(active, profile)}</p><button type="button" className="btn btn--quiet btn--sm" onClick={() => navigator.clipboard?.writeText(shadowRequestScript(active, profile))}>Copy job-shadow script</button></div></div>{profile.stage === 'highSchool' && <Callout tone="info" title="A note about safety">Prefer school, employer, union, association, or organization channels. Meet at an official workplace, event, or public place. Tell a parent, teacher, counselor, or trusted adult, and avoid sharing unnecessary private information with strangers.</Callout>}</div>
           <ConversationForm careerId={active.id} />
         </section>
+        <section className="card network-questions" aria-labelledby="questions-h"><div className="row row--between"><div><h2 id="questions-h" className="h3">Questions that get past the job description</h2><p className="small muted">Choose a few. Listen for examples, tradeoffs, and what has changed recently.</p></div><Link to={`/careers/${active.id}/interview`} className="btn btn--secondary btn--sm">Practice first</Link></div><ol className="grid grid--2">{interviewQuestions(active).map((question) => <li key={question}>{question}</li>)}</ol></section>
         {conversations.length > 0 && <section className="card network-log" aria-labelledby="logged-h"><h2 id="logged-h" className="h3">Your evidence for {active.title}</h2><ul className="plain">{conversations.map((entry) => <li className="network-log__item" key={entry.id}><div className="row row--between"><strong>{entry.role}{entry.organization ? ` · ${entry.organization}` : ''}</strong><span className="small muted">{formatDate(entry.date)}</span></div><p className="small">{entry.notes}</p>{(entry.name || entry.location) && <span className="small muted">{[entry.name, entry.location].filter(Boolean).join(' · ')}</span>}</li>)}</ul><p className="small muted">This conversation now counts as interview evidence for this path and can change My Path’s next best step.</p></section>}
       </> : <section className="section"><div className="empty"><span className="empty__icon"><Icon name="purpose" size={28} /></span><h2 className="empty__title">Choose a career to find relevant connections</h2><p>Start with a career page or pick one above. Called will keep the focus on learning, not networking for its own sake.</p></div></section>}
     </div>

@@ -12,6 +12,9 @@ interface RosterEntry {
   packet: CounselorPacket;
   status: 'new' | 'meeting' | 'followUp' | 'complete';
   note: string;
+  cohort: string;
+  nextMeeting?: string;
+  nextAction: string;
 }
 
 const STORAGE_KEY = 'called.counselor.workspace.v1';
@@ -19,7 +22,7 @@ const STORAGE_KEY = 'called.counselor.workspace.v1';
 function loadRoster(): RosterEntry[] {
   try {
     const value = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
-    return Array.isArray(value) ? value : [];
+    return Array.isArray(value) ? value.map((entry) => ({ ...entry, status: entry?.status in STATUS_LABEL ? entry.status : 'new', note: typeof entry?.note === 'string' ? entry.note : '', cohort: typeof entry?.cohort === 'string' ? entry.cohort : '', nextMeeting: typeof entry?.nextMeeting === 'string' ? entry.nextMeeting : undefined, nextAction: typeof entry?.nextAction === 'string' ? entry.nextAction : '' })) : [];
   } catch {
     return [];
   }
@@ -35,6 +38,7 @@ export default function Counselor() {
   useDocumentTitle('Counselor workspace');
   const [roster, setRosterState] = useState<RosterEntry[]>(loadRoster);
   const [query, setQuery] = useState('');
+  const [cohortFilter, setCohortFilter] = useState('');
   const [message, setMessage] = useState('');
   const [removeId, setRemoveId] = useState<string>();
   const [confirmClear, setConfirmClear] = useState(false);
@@ -55,7 +59,7 @@ export default function Counselor() {
     setSession({ account: result.account, credentials: result.credentials });
     setRoster((current) => result.packets.map((packet) => {
       const existing = current.find((entry) => entry.packet.studentId === packet.studentId);
-      return { packet, status: existing?.status ?? 'new', note: existing?.note ?? '' };
+      return { packet, status: existing?.status ?? 'new', note: existing?.note ?? '', cohort: existing?.cohort ?? '', nextMeeting: existing?.nextMeeting, nextAction: existing?.nextAction ?? '' };
     }));
   };
 
@@ -92,10 +96,13 @@ export default function Counselor() {
   };
 
   const shown = useMemo(() => roster
-    .filter(({ packet }) => smartSearchScore(query, [packet.displayName, packet.memberId, packet.interests.join(' '), packet.strengths.join(' '), packet.topCareers.map((career) => career.title).join(' '), packet.paths.map((path) => path.title).join(' ')]) >= 0)
-    .sort((a, b) => b.packet.generatedAt.localeCompare(a.packet.generatedAt)), [query, roster]);
+    .filter((entry) => !cohortFilter || entry.cohort === cohortFilter)
+    .filter(({ packet, cohort, nextAction }) => smartSearchScore(query, [packet.displayName, packet.memberId, cohort, nextAction, packet.interests.join(' '), packet.strengths.join(' '), packet.topCareers.map((career) => career.title).join(' '), packet.paths.map((path) => path.title).join(' ')]) >= 0)
+    .sort((a, b) => (a.nextMeeting || '9999').localeCompare(b.nextMeeting || '9999') || b.packet.generatedAt.localeCompare(a.packet.generatedAt)), [cohortFilter, query, roster]);
   const totalSimulations = roster.reduce((sum, entry) => sum + entry.packet.summary.simulations, 0);
   const followUps = roster.filter((entry) => entry.status === 'followUp').length;
+  const cohorts = [...new Set(roster.map((entry) => entry.cohort.trim()).filter(Boolean))].sort();
+  const meetingsPlanned = roster.filter((entry) => entry.nextMeeting).length;
 
   const importFiles = async (files: FileList) => {
     let imported = 0;
@@ -108,11 +115,11 @@ export default function Counselor() {
         if (parsed.app === 'called' && parsed.kind === 'counselor-workspace' && Array.isArray(parsed.roster)) {
           for (const entry of parsed.roster) {
             const packet = parseCounselorPacket(JSON.stringify(entry.packet));
-            incoming.push({ packet, status: entry.status in STATUS_LABEL ? entry.status : 'new', note: typeof entry.note === 'string' ? entry.note.slice(0, 1000) : '' });
+            incoming.push({ packet, status: entry.status in STATUS_LABEL ? entry.status : 'new', note: typeof entry.note === 'string' ? entry.note.slice(0, 1000) : '', cohort: typeof entry.cohort === 'string' ? entry.cohort.slice(0, 80) : '', nextMeeting: typeof entry.nextMeeting === 'string' ? entry.nextMeeting : undefined, nextAction: typeof entry.nextAction === 'string' ? entry.nextAction.slice(0, 300) : '' });
             imported += 1;
           }
         } else {
-          incoming.push({ packet: parseCounselorPacket(text), status: 'new', note: '' });
+          incoming.push({ packet: parseCounselorPacket(text), status: 'new', note: '', cohort: '', nextAction: '' });
           imported += 1;
         }
       } catch {
@@ -123,7 +130,13 @@ export default function Counselor() {
       const next = [...current];
       for (const entry of incoming) {
         const index = next.findIndex((item) => item.packet.studentId === entry.packet.studentId);
-        if (index >= 0) next[index] = { ...next[index], packet: entry.packet, ...(entry.note || entry.status !== 'new' ? { note: entry.note, status: entry.status } : {}) };
+        if (index >= 0) next[index] = {
+          ...next[index],
+          packet: entry.packet,
+          ...(entry.note || entry.status !== 'new' || entry.cohort || entry.nextMeeting || entry.nextAction
+            ? { note: entry.note, status: entry.status, cohort: entry.cohort, nextMeeting: entry.nextMeeting, nextAction: entry.nextAction }
+            : {}),
+        };
         else next.push(entry);
       }
       return next;
@@ -131,14 +144,27 @@ export default function Counselor() {
     setMessage(`${imported} student packet${imported === 1 ? '' : 's'} added or updated${failed ? `; ${failed} could not be read` : ''}.`);
   };
 
-  const updateEntry = (studentId: string, change: Partial<Pick<RosterEntry, 'status' | 'note'>>) => setRoster((current) => current.map((entry) => entry.packet.studentId === studentId ? { ...entry, ...change } : entry));
+  const updateEntry = (studentId: string, change: Partial<Pick<RosterEntry, 'status' | 'note' | 'cohort' | 'nextMeeting' | 'nextAction'>>) => setRoster((current) => current.map((entry) => entry.packet.studentId === studentId ? { ...entry, ...change } : entry));
 
   const exportWorkspace = () => {
-    const file = new Blob([JSON.stringify({ app: 'called', kind: 'counselor-workspace', version: 1, exportedAt: new Date().toISOString(), roster }, null, 2)], { type: 'application/json' });
+    const file = new Blob([JSON.stringify({ app: 'called', kind: 'counselor-workspace', version: 2, exportedAt: new Date().toISOString(), roster }, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(file);
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = `called-counselor-workspace-${new Date().toISOString().slice(0, 10)}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportProgramSummary = () => {
+    const escape = (value: unknown) => `"${String(value ?? '').replace(/"/g, '""')}"`;
+    const header = ['Name', 'Called member ID', 'Cohort', 'Status', 'Next meeting', 'Next action', 'Assessments', 'Simulations', 'Top career', 'Report updated'];
+    const rows = roster.map((entry) => [entry.packet.displayName, entry.packet.memberId, entry.cohort, STATUS_LABEL[entry.status], entry.nextMeeting, entry.nextAction, entry.packet.summary.assessments, entry.packet.summary.simulations, entry.packet.topCareers[0]?.title, entry.packet.generatedAt]);
+    const file = new Blob([[header, ...rows].map((row) => row.map(escape).join(',')).join('\n')], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(file);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `called-program-summary-${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
   };
@@ -207,6 +233,7 @@ export default function Counselor() {
         {session ? <button type="button" className="btn btn--primary" onClick={() => void refreshAccount()} disabled={authBusy}><Icon name="down" size={18} /> Refresh shared results</button> : <button type="button" className="btn btn--primary" onClick={() => inputRef.current?.click()}><Icon name="upload" size={18} /> Import student packets</button>}
         <input ref={inputRef} type="file" accept="application/json,.json" multiple hidden onChange={(event) => { if (event.target.files) void importFiles(event.target.files); event.target.value = ''; }} />
         {roster.length > 0 && <button type="button" className="btn btn--secondary" onClick={exportWorkspace}><Icon name="download" size={18} /> Back up workspace</button>}
+        {roster.length > 0 && <button type="button" className="btn btn--secondary" onClick={exportProgramSummary}><Icon name="download" size={18} /> Export program summary</button>}
         {!session && roster.length > 0 && !confirmClear && <button type="button" className="btn btn--quiet" onClick={() => setConfirmClear(true)}>Clear workspace</button>}
         {session && <button type="button" className="btn btn--quiet" onClick={() => { saveCounselorCredentials(null); setSession(null); setRoster([]); setAccessKey(''); setMessage('Signed out.'); }}>Sign out</button>}
         <Link className="btn btn--quiet" to="/path/report#counselor">How people share</Link>
@@ -220,9 +247,10 @@ export default function Counselor() {
             <Stat value={roster.length} label="Students" />
             <Stat value={totalSimulations} label="Simulations completed" />
             <Stat value={followUps} label="Need follow-up" />
+            <Stat value={meetingsPlanned} label="Meetings planned" />
           </div>
           <p className="small muted">Career scores are Called-specific decision support, not validated predictions. Use them to guide questions and real-world exploration.</p>
-          <label className="field counselor__search">Search names, member IDs, interests, or careers<input className="input" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Close spellings and related career terms work" /></label>
+          <div className="grid grid--2 counselor__filters"><label className="field counselor__search">Search names, IDs, interests, careers, or next actions<input className="input" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Close spellings and related career terms work" /></label><label className="field">Cohort<select className="select" value={cohortFilter} onChange={(event) => setCohortFilter(event.target.value)}><option value="">All cohorts</option>{cohorts.map((cohort) => <option key={cohort} value={cohort}>{cohort}</option>)}</select></label></div>
         </>
       )}
 
@@ -253,6 +281,9 @@ export default function Counselor() {
                   </div>
                   <div className="counselor-card__manage">
                     <label className="field">Counselor status<select className="select" value={entry.status} onChange={(event) => updateEntry(packet.studentId, { status: event.target.value as RosterEntry['status'] })}>{Object.entries(STATUS_LABEL).map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select></label>
+                    <label className="field">Cohort or program<input className="input" value={entry.cohort} maxLength={80} onChange={(event) => updateEntry(packet.studentId, { cohort: event.target.value })} placeholder="e.g. Spring career lab" /></label>
+                    <label className="field">Next meeting<input className="input" type="date" value={entry.nextMeeting ?? ''} onChange={(event) => updateEntry(packet.studentId, { nextMeeting: event.target.value || undefined })} /></label>
+                    <label className="field">Next action<input className="input" value={entry.nextAction} maxLength={300} onChange={(event) => updateEntry(packet.studentId, { nextAction: event.target.value })} placeholder="One agreed next step" /></label>
                     <label className="field">Private counselor note<textarea className="textarea" value={entry.note} maxLength={1000} onChange={(event) => updateEntry(packet.studentId, { note: event.target.value })} placeholder="Stored only in this browser" /></label>
                   </div>
                   {removeId === packet.studentId ? <div className="row"><button type="button" className="btn btn--danger btn--sm" onClick={async () => { if (session) await removeCounselorRecord(session.credentials, packet.memberId); setRoster((current) => current.filter((item) => item.packet.studentId !== packet.studentId)); setRemoveId(undefined); }}>Yes, remove this student</button><button type="button" className="btn btn--secondary btn--sm" onClick={() => setRemoveId(undefined)}>Keep</button></div> : <button type="button" className="btn btn--quiet btn--sm" onClick={() => setRemoveId(packet.studentId)}>Remove from this workspace</button>}

@@ -37,6 +37,7 @@ export type IconName =
   | 'down'
   | 'external'
   | 'mail'
+  | 'copy'
   | 'user';
 
 const paths: Record<IconName, ReactElement> = {
@@ -144,6 +145,7 @@ const paths: Record<IconName, ReactElement> = {
   down: <path d="m6 9 6 6 6-6" />,
   external: <path d="M14 5h5v5M19 5l-8 8M17 14v5H5V7h5" />,
   mail: <path d="M4 6h16v12H4zM4 7l8 6 8-6" />,
+  copy: <path d="M9 8h10v12H9zM5 16H4V4h10v1" />,
   user: (
     <>
       <circle cx="12" cy="8" r="4" />

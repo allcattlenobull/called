@@ -30,6 +30,24 @@ const CAREER_RESOURCES: { test: (c: Career) => boolean; resources: NetworkResour
   { test: (c) => c.family === 'healthcare' || /nurs|medical|therap|dental|paramedic|pharmacy/i.test(c.title), resources: [
     { id: 'nursing-associations', name: 'State and professional healthcare associations', description: 'Find the association for your state and role through CareerOneStop.', url: 'https://www.careeronestop.org/BusinessCenter/Toolkit/find-professional-associations.aspx', kind: 'career' },
   ] },
+  { test: (c) => c.family === 'technology', resources: [
+    { id: 'acm', name: 'Association for Computing Machinery', description: 'Professional chapters, student chapters, events, and computing communities.', url: 'https://www.acm.org/chapters/find-a-chapter', kind: 'career' },
+    { id: 'ieee', name: 'IEEE local organizations', description: 'Geographic sections, technical communities, and student branches for engineering and technology.', url: 'https://www.ieee.org/communities/geographic-activities.html', kind: 'career' },
+  ] },
+  { test: (c) => ['engineering', 'science'].includes(c.family), resources: [
+    { id: 'nspe', name: 'National Society of Professional Engineers', description: 'State societies and local professional engineering connections.', url: 'https://www.nspe.org/membership/about-nspe/state-societies', kind: 'career' },
+    { id: 'science-societies', name: 'Science and engineering associations', description: 'Search recognized professional associations by occupation.', url: 'https://www.careeronestop.org/BusinessCenter/Toolkit/find-professional-associations.aspx', kind: 'career' },
+  ] },
+  { test: (c) => ['business', 'finance', 'entrepreneurship'].includes(c.family), resources: [
+    { id: 'score', name: 'SCORE', description: 'Free business mentoring and local workshops from experienced volunteers.', url: 'https://www.score.org/find-mentor', kind: 'career' },
+    { id: 'business-associations', name: 'Business and finance associations', description: 'Find role-specific professional associations and chapters.', url: 'https://www.careeronestop.org/BusinessCenter/Toolkit/find-professional-associations.aspx', kind: 'career' },
+  ] },
+  { test: (c) => ['education', 'humanServices', 'government', 'publicSafety'].includes(c.family), resources: [
+    { id: 'public-service-associations', name: 'Education and public-service associations', description: 'Find established national, state, and local professional organizations.', url: 'https://www.careeronestop.org/BusinessCenter/Toolkit/find-professional-associations.aspx', kind: 'career' },
+  ] },
+  { test: (c) => c.family === 'creative', resources: [
+    { id: 'aiga', name: 'AIGA chapters', description: 'Local design communities, events, portfolio reviews, and student groups.', url: 'https://www.aiga.org/membership-community/aiga-chapters', kind: 'career' },
+  ] },
 ];
 
 const STUDENT_RESOURCES: { test: (c: Career) => boolean; resource: NetworkResource }[] = [
@@ -66,6 +84,24 @@ export function outreachScript(career: Career, profile: Profile): string {
   if (stage === 'working') return `Hi — I’m currently working and considering a career change into ${career.title.toLowerCase()}${where}. Would you be open to a 20-minute conversation, an open house, or pointing me toward someone who helps people explore the field? I’m not asking for a job — I’m trying to understand the work, training path, and what you wish you had known when you started.`;
   if (stage === 'graduated') return `Hi — I recently graduated and am exploring ${career.title.toLowerCase()}${where}. Would you be open to a 20-minute conversation or point me toward a local professional, training program, or open house? I’m not asking for a job — I’m trying to learn what the work and training path are really like.`;
   return `Hi — I’m exploring what working as a ${career.title.toLowerCase()} is really like${where}. Would you be open to a 20-minute conversation or point me toward someone who could help me understand the work, training path, and what you wish you had known when you started? I’m not asking for a job — I’m trying to learn what to explore next.`;
+}
+
+export function shadowRequestScript(career: Career, profile: Profile): string {
+  const place = locationText(profile.location);
+  const where = place ? ` in ${place}` : '';
+  const trustedAdult = profile.stage === 'highSchool' ? ' A parent, teacher, counselor, or other trusted adult can coordinate and attend.' : '';
+  return `Hello — I’m exploring ${career.title.toLowerCase()}${where} and would like to understand the work beyond a job description. Does your organization offer an open house, workplace tour, short job shadow, volunteer opportunity, or another safe way to observe the field? I’m looking to learn, not asking for a job.${trustedAdult}`;
+}
+
+export function interviewQuestions(career: Career): string[] {
+  return [
+    `What does a normal week as a ${career.title.toLowerCase()} actually look like?`,
+    'What part of the work surprises people after they enter the field?',
+    `Which skill matters most when ${career.frustrations[0]?.toLowerCase() ?? 'the work gets difficult'}?`,
+    'What training route gives someone the best chance to test the work before taking on debt?',
+    'How have AI or other new tools changed what beginners do?',
+    'What is one thing I could try in the next month to learn whether this fits me?',
+  ];
 }
 
 export function localContext(profile: Profile): string {

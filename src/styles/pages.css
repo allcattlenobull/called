@@ -2699,6 +2699,106 @@ html[data-reading='plain'] .panel {
   outline: none;
   box-shadow: none;
 }
+
+/* Evidence, AI-change, connection, and program workspace additions */
+.moat-grid .card,
+.ai-work__grid .card {
+  height: 100%;
+}
+.ai-work__summary {
+  font-size: var(--fs-lg);
+  max-width: 76ch;
+}
+.ai-work__grid {
+  margin-top: var(--s-5);
+}
+.ai-work__grid ul,
+.practice-questions,
+.network-questions ol {
+  margin-bottom: 0;
+  padding-left: 1.25rem;
+}
+.ai-work__sources {
+  display: grid;
+  gap: var(--s-3);
+}
+.ai-work__sources li {
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--border);
+}
+.smart-results {
+  display: grid;
+  gap: var(--s-2);
+  max-height: 26rem;
+  overflow: auto;
+  margin-top: var(--s-2);
+}
+.smart-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  width: 100%;
+  padding: var(--s-3);
+  color: var(--text);
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+.smart-result:hover {
+  border-color: var(--primary);
+  background: var(--primary-tint);
+}
+.smart-result > span:first-child {
+  display: grid;
+  gap: var(--s-1);
+}
+.network-questions,
+.account-ai,
+.ai-export-page .card,
+.interview-practice .card {
+  margin-top: var(--s-5);
+}
+.network-questions li,
+.practice-questions li {
+  padding: var(--s-2) var(--s-3) var(--s-2) 0;
+}
+.ai-export__prompt {
+  min-height: 20rem;
+  resize: vertical;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+.counselor__filters {
+  align-items: end;
+  margin: var(--s-5) 0;
+}
+.counselor-card__manage {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-4);
+  margin-top: var(--s-5);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--border);
+}
+.counselor-card__manage .field:last-child {
+  grid-column: 1 / -1;
+}
+@media (max-width: 699px) {
+  .counselor-card__manage {
+    grid-template-columns: 1fr;
+  }
+  .counselor-card__manage .field:last-child {
+    grid-column: auto;
+  }
+  .network-questions .row--between {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
 .empty + .new-roadmap {
   margin-top: var(--s-4);
 }

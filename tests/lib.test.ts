@@ -5,6 +5,8 @@ import { computeRoi, defaultAssumptions, monthlyPayment } from '../src/lib/roi';
 import { generateRoadmap } from '../src/lib/path';
 import { emptyProfile, normalizeProfile } from '../src/lib/profile';
 import { exportJourney, loadProfile, parseJourney, saveProfile, clearProfile } from '../src/lib/storage';
+import { createAiPrompt, createPrivateEvidenceSummary } from '../src/lib/aiExport';
+import { aiRolePlayPrompt } from '../src/lib/interviewPractice';
 
 describe('education ROI', () => {
   it('computes standard loan payments', () => {
@@ -30,6 +32,32 @@ describe('roadmaps', () => {
     const welder = generateRoadmap(CAREER_BY_ID['welder']);
     expect(welder.items.filter((i) => i.horizon === 'now').length).toBeGreaterThanOrEqual(2);
     expect(welder.items.every((i) => !i.done)).toBe(true);
+  });
+});
+
+describe('privacy-safe AI handoff', () => {
+  it('excludes identifying and free-text data', () => {
+    const profile = emptyProfile();
+    profile.name = 'Private Name';
+    profile.lastName = 'Private Last';
+    profile.memberId = 'CLD-SECRET';
+    profile.code = 'CALL-SECRET';
+    profile.location = { city: 'Secret City', state: 'MN', considering: [] };
+    profile.journal = [{ id: 'j1', body: 'private journal words', createdAt: '2026-01-01' }];
+    const output = JSON.stringify(createPrivateEvidenceSummary(profile));
+    expect(output).not.toContain('Private Name');
+    expect(output).not.toContain('Private Last');
+    expect(output).not.toContain('CLD-SECRET');
+    expect(output).not.toContain('CALL-SECRET');
+    expect(output).not.toContain('Secret City');
+    expect(output).not.toContain('private journal words');
+    expect(createAiPrompt(profile, 'contradictions')).toContain('must not alter my Called scores');
+  });
+
+  it('labels interview role-play as synthetic and outside scoring', () => {
+    const prompt = aiRolePlayPrompt(CAREER_BY_ID['registered-nurse']);
+    expect(prompt).toMatch(/simulation|synthetic/i);
+    expect(prompt).toMatch(/do not.*score|does not.*score/i);
   });
 });
 
