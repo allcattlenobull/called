@@ -1,0 +1,2790 @@
+{
+ "source": "Eloundou, Manning, Mishkin & Rock, “GPTs are GPTs: Labor market impact potential of LLMs,” Science 384 (2024). Task ratings by human annotators. Tasks from O*NET (USDOL/ETA, CC BY 4.0).",
+ "sourceUrl": "https://www.science.org/doi/10.1126/science.adj0998",
+ "dataUrl": "https://github.com/openai/GPTs-are-GPTs",
+ "careers": {
+  "hr-specialist": {
+   "exposure": 0.59,
+   "exposedShare": 0.79,
+   "autoShare": 0.4,
+   "tasksRated": 19,
+   "speed": [
+    "Prepare or maintain employment records related to events, such as hiring, termination, leaves, transfers, or promotions, using human resources management system software.",
+    "Maintain and update human resources documents, such as organizational charts, employee handbooks or directories, or performance evaluation forms.",
+    "Interpret and explain human resources policies, procedures, laws, standards, or regulations."
+   ],
+   "human": [
+    "Conduct exit interviews and ensure that necessary employment termination paperwork is completed.",
+    "Inform job applicants of details such as duties and responsibilities, compensation, benefits, schedules, working conditions, or promotion opportunities.",
+    "Interview job applicants to obtain information on work history, training, education, or job skills."
+   ]
+  },
+  "hr-manager": {
+   "exposure": 0.45,
+   "exposedShare": 0.75,
+   "autoShare": 0.28,
+   "tasksRated": 24,
+   "speed": [
+    "Provide current and prospective employees with information about policies, job duties, working conditions, wages, opportunities for promotion, and employee benefits.",
+    "Advise managers on organizational policy matters, such as equal employment opportunity and sexual harassment, and recommend needed changes.",
+    "Analyze and modify compensation and benefits policies to establish competitive programs and ensure compliance with legal requirements."
+   ],
+   "human": [
+    "Identify staff vacancies and recruit, interview, and select applicants.",
+    "Represent organization at personnel-related hearings and investigations.",
+    "Perform difficult staffing duties, including dealing with understaffing, refereeing disputes, firing employees, and administering disciplinary procedures."
+   ]
+  },
+  "marketing-manager": {
+   "exposure": 0.58,
+   "exposedShare": 0.92,
+   "autoShare": 0.09,
+   "tasksRated": 12,
+   "speed": [
+    "Coordinate or participate in promotional activities or trade shows, working with developers, advertisers, or production managers, to market products or services.",
+    "Initiate market research studies, or analyze their findings.",
+    "Formulate, direct, or coordinate marketing activities or policies to promote products or services, working with advertising or promotion managers."
+   ],
+   "human": [
+    "Direct the hiring, training, or performance evaluations of marketing or sales staff and oversee their daily activities."
+   ]
+  },
+  "market-research-analyst": {
+   "exposure": 0.58,
+   "exposedShare": 0.92,
+   "autoShare": 0.67,
+   "tasksRated": 13,
+   "speed": [
+    "Prepare reports of findings, illustrating data graphically and translating complex findings into written text.",
+    "Devise and evaluate methods and procedures for collecting data, such as surveys, opinion polls, or questionnaires, or arrange to obtain existing data.",
+    "Forecast and track marketing and sales trends, analyzing collected data."
+   ],
+   "human": [
+    "Measure and assess customer and employee satisfaction."
+   ]
+  },
+  "sales-representative": {
+   "exposure": 0.71,
+   "exposedShare": 1,
+   "autoShare": 0.5,
+   "tasksRated": 10,
+   "speed": [
+    "Provide customers with product samples and catalogs.",
+    "Answer customers' questions about products, prices, availability, product uses, and credit terms.",
+    "Consult with clients after sales or contract signings to resolve problems and to provide ongoing support."
+   ],
+   "human": [
+    "Forward orders to manufacturers.",
+    "Check stock levels and reorder merchandise as necessary."
+   ]
+  },
+  "project-manager": {
+   "exposure": 0.4,
+   "exposedShare": 0.75,
+   "autoShare": 0.53,
+   "tasksRated": 20,
+   "speed": [
+    "Create project status presentations for delivery to customers or project personnel.",
+    "Plan, schedule, or coordinate project activities to meet deadlines.",
+    "Report project status, such as budget, resources, technical issues, or customer satisfaction, to managers."
+   ],
+   "human": [
+    "Monitor costs incurred by project staff to identify budget issues.",
+    "Identify, review, or select vendors or consultants to meet project needs.",
+    "Recruit or hire project personnel."
+   ]
+  },
+  "real-estate-agent": {
+   "exposure": 0.41,
+   "exposedShare": 0.52,
+   "autoShare": 0.42,
+   "tasksRated": 23,
+   "speed": [
+    "Advise clients on market conditions, prices, mortgages, legal requirements, and related matters.",
+    "Accompany buyers during visits to and inspections of property, advising them on the suitability and value of the homes they are visiting.",
+    "Advise sellers on how to make homes more appealing to potential buyers."
+   ],
+   "human": [
+    "Contact property owners and advertise services to solicit property sales listings.",
+    "Contact previous clients for prospecting of referral business.",
+    "Visit properties to assess them before showing them to clients."
+   ]
+  },
+  "accountant": {
+   "exposure": 0.52,
+   "exposedShare": 0.8,
+   "autoShare": 0.56,
+   "tasksRated": 20,
+   "speed": [
+    "Prepare detailed reports on audit findings.",
+    "Report to management about asset utilization and audit results, and recommend changes in operations and financial activities.",
+    "Establish tables of accounts and assign entries to proper accounts."
+   ],
+   "human": [
+    "Inspect cash on hand, notes receivable and payable, negotiable securities, and canceled checks to confirm records are accurate.",
+    "Review accounts for discrepancies and reconcile differences."
+   ]
+  },
+  "financial-analyst": {
+   "exposure": 0.5,
+   "exposedShare": 0.85,
+   "autoShare": 0.55,
+   "tasksRated": 26,
+   "speed": [
+    "Conduct financial analyses related to investments in green construction or green retrofitting projects.",
+    "Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions.",
+    "Interpret data on price, yield, stability, future investment-risk trends, economic influences, and other factors affecting investment programs."
+   ],
+   "human": [
+    "Purchase investments for companies in accordance with company policy.",
+    "Collaborate on projects with other professionals, such as lawyers, accountants, or public relations experts."
+   ]
+  },
+  "financial-advisor": {
+   "exposure": 0.67,
+   "exposedShare": 0.94,
+   "autoShare": 0.44,
+   "tasksRated": 17,
+   "speed": [
+    "Explain to clients the personal financial advisor's responsibilities and the types of services to be provided.",
+    "Recommend to clients strategies in cash management, insurance coverage, investment planning, or other areas to help them achieve their financial goals.",
+    "Guide clients in the gathering of information, such as bank account records, income tax returns, life and disability insurance records, pension plans, or wills."
+   ],
+   "human": [
+    "Meet with clients' other advisors, such as attorneys, accountants, trust officers, or investment bankers, to fully understand clients' financial goals and circumstances."
+   ]
+  },
+  "graphic-designer": {
+   "exposure": 0.41,
+   "exposedShare": 0.92,
+   "autoShare": 0.45,
+   "tasksRated": 12,
+   "speed": [
+    "Create designs, concepts, and sample layouts, based on knowledge of layout principles and esthetic design concepts.",
+    "Develop graphics and layouts for product illustrations, company logos, and Web sites.",
+    "Research new software or design concepts."
+   ],
+   "human": [
+    "Prepare notes and instructions for workers who assemble and prepare final layouts for printing.",
+    "Mark up, paste, and assemble final layouts to prepare layouts for printer.",
+    "Photograph layouts, using camera, to make layout prints for supervisors or clients."
+   ]
+  },
+  "video-editor": {
+   "exposure": 0.47,
+   "exposedShare": 0.85,
+   "autoShare": 0.64,
+   "tasksRated": 13,
+   "speed": [
+    "Study scripts to become familiar with production concepts and requirements.",
+    "Organize and string together raw footage into a continuous whole according to scripts or the instructions of directors and producers.",
+    "Review assembled films or edited videotapes on screens or monitors to determine if corrections are necessary."
+   ],
+   "human": [
+    "Supervise and coordinate activities of workers engaged in film editing, assembling, and recording activities.",
+    "Set up and operate computer editing systems, electronic titling systems, video switching equipment, and digital video effects units to produce a final product.",
+    "Conduct film screenings for directors and members of production staffs."
+   ]
+  },
+  "architect": {
+   "exposure": 0.43,
+   "exposedShare": 0.68,
+   "autoShare": 0.15,
+   "tasksRated": 19,
+   "speed": [
+    "Represent clients in obtaining bids or awarding construction contracts.",
+    "Administer construction contracts.",
+    "Prepare contract documents for building contractors."
+   ],
+   "human": [
+    "Meet with clients to review or discuss architectural drawings.",
+    "Consult with clients to determine functional or spatial requirements of structures.",
+    "Direct activities of technicians engaged in preparing drawings or specification documents."
+   ]
+  },
+  "civil-engineer": {
+   "exposure": 0.38,
+   "exposedShare": 0.55,
+   "autoShare": 0.33,
+   "tasksRated": 11,
+   "speed": [
+    "Prepare or present public reports on topics such as bid proposals, deeds, environmental impact statements, or property and right-of-way descriptions.",
+    "Analyze survey reports, maps, drawings, blueprints, aerial photography, or other topographical or geologic data.",
+    "Design energy-efficient or environmentally sound civil structures."
+   ],
+   "human": [
+    "Inspect project sites to monitor progress and ensure conformance to design specifications and safety or sanitation standards.",
+    "Manage and direct the construction, operations, or maintenance activities at project site.",
+    "Compute load and grade requirements, water flow rates, or material stress factors to determine design specifications."
+   ]
+  },
+  "mechanical-engineer": {
+   "exposure": 0.37,
+   "exposedShare": 0.47,
+   "autoShare": 0.14,
+   "tasksRated": 15,
+   "speed": [
+    "Provide feedback to design engineers on customer problems or needs.",
+    "Recommend design modifications to eliminate machine or system malfunctions.",
+    "Assist drafters in developing the structural design of products, using drafting tools or computer-assisted drafting equipment or software."
+   ],
+   "human": [
+    "Conduct research that tests or analyzes the feasibility, design, operation, or performance of equipment, components, or systems.",
+    "Design test control apparatus or equipment or develop procedures for testing products.",
+    "Research, design, evaluate, install, operate, or maintain mechanical products, equipment, systems or processes to meet requirements."
+   ]
+  },
+  "environmental-scientist": {
+   "exposure": 0.73,
+   "exposedShare": 1,
+   "autoShare": 0.11,
+   "tasksRated": 9,
+   "speed": [
+    "Prepare charts or graphs from data samples, providing summary information on the environmental relevance of the data.",
+    "Provide advice on proper standards and regulations or the development of policies, strategies, or codes of practice for environmental management.",
+    "Monitor effects of pollution or land degradation and recommend means of prevention or control."
+   ],
+   "human": [
+    "Supervise or train students, environmental technologists, technicians, or other related staff."
+   ]
+  },
+  "elementary-teacher": {
+   "exposure": 0.31,
+   "exposedShare": 0.5,
+   "autoShare": 0.11,
+   "tasksRated": 36,
+   "speed": [
+    "Collaborate with other teachers and administrators in the development, evaluation, and revision of elementary school programs.",
+    "Confer with other staff members to plan and schedule lessons promoting learning, following approved curricula.",
+    "Prepare reports on students and activities as required by administration."
+   ],
+   "human": [
+    "Prepare students for later grades by encouraging them to explore learning opportunities and to persevere with challenging tasks.",
+    "Involve parent volunteers and older students in children's activities to facilitate involvement in focused, complex play.",
+    "Confer with parents or guardians, teachers, counselors, and administrators to resolve students' behavioral and academic problems."
+   ]
+  },
+  "high-school-teacher": {
+   "exposure": 0.34,
+   "exposedShare": 0.52,
+   "autoShare": 0.31,
+   "tasksRated": 31,
+   "speed": [
+    "Prepare reports on students and activities as required by administration.",
+    "Establish clear objectives for all lessons, units, and projects, and communicate those objectives to students.",
+    "Prepare for assigned classes, and show written evidence of preparation upon request of immediate supervisors."
+   ],
+   "human": [
+    "Sponsor extracurricular activities, such as clubs, student organizations, and academic contests.",
+    "Guide and counsel students with adjustments, academic problems, or special academic interests.",
+    "Prepare students for later grades by encouraging them to explore learning opportunities and to persevere with challenging tasks."
+   ]
+  },
+  "special-education-teacher": {
+   "exposure": 0.25,
+   "exposedShare": 0.3,
+   "autoShare": 0.17,
+   "tasksRated": 20,
+   "speed": [
+    "Write or modify individualized education plans (IEPs) for students with intellectual or physical disabilities.",
+    "Prepare lesson plans in accordance with individualized education plans (IEPs) and the functional abilities or needs of students.",
+    "Write reports to summarize student performance, social growth, or physical development."
+   ],
+   "human": [
+    "Provide individual or small groups of students with adapted physical education instruction that meets desired physical needs or goals.",
+    "Advise education professionals of students' physical abilities or disabilities and the accommodations required to enhance their school performance.",
+    "Instruct students, using adapted physical education techniques, to improve physical fitness, gross motor skills, perceptual motor skills, or sports and game achievement."
+   ],
+   "approximate": true,
+   "basedOn": [
+    "Adapted Physical Education Specialists"
+   ]
+  },
+  "school-counselor": {
+   "exposure": 0.32,
+   "exposedShare": 0.35,
+   "autoShare": 0.25,
+   "tasksRated": 23,
+   "speed": [
+    "Plan, direct, and participate in recruitment and enrollment activities.",
+    "Prepare reports on students and activities as required by administration.",
+    "Counsel individuals to help them understand and overcome personal, social, or behavioral problems affecting their educational or vocational situations."
+   ],
+   "human": [
+    "Teach classes and present self-help or information sessions on subjects related to education and career planning.",
+    "Identify cases of domestic abuse or other family problems and encourage students or parents to seek additional assistance from mental health professionals.",
+    "Observe students during classroom and play activities to evaluate students' performance, behavior, social development, and physical health."
+   ]
+  },
+  "social-worker": {
+   "exposure": 0.3,
+   "exposedShare": 0.5,
+   "autoShare": 0.33,
+   "tasksRated": 12,
+   "speed": [
+    "Collect supplementary information needed to assist client, such as employment records, medical records, or school reports.",
+    "Maintain case history records and prepare reports.",
+    "Counsel parents with child rearing problems, interviewing the child and family to determine whether further action is required."
+   ],
+   "human": [
+    "Develop and review service plans in consultation with clients and perform follow-ups assessing the quantity and quality of services provided.",
+    "Address legal issues, such as child abuse and discipline, assisting with hearings and providing testimony to inform custody arrangements.",
+    "Consult with parents, teachers, and other school personnel to determine causes of problems, such as truancy and misbehavior, and to implement solutions."
+   ]
+  },
+  "mental-health-counselor": {
+   "exposure": 0.26,
+   "exposedShare": 0.42,
+   "autoShare": 0.3,
+   "tasksRated": 24,
+   "speed": [
+    "Refer patients, clients, or family members to community resources or to specialists as necessary.",
+    "Prepare and maintain all required treatment records and reports.",
+    "Collaborate with mental health professionals and other staff members to perform clinical assessments or develop treatment plans."
+   ],
+   "human": [
+    "Plan, organize, or lead structured programs of counseling, work, study, recreation, or social activities for clients.",
+    "Counsel family members to assist them in understanding, dealing with, or supporting clients or patients.",
+    "Discuss with individual patients their plans for life after leaving therapy."
+   ],
+   "approximate": true,
+   "basedOn": [
+    "Mental Health Counselors"
+   ]
+  },
+  "community-service-manager": {
+   "exposure": 0.45,
+   "exposedShare": 0.67,
+   "autoShare": 0.13,
+   "tasksRated": 12,
+   "speed": [
+    "Act as consultants to agency staff and other community programs regarding the interpretation of program-related federal, state, and county regulations and policies.",
+    "Establish and oversee administrative procedures to meet objectives set by boards of directors or senior management.",
+    "Participate in the determination of organizational policies regarding such issues as participant eligibility, program requirements, and program benefits."
+   ],
+   "human": [
+    "Direct activities of professional and technical staff members and volunteers.",
+    "Evaluate the work of staff and volunteers to ensure that programs are of appropriate quality and that resources are used effectively.",
+    "Recruit, interview, and hire or sign up volunteers and staff."
+   ]
+  },
+  "pastor": {
+   "exposure": 0.24,
+   "exposedShare": 0.29,
+   "autoShare": 0,
+   "tasksRated": 21,
+   "speed": [
+    "Refer people to community support services, psychologists, or doctors.",
+    "Instruct people who seek conversion to a particular faith.",
+    "Share information about religious issues by writing articles, giving speeches, or teaching."
+   ],
+   "human": [
+    "Train leaders of church, community, or youth groups.",
+    "Visit people in homes, hospitals, or prisons to provide them with comfort and support.",
+    "Prepare and deliver sermons or other talks."
+   ]
+  },
+  "registered-nurse": {
+   "exposure": 0.38,
+   "exposedShare": 0.6,
+   "autoShare": 0.22,
+   "tasksRated": 15,
+   "speed": [
+    "Monitor all aspects of patient care, including diet and physical activity.",
+    "Work with individuals, groups, or families to plan or implement programs designed to improve the overall health of communities.",
+    "Instruct individuals, families, or other groups on topics such as health education, disease prevention, or childbirth and develop health improvement programs."
+   ],
+   "human": [
+    "Observe nurses and visit patients to ensure proper nursing care.",
+    "Provide health care, first aid, immunizations, or assistance in convalescence or rehabilitation in locations such as schools, hospitals, or industry.",
+    "Administer medications to patients and monitor patients for reactions or side effects."
+   ]
+  },
+  "licensed-practical-nurse": {
+   "exposure": 0.25,
+   "exposedShare": 0.53,
+   "autoShare": 0.13,
+   "tasksRated": 15,
+   "speed": [
+    "Prepare patients for examinations, tests, or treatments and explain procedures.",
+    "Observe patients, charting and reporting changes in patients' conditions, such as adverse reactions to medication or treatment, and taking any necessary action.",
+    "Administer prescribed medications or start intravenous fluids, noting times and amounts on patients' charts."
+   ],
+   "human": [
+    "Help patients with bathing, dressing, maintaining personal hygiene, moving in bed, or standing and walking.",
+    "Supervise nurses' aides or assistants.",
+    "Collect samples, such as blood, urine, or sputum from patients, and perform routine laboratory tests on samples."
+   ]
+  },
+  "physician-assistant": {
+   "exposure": 0.13,
+   "exposedShare": 0.25,
+   "autoShare": 0,
+   "tasksRated": 12,
+   "speed": [
+    "Obtain, compile, and record patient medical data, including health history, progress notes, and results of physical examination.",
+    "Administer or order diagnostic tests, such as x-ray, electrocardiogram, and laboratory tests.",
+    "Interpret diagnostic test results for deviations from normal."
+   ],
+   "human": [
+    "Visit and observe patients on hospital rounds or house calls, updating charts, ordering therapy, and reporting back to physician.",
+    "Examine patients to obtain information about their physical condition.",
+    "Order medical and laboratory supplies and equipment."
+   ]
+  },
+  "physical-therapist": {
+   "exposure": 0.34,
+   "exposedShare": 0.57,
+   "autoShare": 0.15,
+   "tasksRated": 23,
+   "speed": [
+    "Inform patients and refer to appropriate practitioners when diagnosis reveals findings outside physical therapy.",
+    "Participate in community or community agency activities or help to formulate public policy.",
+    "Review physician's referral and patient's medical records to help determine diagnosis and physical therapy treatment required."
+   ],
+   "human": [
+    "Teach physical therapy students or those in other health professions.",
+    "Administer manual exercises, massage, or traction to help relieve pain, increase patient strength, or decrease or prevent deformity or crippling.",
+    "Instruct patient and family in treatment procedures to be continued at home."
+   ]
+  },
+  "dental-hygienist": {
+   "exposure": 0.09,
+   "exposedShare": 0.21,
+   "autoShare": 0.67,
+   "tasksRated": 14,
+   "speed": [
+    "Record and review patient medical histories.",
+    "Maintain patient recall system.",
+    "Chart conditions of decay and disease for diagnosis and treatment by dentist."
+   ],
+   "human": [
+    "Feel and visually examine gums for sores and signs of disease.",
+    "Examine gums, using probes, to locate periodontal recessed gums and signs of gum disease.",
+    "Clean calcareous deposits, accretions, and stains from teeth and beneath margins of gums, using dental instruments."
+   ]
+  },
+  "medical-assistant": {
+   "exposure": 0.14,
+   "exposedShare": 0.21,
+   "autoShare": 0.75,
+   "tasksRated": 19,
+   "speed": [
+    "Perform general office duties, such as answering telephones, taking dictation, or completing insurance forms.",
+    "Record patients' medical history, vital statistics, or information such as test results in medical records.",
+    "Schedule appointments for patients."
+   ],
+   "human": [
+    "Interview patients to obtain medical information and measure their vital signs, weight, and height.",
+    "Show patients to examination rooms and prepare them for the physician.",
+    "Prepare treatment rooms for patient examinations, keeping the rooms neat and clean."
+   ]
+  },
+  "pharmacy-technician": {
+   "exposure": 0.43,
+   "exposedShare": 0.62,
+   "autoShare": 1,
+   "tasksRated": 13,
+   "speed": [
+    "Price and file prescriptions that have been filled.",
+    "Operate cash registers to accept payment from customers.",
+    "Receive written prescription or refill requests and verify that information is complete and accurate."
+   ],
+   "human": [
+    "Prepack bulk medicines, fill bottles with prescribed medications, and type and affix labels.",
+    "Mix pharmaceutical preparations, according to written prescriptions.",
+    "Clean and help maintain equipment or work areas and sterilize glassware, according to prescribed methods."
+   ]
+  },
+  "emt-paramedic": {
+   "exposure": 0.21,
+   "exposedShare": 0.42,
+   "autoShare": 0.2,
+   "tasksRated": 12,
+   "speed": [
+    "Coordinate work with other emergency medical team members or police or fire department personnel.",
+    "Observe, record, and report to physician the patient's condition or injury, the treatment provided, and reactions to drugs or treatment.",
+    "Assess nature and extent of illness or injury to establish and prioritize medical procedures."
+   ],
+   "human": [
+    "Administer first aid treatment or life support care to sick or injured persons in prehospital settings.",
+    "Drive mobile intensive care unit to specified location, following instructions from emergency medical dispatcher.",
+    "Maintain vehicles and medical and communication equipment, and replenish first aid equipment and supplies."
+   ]
+  },
+  "clinical-lab-technologist": {
+   "exposure": 0.16,
+   "exposedShare": 0.22,
+   "autoShare": 0.25,
+   "tasksRated": 18,
+   "speed": [
+    "Establish or monitor quality assurance programs or activities to ensure the accuracy of laboratory results.",
+    "Develop, standardize, evaluate, or modify procedures, techniques, or tests used in the analysis of specimens or in medical laboratory experiments.",
+    "Enter data from analysis of medical tests or clinical results into computer for storage."
+   ],
+   "human": [
+    "Analyze laboratory findings to check the accuracy of the results.",
+    "Set up, maintain, calibrate, clean, and test sterility of medical laboratory equipment.",
+    "Collect blood or tissue samples from patients, observing principles of asepsis to obtain blood sample."
+   ],
+   "approximate": true,
+   "basedOn": [
+    "Medical and Clinical Laboratory Technologists",
+    "Medical and Clinical Laboratory Technicians"
+   ]
+  },
+  "writer": {
+   "exposure": 0.81,
+   "exposedShare": 1,
+   "autoShare": 0.5,
+   "tasksRated": 6,
+   "speed": [
+    "Write articles, bulletins, sales letters, speeches, and other related informative, marketing and promotional material.",
+    "Discuss with the client the product, advertising themes and methods, and any changes that should be made in advertising copy.",
+    "Present drafts and ideas to clients."
+   ],
+   "human": []
+  },
+  "journalist": {
+   "exposure": 0.63,
+   "exposedShare": 0.83,
+   "autoShare": 0.6,
+   "tasksRated": 30,
+   "speed": [
+    "Write online blog entries that address news developments or offer additional information, opinions, or commentary on news events.",
+    "Examine news items of local, national, and international significance to determine topics to address, or obtain assignments from editorial staff members.",
+    "Present live or recorded commentary via broadcast media."
+   ],
+   "human": [
+    "Transmit news stories or reporting information from remote locations, using equipment such as satellite phones, telephones, fax machines, or modems.",
+    "Report news stories for publication or broadcast, describing the background and details of events.",
+    "Present news stories, and introduce in-depth videotaped segments or live transmissions from on-the-scene reporters."
+   ]
+  },
+  "technical-writer": {
+   "exposure": 0.63,
+   "exposedShare": 0.93,
+   "autoShare": 0.64,
+   "tasksRated": 15,
+   "speed": [
+    "Develop or maintain online help documentation.",
+    "Edit, standardize, or make changes to material prepared by other writers or establishment personnel.",
+    "Review published materials and recommend revisions or changes in scope, format, content, and methods of reproduction and binding."
+   ],
+   "human": [
+    "Observe production, developmental, and experimental activities to determine operating procedure and detail."
+   ]
+  },
+  "photographer": {
+   "exposure": 0.22,
+   "exposedShare": 0.42,
+   "autoShare": 0.5,
+   "tasksRated": 19,
+   "speed": [
+    "Manipulate and enhance scanned or digital images to create desired effects, using computers and specialized software.",
+    "Transfer photographs to computers for editing, archiving, and electronic transmission.",
+    "Determine project goals, locations, and equipment needs by studying assignments and consulting with clients or advertising staff."
+   ],
+   "human": [
+    "Take pictures of individuals, families, and small groups, either in studio or on location.",
+    "Create artificial light, using flashes and reflectors.",
+    "Select and assemble equipment and required background properties, according to subjects, materials, and conditions."
+   ]
+  },
+  "musician": {
+   "exposure": 0.13,
+   "exposedShare": 0.16,
+   "autoShare": 0,
+   "tasksRated": 19,
+   "speed": [
+    "Sight-read musical parts during rehearsals.",
+    "Promote their own or their group's music by participating in media interviews and other activities.",
+    "Listen to recordings to master pieces or to maintain and improve skills."
+   ],
+   "human": [
+    "Practice singing exercises and study with vocal coaches to develop voice and skills and to rehearse for upcoming roles.",
+    "Teach music for specific instruments.",
+    "Make or participate in recordings in music studios."
+   ]
+  },
+  "animator": {
+   "exposure": 0.48,
+   "exposedShare": 1,
+   "autoShare": 0.33,
+   "tasksRated": 6,
+   "speed": [
+    "Create two-dimensional and three-dimensional images depicting objects in motion or illustrating a process, using computer animation or modeling programs.",
+    "Design complex graphics and animation, using independent judgment, creativity, and computer equipment.",
+    "Create basic designs, drawings, and illustrations for product labels, cartons, direct mail, or television."
+   ],
+   "human": [
+    "Assemble, typeset, scan, and produce digital camera-ready art or film negatives and printer's proofs.",
+    "Create and install special effects as required by the script, mixing chemicals and fabricating needed parts from wood, metal, plaster, and clay."
+   ]
+  },
+  "interior-designer": {
+   "exposure": 0.36,
+   "exposedShare": 0.57,
+   "autoShare": 0.25,
+   "tasksRated": 14,
+   "speed": [
+    "Advise client on interior design factors, such as space planning, layout and use of furnishings or equipment, and color coordination.",
+    "Research and explore the use of new materials, technologies, and products to incorporate into designs.",
+    "Estimate material requirements and costs, and present design to client for approval."
+   ],
+   "human": [
+    "Inspect construction work on site to ensure its adherence to the design plans.",
+    "Design plans to be safe and to be compliant with the American Disabilities Act (ADA).",
+    "Coordinate with other professionals, such as contractors, architects, engineers, and plumbers, to ensure job success."
+   ]
+  },
+  "fashion-designer": {
+   "exposure": 0.38,
+   "exposedShare": 0.67,
+   "autoShare": 0.13,
+   "tasksRated": 12,
+   "speed": [
+    "Provide sample garments to agents and sales representatives, and arrange for showings of sample garments at sales meetings or fashion shows.",
+    "Identify target markets for designs, looking at factors such as age, gender, and socioeconomic status.",
+    "Sketch rough and detailed drawings of apparel or accessories, and write specifications such as color schemes, construction, material types, and accessory requirements."
+   ],
+   "human": [
+    "Purchase new or used clothing and accessory items as needed to complete designs.",
+    "Select materials and production techniques to be used for products.",
+    "Confer with sales and management executives or with clients to discuss design ideas."
+   ]
+  },
+  "audio-engineer": {
+   "exposure": 0.28,
+   "exposedShare": 0.54,
+   "autoShare": 0.57,
+   "tasksRated": 13,
+   "speed": [
+    "Mix and edit voices, music, and taped sound effects for live performances and for prerecorded events, using sound mixing boards.",
+    "Convert video and audio recordings into digital formats for editing or archiving.",
+    "Reproduce and duplicate sound recordings from original recording media, using sound editing and duplication equipment."
+   ],
+   "human": [
+    "Record speech, music, and other sounds on recording media, using recording equipment.",
+    "Set up, test, and adjust recording equipment for recording sessions and live performances.",
+    "Tear down equipment after event completion."
+   ]
+  },
+  "industrial-designer": {
+   "exposure": 0.41,
+   "exposedShare": 0.75,
+   "autoShare": 0,
+   "tasksRated": 12,
+   "speed": [
+    "Confer with engineering, marketing, production, or sales departments, or with customers, to establish and evaluate design concepts for manufactured products.",
+    "Modify and refine designs, using working models, to conform with customer specifications, production limitations, or changes in design trends.",
+    "Research production specifications, costs, production materials, and manufacturing methods and provide cost estimates and itemized production requirements."
+   ],
+   "human": [
+    "Develop manufacturing procedures and monitor the manufacture of their designs in a factory to improve operations and product quality.",
+    "Evaluate feasibility of design ideas, based on factors such as appearance, safety, function, serviceability, budget, production costs/methods, and market characteristics.",
+    "Fabricate models or samples in paper, wood, glass, fabric, plastic, metal, or other materials, using hand or power tools."
+   ]
+  },
+  "electrical-engineer": {
+   "exposure": 0.41,
+   "exposedShare": 0.7,
+   "autoShare": 0.43,
+   "tasksRated": 10,
+   "speed": [
+    "Compile data and write reports regarding existing or potential electrical engineering studies or projects.",
+    "Prepare specifications for purchases of materials or equipment.",
+    "Operate computer-assisted engineering or design software or equipment to perform engineering tasks."
+   ],
+   "human": [
+    "Design, implement, maintain, or improve electrical instruments, equipment, facilities, components, products, or systems for commercial, industrial, or domestic purposes.",
+    "Supervise or train project team members, as necessary.",
+    "Investigate or test vendors' or competitors' products."
+   ]
+  },
+  "chemical-engineer": {
+   "exposure": 0.35,
+   "exposedShare": 0.62,
+   "autoShare": 0.25,
+   "tasksRated": 13,
+   "speed": [
+    "Determine most effective arrangement of operations such as mixing, crushing, heat transfer, distillation, and drying.",
+    "Troubleshoot problems with chemical manufacturing processes.",
+    "Conduct research to develop new and improved chemical manufacturing processes."
+   ],
+   "human": [
+    "Perform laboratory studies of steps in manufacture of new products and test proposed processes in small-scale operation, such as a pilot plant.",
+    "Evaluate chemical equipment and processes to identify ways to optimize performance or to ensure compliance with safety and environmental regulations.",
+    "Develop safety procedures to be employed by workers operating equipment or working in close proximity to ongoing chemical reactions."
+   ]
+  },
+  "aerospace-engineer": {
+   "exposure": 0.52,
+   "exposedShare": 0.9,
+   "autoShare": 0.22,
+   "tasksRated": 10,
+   "speed": [
+    "Write technical reports or other documentation, such as handbooks or bulletins, for use by engineering staff, management, or customers.",
+    "Direct or coordinate activities of engineering or technical personnel involved in designing, fabricating, modifying, or testing of aircraft or aerospace products.",
+    "Plan or coordinate investigation and resolution of customers' reports of technical problems with aircraft or aerospace vehicles."
+   ],
+   "human": [
+    "Plan or conduct experimental, environmental, operational, or stress tests on models or prototypes of aircraft or aerospace systems or equipment.",
+    "Design or engineer filtration systems that reduce harmful emissions."
+   ]
+  },
+  "biomedical-engineer": {
+   "exposure": 0.54,
+   "exposedShare": 0.78,
+   "autoShare": 0.14,
+   "tasksRated": 9,
+   "speed": [
+    "Advise hospital administrators on the planning, acquisition, and use of medical equipment.",
+    "Write documents describing protocols, policies, standards for use, maintenance, and repair of medical equipment.",
+    "Conduct research, along with life scientists, chemists, and medical scientists, on the engineering aspects of the biological systems of humans and animals."
+   ],
+   "human": [
+    "Evaluate the safety, efficiency, and effectiveness of biomedical equipment.",
+    "Conduct training or in-services to educate clinicians and other personnel on proper use of equipment.",
+    "Confer with research and biomanufacturing personnel to ensure the compatibility of design and production."
+   ]
+  },
+  "industrial-engineer": {
+   "exposure": 0.61,
+   "exposedShare": 0.89,
+   "autoShare": 0.25,
+   "tasksRated": 18,
+   "speed": [
+    "Study operations sequence, material flow, functional statements, organization charts, and project information to determine worker functions and responsibilities.",
+    "Formulate sampling procedures and designs and develop forms and instructions for recording, evaluating, and reporting quality and reliability data.",
+    "Review production schedules, engineering specifications, orders, and related information to obtain knowledge of manufacturing methods, procedures, and activities."
+   ],
+   "human": [
+    "Confer with clients, vendors, staff, and management personnel regarding purchases, product and production specifications, manufacturing capabilities, or project status.",
+    "Recommend methods for improving utilization of personnel, material, and utilities."
+   ]
+  },
+  "environmental-engineer": {
+   "exposure": 0.5,
+   "exposedShare": 0.77,
+   "autoShare": 0.15,
+   "tasksRated": 26,
+   "speed": [
+    "Provide environmental engineering assistance in network analysis, regulatory analysis, or planning or reviewing database development.",
+    "Prepare or present public briefings on the status of environmental engineering projects.",
+    "Prepare hazardous waste manifests or land disposal restriction notifications."
+   ],
+   "human": [
+    "Inspect industrial or municipal facilities or programs to evaluate operational effectiveness or ensure compliance with environmental regulations.",
+    "Monitor progress of environmental improvement programs.",
+    "Direct installation or operation of environmental monitoring devices or supervise related data collection programs."
+   ]
+  },
+  "engineering-technician": {
+   "exposure": 0.33,
+   "exposedShare": 0.57,
+   "autoShare": 0.23,
+   "tasksRated": 23,
+   "speed": [
+    "Provide user applications or engineering support or recommendations for new or existing equipment with regard to installation, upgrades, or enhancements.",
+    "Maintain system logs or manuals to document testing or operation of equipment.",
+    "Select electronics equipment, components, or systems to meet functional specifications."
+   ],
+   "human": [
+    "Assemble electrical systems or prototypes, using hand tools or measuring instruments.",
+    "Modify, maintain, or repair electronics equipment or systems to ensure proper functioning.",
+    "Set up and operate specialized or standard test equipment to diagnose, test, or analyze the performance of electronic components, assemblies, or systems."
+   ]
+  },
+  "drafter": {
+   "exposure": 0.52,
+   "exposedShare": 0.86,
+   "autoShare": 0.58,
+   "tasksRated": 22,
+   "speed": [
+    "Analyze building codes, by-laws, space and site requirements, and other technical documents and reports to determine their effect on architectural designs.",
+    "Check dimensions of materials to be used and assign numbers to lists of materials.",
+    "Determine procedures and instructions to be followed, according to design specifications and quantity of required materials."
+   ],
+   "human": [
+    "Supervise or conduct field surveys, inspections, or technical investigations to obtain data required to revise construction drawings.",
+    "Supervise and train other technologists, technicians, and drafters.",
+    "Obtain and assemble data to complete architectural designs, visiting job sites to compile measurements as necessary."
+   ]
+  },
+  "surveyor": {
+   "exposure": 0.43,
+   "exposedShare": 0.71,
+   "autoShare": 0.2,
+   "tasksRated": 21,
+   "speed": [
+    "Verify the accuracy of survey data, including measurements and calculations conducted at survey sites.",
+    "Develop criteria for survey methods and procedures.",
+    "Search legal records, survey records, and land titles to obtain information about property boundaries in areas to be surveyed."
+   ],
+   "human": [
+    "Testify as an expert witness in court cases on land survey issues, such as property boundaries.",
+    "Direct or conduct surveys to establish legal boundaries for properties, based on legal deeds and titles.",
+    "Adjust surveying instruments to maintain their accuracy."
+   ]
+  },
+  "biologist": {
+   "exposure": 0.31,
+   "exposedShare": 0.5,
+   "autoShare": 0,
+   "tasksRated": 10,
+   "speed": [
+    "Prepare technical reports and recommendations, based upon research outcomes.",
+    "Provide laboratory services for health departments, community environmental health programs, and physicians needing information for diagnosis and treatment.",
+    "Investigate the relationship between organisms and disease, including the control of epidemics and the effects of antibiotics on microorganisms."
+   ],
+   "human": [
+    "Supervise biological technologists and technicians and other scientists.",
+    "Observe action of microorganisms upon living tissues of plants, higher animals, and other microorganisms, and on dead organic matter."
+   ]
+  },
+  "chemist": {
+   "exposure": 0.4,
+   "exposedShare": 0.5,
+   "autoShare": 0.17,
+   "tasksRated": 12,
+   "speed": [
+    "Confer with scientists or engineers to conduct analyses of research projects, interpret test results, or develop nonstandard tests.",
+    "Purchase laboratory supplies, such as chemicals, when supplies are low or near their expiration date.",
+    "Write technical papers or reports or prepare standards and specifications for processes, facilities, products, or tests."
+   ],
+   "human": [
+    "Induce changes in composition of substances by introducing heat, light, energy, or chemical catalysts for quantitative or qualitative analysis.",
+    "Conduct quality control tests.",
+    "Maintain laboratory instruments to ensure proper working order and troubleshoot malfunctions when needed."
+   ]
+  },
+  "forensic-science-technician": {
+   "exposure": 0.19,
+   "exposedShare": 0.3,
+   "autoShare": 0.33,
+   "tasksRated": 10,
+   "speed": [
+    "Keep records and prepare reports detailing findings, investigative methods, and laboratory techniques.",
+    "Use photographic or video equipment to document evidence or crime scenes.",
+    "Reconstruct crime scenes to determine relationships among pieces of evidence."
+   ],
+   "human": [
+    "Collect evidence from crime scenes, storing it in conditions that preserve its integrity.",
+    "Train new technicians or other personnel on forensic science techniques.",
+    "Testify in court about investigative or analytical methods or findings."
+   ]
+  },
+  "agricultural-scientist": {
+   "exposure": 0.5,
+   "exposedShare": 0.77,
+   "autoShare": 0.1,
+   "tasksRated": 13,
+   "speed": [
+    "Develop food standards and production specifications, safety and sanitary regulations, and waste management and water supply specifications.",
+    "Develop new or improved ways of preserving, processing, packaging, storing, and delivering foods, using knowledge of chemistry, microbiology, and other sciences.",
+    "Evaluate food processing and storage operations and assist in the development of quality assurance programs for such operations."
+   ],
+   "human": [
+    "Check raw ingredients for maturity or stability for processing, and finished products for safety, quality, and nutritional value.",
+    "Inspect food processing areas to ensure compliance with government regulations and standards for sanitation, safety, quality, and waste management.",
+    "Test new products for flavor, texture, color, nutritional content, and adherence to government and industry standards."
+   ]
+  },
+  "geoscientist": {
+   "exposure": 0.48,
+   "exposedShare": 0.62,
+   "autoShare": 0.25,
+   "tasksRated": 13,
+   "speed": [
+    "Communicate geological findings by writing research papers, participating in conferences, or teaching geological science at universities.",
+    "Locate and estimate probable natural gas, oil, or mineral ore deposits or underground water resources, using aerial photographs, charts, or research or survey results.",
+    "Locate and review research articles or environmental, historical, or technical reports."
+   ],
+   "human": [
+    "Analyze and interpret geological data, using computer software.",
+    "Analyze and interpret geological, geochemical, or geophysical information from sources, such as survey data, well logs, bore holes, or aerial photos.",
+    "Measure characteristics of the Earth, such as gravity or magnetic fields, using equipment such as seismographs, gravimeters, torsion balances, or magnetometers."
+   ]
+  },
+  "statistician": {
+   "exposure": 0.71,
+   "exposedShare": 0.95,
+   "autoShare": 0.44,
+   "tasksRated": 19,
+   "speed": [
+    "Determine whether statistical methods are appropriate, based on user needs or research questions of interest.",
+    "Report results of statistical analyses in peer-reviewed papers and technical manuals.",
+    "Evaluate the statistical methods and procedures used to obtain data to ensure validity, applicability, efficiency, and accuracy."
+   ],
+   "human": [
+    "Supervise and provide instructions for workers collecting and tabulating data."
+   ]
+  },
+  "meteorologist": {
+   "exposure": 0.61,
+   "exposedShare": 0.95,
+   "autoShare": 0.5,
+   "tasksRated": 19,
+   "speed": [
+    "Formulate predictions by interpreting environmental data, such as meteorological, atmospheric, oceanic, paleoclimate, climate, or related information.",
+    "Prepare forecasts or briefings to meet the needs of industry, business, government, or other groups.",
+    "Develop and deliver training on weather topics."
+   ],
+   "human": [
+    "Teach college-level courses on topics such as atmospheric and space science, meteorology, or global climate change.",
+    "Direct forecasting services at weather stations or at radio or television broadcasting facilities.",
+    "Collect air samples from planes or ships over land or sea to study atmospheric composition."
+   ]
+  },
+  "wildlife-biologist": {
+   "exposure": 0.52,
+   "exposedShare": 1,
+   "autoShare": 0,
+   "tasksRated": 7,
+   "speed": [
+    "Make recommendations on management systems and planning for wildlife populations and habitat, consulting with stakeholders and the public at large to explore options.",
+    "Inventory or estimate plant and wildlife populations.",
+    "Inform and respond to public regarding wildlife and conservation issues, such as plant identification, hunting ordinances, and nuisance wildlife."
+   ],
+   "human": [
+    "Raise specimens for study and observation or for use in experiments.",
+    "Collect and dissect animal specimens and examine specimens under microscope.",
+    "Organize and conduct experimental studies with live animals in controlled or natural surroundings."
+   ]
+  },
+  "conservation-scientist": {
+   "exposure": 0.55,
+   "exposedShare": 0.83,
+   "autoShare": 0.17,
+   "tasksRated": 29,
+   "speed": [
+    "Develop or conduct environmental studies, such as plant material field trials or wildlife habitat impact studies.",
+    "Review or approve amendments to comprehensive local water plans or conservation district plans.",
+    "Develop, conduct, or participate in surveys, studies, or investigations of various land uses to inform corrective action plans."
+   ],
+   "human": [
+    "Manage field offices or involve staff in cooperative ventures.",
+    "Revisit land users to view implemented land use practices or plans.",
+    "Implement soil or water management techniques, such as nutrient management, erosion control, buffers, or filter strips, in accordance with conservation plans."
+   ]
+  },
+  "physician": {
+   "exposure": 0.38,
+   "exposedShare": 0.55,
+   "autoShare": 0,
+   "tasksRated": 11,
+   "speed": [
+    "Refer patients to medical specialists or other practitioners when necessary.",
+    "Explain procedures and discuss test results or prescribed treatments with patients.",
+    "Order, perform, and interpret tests and analyze records, reports, and examination information to diagnose patients' condition."
+   ],
+   "human": [
+    "Prescribe or administer treatment, therapy, medication, vaccination, and other specialized medical care to treat or prevent illness, disease, or injury.",
+    "Train residents, medical students, and other health care professionals.",
+    "Monitor patients' conditions and progress and reevaluate treatments as necessary."
+   ]
+  },
+  "nurse-practitioner": {
+   "exposure": 0.31,
+   "exposedShare": 0.56,
+   "autoShare": 0.2,
+   "tasksRated": 27,
+   "speed": [
+    "Provide patients or caregivers with assistance in locating health care resources.",
+    "Diagnose or treat complex, unstable, comorbid, episodic, or emergency conditions in collaboration with other health care providers as necessary.",
+    "Schedule follow-up visits to monitor patients or evaluate health or illness care."
+   ],
+   "human": [
+    "Diagnose or treat chronic health care problems, such as high blood pressure and diabetes.",
+    "Diagnose or treat acute health care problems, such as illnesses, infections, or injuries.",
+    "Supervise or coordinate patient care or support staff activities."
+   ]
+  },
+  "pharmacist": {
+   "exposure": 0.4,
+   "exposedShare": 0.5,
+   "autoShare": 0.43,
+   "tasksRated": 14,
+   "speed": [
+    "Provide information and advice regarding drug interactions, side effects, dosage, and proper medication storage.",
+    "Advise customers on the selection of medication brands, medical equipment, or healthcare supplies.",
+    "Refer patients to other health professionals or agencies when appropriate."
+   ],
+   "human": [
+    "Provide specialized services to help patients manage conditions, such as diabetes, asthma, smoking cessation, or high blood pressure.",
+    "Teach pharmacy students serving as interns in preparation for their graduation or licensure.",
+    "Analyze prescribing trends to monitor patient compliance and to prevent excessive usage or harmful interactions."
+   ]
+  },
+  "dentist": {
+   "exposure": 0.23,
+   "exposedShare": 0.3,
+   "autoShare": 0,
+   "tasksRated": 20,
+   "speed": [
+    "Advise or instruct patients regarding preventive dental care, the causes and treatment of dental problems, or oral health care services.",
+    "Produce or evaluate dental health educational materials.",
+    "Plan, organize, or maintain dental health programs."
+   ],
+   "human": [
+    "Diagnose and treat diseases, injuries, or malformations of teeth, gums, or related oral structures and provide preventive or corrective services.",
+    "Bleach, clean, or polish teeth to restore natural color.",
+    "Use dental air turbines, hand instruments, dental appliances, or surgical implements."
+   ]
+  },
+  "occupational-therapist": {
+   "exposure": 0.39,
+   "exposedShare": 0.69,
+   "autoShare": 0.09,
+   "tasksRated": 16,
+   "speed": [
+    "Test and evaluate patients' physical and mental abilities and analyze medical data to determine realistic rehabilitation goals for patients.",
+    "Advise on health risks in the workplace or on health-related transition to retirement.",
+    "Plan and implement programs and social activities to help patients learn work or school skills and adjust to handicaps."
+   ],
+   "human": [
+    "Lay out materials such as puzzles, scissors and eating utensils for use in therapy, and clean and repair these tools after therapy sessions.",
+    "Train caregivers in providing for the needs of a patient during and after therapy.",
+    "Recommend changes in patients' work or living environments, consistent with their needs and capabilities."
+   ]
+  },
+  "speech-language-pathologist": {
+   "exposure": 0.39,
+   "exposedShare": 0.71,
+   "autoShare": 0.17,
+   "tasksRated": 17,
+   "speed": [
+    "Consult with and advise educators or medical staff on speech or hearing topics, such as communication strategies or speech and language stimulation.",
+    "Complete administrative responsibilities, such as coordinating paperwork, scheduling case management activities, or writing lesson plans.",
+    "Consult with and refer clients to additional medical or educational services."
+   ],
+   "human": [
+    "Instruct clients in techniques for more effective communication, such as sign language, lip reading, or voice improvement.",
+    "Monitor patients' progress and adjust treatments accordingly.",
+    "Teach clients to control or strengthen tongue, jaw, face muscles, or breathing mechanisms."
+   ]
+  },
+  "respiratory-therapist": {
+   "exposure": 0.19,
+   "exposedShare": 0.3,
+   "autoShare": 0.33,
+   "tasksRated": 20,
+   "speed": [
+    "Explain treatment procedures to patients to gain cooperation and allay fears.",
+    "Work as part of a team of physicians, nurses, or other healthcare professionals to manage patient care by assisting with medical procedures or related duties.",
+    "Maintain charts that contain patients' pertinent identification and therapy information."
+   ],
+   "human": [
+    "Demonstrate respiratory care procedures to trainees or other healthcare personnel.",
+    "Teach, train, supervise, or use the assistance of students, respiratory therapy technicians, or assistants.",
+    "Inspect, clean, test, and maintain respiratory therapy equipment to ensure equipment is functioning safely and efficiently, ordering repairs when necessary."
+   ]
+  },
+  "radiologic-technologist": {
+   "exposure": 0.28,
+   "exposedShare": 0.44,
+   "autoShare": 0.5,
+   "tasksRated": 27,
+   "speed": [
+    "Explain procedures and observe patients to ensure safety and comfort during scan.",
+    "Record, process, and maintain patient data or treatment records and prepare reports.",
+    "Perform general administrative tasks, such as answering phones, scheduling patient appointments, or pulling and filing films."
+   ],
+   "human": [
+    "Operate mobile x-ray equipment in operating room, emergency room, or at patient's bedside.",
+    "Position imaging equipment and adjust controls to set exposure time and distance, according to specification of examination.",
+    "Position patient on examining table and set up and adjust equipment to obtain optimum view of specific body area as requested by physician."
+   ]
+  },
+  "sonographer": {
+   "exposure": 0.29,
+   "exposedShare": 0.44,
+   "autoShare": 0.25,
+   "tasksRated": 18,
+   "speed": [
+    "Prepare patient for exam by explaining procedure, transferring patient to ultrasound table, scrubbing skin and applying gel, and positioning patient properly.",
+    "Perform clerical duties, such as scheduling exams or special procedures, keeping records, or archiving computerized images.",
+    "Coordinate work with physicians or other healthcare team members, including providing assistance during invasive procedures."
+   ],
+   "human": [
+    "Operate ultrasound equipment to produce and record images of the motion, shape, and composition of blood, organs, tissues, or bodily masses, such as fluid accumulations.",
+    "Observe screen during scan to ensure that image produced is satisfactory for diagnostic purposes, making adjustments to equipment as required.",
+    "Supervise or train students or other medical sonographers."
+   ]
+  },
+  "surgical-technologist": {
+   "exposure": 0.02,
+   "exposedShare": 0,
+   "autoShare": 0,
+   "tasksRated": 14,
+   "speed": [
+    "Maintain files and records of surgical procedures."
+   ],
+   "human": [
+    "Maintain a proper sterile field during surgical procedures.",
+    "Prepare patients for surgery, including positioning patients on the operating table and covering them with sterile surgical drapes to prevent exposure.",
+    "Hand instruments and supplies to surgeons and surgeons' assistants, hold retractors and cut sutures, and perform other tasks as directed by surgeon during operation."
+   ]
+  },
+  "nursing-assistant": {
+   "exposure": 0.14,
+   "exposedShare": 0.27,
+   "autoShare": 0.14,
+   "tasksRated": 26,
+   "speed": [
+    "Provide information, such as directions, visiting hours, or patient status information to visitors or callers.",
+    "Document or otherwise report observations of patient behavior, complaints, or physical symptoms to nurses.",
+    "Measure and record food and liquid intake or urinary and fecal output, reporting changes to medical or nursing staff."
+   ],
+   "human": [
+    "Assist nurses or physicians in the operation of medical equipment or provision of patient care.",
+    "Turn or reposition bedridden patients.",
+    "Feed patients or assist patients to eat or drink."
+   ]
+  },
+  "home-health-aide": {
+   "exposure": 0.33,
+   "exposedShare": 0.57,
+   "autoShare": 0.25,
+   "tasksRated": 7,
+   "speed": [
+    "Instruct or advise clients on issues, such as household cleanliness, utilities, hygiene, nutrition, or infant care.",
+    "Participate in case reviews, consulting with the team caring for the client, to evaluate the client's needs and plan for continuing services.",
+    "Prepare and maintain records of client progress and services performed, reporting changes in client condition to manager or supervisor."
+   ],
+   "human": [
+    "Perform healthcare-related tasks, such as monitoring vital signs and medication, under the direction of registered nurses or physiotherapists.",
+    "Administer bedside or personal care, such as ambulation or personal hygiene assistance.",
+    "Train family members to provide bedside care."
+   ]
+  },
+  "phlebotomist": {
+   "exposure": 0.11,
+   "exposedShare": 0.18,
+   "autoShare": 0.67,
+   "tasksRated": 17,
+   "speed": [
+    "Enter patient, specimen, insurance, or billing information into computer.",
+    "Determine donor suitability, according to interview results, vital signs, and medical history."
+   ],
+   "human": [
+    "Process blood or other fluid samples for further analysis by other medical professionals.",
+    "Organize or clean blood-drawing trays, ensuring that all instruments are sterile and all needles, syringes, or related items are of first-time use.",
+    "Train other medical personnel in phlebotomy or laboratory techniques."
+   ]
+  },
+  "dental-assistant": {
+   "exposure": 0.1,
+   "exposedShare": 0.21,
+   "autoShare": 0.67,
+   "tasksRated": 14,
+   "speed": [
+    "Take and record medical and dental histories and vital signs of patients.",
+    "Schedule appointments, prepare bills and receive payment for dental services, complete insurance forms, and maintain records, manually or using computer.",
+    "Record treatment information in patient records."
+   ],
+   "human": [
+    "Prepare patient, sterilize or disinfect instruments, set up instrument trays, prepare materials, or assist dentist during dental procedures.",
+    "Assist dentist in management of medical or dental emergencies.",
+    "Instruct patients in oral hygiene and plaque control programs."
+   ]
+  },
+  "veterinarian": {
+   "exposure": 0.23,
+   "exposedShare": 0.5,
+   "autoShare": 0.14,
+   "tasksRated": 14,
+   "speed": [
+    "Educate the public about diseases that can be spread from animals to humans.",
+    "Counsel clients about the deaths of their pets or about euthanasia decisions for their pets.",
+    "Perform administrative or business management tasks, such as scheduling appointments, accepting payments from clients, budgeting, or maintaining business records."
+   ],
+   "human": [
+    "Treat sick or injured animals by prescribing medication, setting bones, dressing wounds, or performing surgery.",
+    "Train or supervise workers who handle or care for animals.",
+    "Advise animal owners regarding sanitary measures, feeding, general care, medical conditions, or treatment options."
+   ]
+  },
+  "vet-tech": {
+   "exposure": 0.15,
+   "exposedShare": 0.23,
+   "autoShare": 0.71,
+   "tasksRated": 30,
+   "speed": [
+    "Discuss medical health of pets with clients, such as post-operative status.",
+    "Schedule appointments and procedures for animals.",
+    "Monitor medical supplies and place orders when inventory is low."
+   ],
+   "human": [
+    "Perform laboratory tests on blood, urine, or feces, such as urinalyses or blood counts, to assist in the diagnosis and treatment of animal health problems.",
+    "Care for and monitor the condition of animals recovering from surgery.",
+    "Administer anesthesia to animals, under the direction of a veterinarian, and monitor animals' responses to anesthetics so that dosages can be adjusted."
+   ]
+  },
+  "dietitian": {
+   "exposure": 0.46,
+   "exposedShare": 0.62,
+   "autoShare": 0.13,
+   "tasksRated": 13,
+   "speed": [
+    "Evaluate laboratory tests in preparing nutrition recommendations.",
+    "Develop curriculum and prepare manuals, visual aids, course outlines, and other materials used in teaching.",
+    "Develop recipes and menus to address special nutrition needs, such as low glycemic, low histamine, or gluten- or allergen-free."
+   ],
+   "human": [
+    "Counsel individuals and groups on basic rules of good nutrition, healthy eating habits, and nutrition monitoring to improve their quality of life.",
+    "Advise patients and their families on nutritional principles, dietary plans, diet modifications, and food selection and preparation.",
+    "Incorporate patient cultural, ethnic, or religious preferences and needs in the development of nutrition plans."
+   ]
+  },
+  "athletic-trainer": {
+   "exposure": 0.41,
+   "exposedShare": 0.5,
+   "autoShare": 0.1,
+   "tasksRated": 20,
+   "speed": [
+    "Instruct coaches, athletes, parents, medical personnel, or community members in the care and prevention of athletic injuries.",
+    "Develop training programs or routines designed to improve athletic performance.",
+    "Plan or implement comprehensive athletic injury or illness prevention programs."
+   ],
+   "human": [
+    "Travel with athletic teams to be available at sporting events.",
+    "Lead stretching exercises for team members prior to games or practices.",
+    "Care for athletic injuries, using physical therapy equipment, techniques, or medication."
+   ]
+  },
+  "medical-records-specialist": {
+   "exposure": 0.56,
+   "exposedShare": 0.88,
+   "autoShare": 1,
+   "tasksRated": 17,
+   "speed": [
+    "Retrieve patient medical records for physicians, technicians, or other medical personnel.",
+    "Assign the patient to diagnosis-related groups (DRGs), using appropriate computer software.",
+    "Transcribe medical reports."
+   ],
+   "human": [
+    "Identify, compile, abstract, and code patient data, using standard classification systems."
+   ]
+  },
+  "preschool-teacher": {
+   "exposure": 0.31,
+   "exposedShare": 0.47,
+   "autoShare": 0.13,
+   "tasksRated": 32,
+   "speed": [
+    "Confer with other staff members to plan and schedule lessons promoting learning, following approved curricula.",
+    "Collaborate with other teachers and administrators in the development, evaluation, and revision of preschool programs.",
+    "Plan and supervise class projects, field trips, visits by guests, or other experiential activities and guide students in learning from those activities."
+   ],
+   "human": [
+    "Observe and evaluate children's performance, behavior, social development, and physical health.",
+    "Provide a variety of materials and resources for children to explore, manipulate, and use, both in learning activities and in imaginative play.",
+    "Assimilate arriving children to the school environment by greeting them, helping them remove outerwear, and selecting activities of interest to them."
+   ]
+  },
+  "middle-school-teacher": {
+   "exposure": 0.34,
+   "exposedShare": 0.47,
+   "autoShare": 0.25,
+   "tasksRated": 34,
+   "speed": [
+    "Collaborate with other teachers and administrators in the development, evaluation, and revision of middle school programs.",
+    "Instruct through lectures, discussions, and demonstrations in one or more subjects, such as English, mathematics, or social studies.",
+    "Prepare reports on students and activities as required by administration."
+   ],
+   "human": [
+    "Assist students who need extra help, such as by tutoring and preparing and implementing remedial programs.",
+    "Prepare students for later grades by encouraging them to explore learning opportunities and to persevere with challenging tasks.",
+    "Confer with parents or guardians, other teachers, counselors, and administrators to resolve students' behavioral and academic problems."
+   ]
+  },
+  "professor": {
+   "exposure": 0.46,
+   "exposedShare": 0.6,
+   "autoShare": 0.36,
+   "tasksRated": 42,
+   "speed": [
+    "Conduct research in a particular field of knowledge and publish findings in professional journals, books, or electronic media.",
+    "Prepare and deliver lectures to undergraduate or graduate students on topics such as poetry, novel structure, and translation and adaptation.",
+    "Write grant proposals to procure external research funding."
+   ],
+   "human": [
+    "Teach writing or communication classes.",
+    "Prepare and deliver lectures to undergraduate or graduate students on topics such as financial accounting, principles of marketing, and operations management.",
+    "Supervise undergraduate or graduate teaching, internship, and research work."
+   ],
+   "approximate": true,
+   "basedOn": [
+    "Business Teachers, Postsecondary",
+    "Mathematical Science Teachers, Postsecondary",
+    "Biological Science Teachers, Postsecondary",
+    "English Language and Literature Teachers, Postsecondary"
+   ]
+  },
+  "librarian": {
+   "exposure": 0.5,
+   "exposedShare": 0.74,
+   "autoShare": 0.4,
+   "tasksRated": 27,
+   "speed": [
+    "Analyze patrons' requests to determine needed information and assist in furnishing or locating that information.",
+    "Explain use of library facilities, resources, equipment, and services, and provide information about library policies.",
+    "Compile lists of books, periodicals, articles, and audio-visual materials on particular subjects."
+   ],
+   "human": [
+    "Teach library patrons basic computer skills, such as searching computerized databases.",
+    "Direct and train library staff in duties, such as receiving, shelving, researching, cataloging, and equipment use.",
+    "Represent library or institution on internal and external committees."
+   ]
+  },
+  "teacher-assistant": {
+   "exposure": 0.28,
+   "exposedShare": 0.4,
+   "autoShare": 0.42,
+   "tasksRated": 30,
+   "speed": [
+    "Prepare lesson materials, bulletin board displays, exhibits, equipment, and demonstrations.",
+    "Plan, prepare, and develop various teaching aids, such as bibliographies, charts, and graphs.",
+    "Maintain computers in classrooms and laboratories, and assist students with hardware and software use."
+   ],
+   "human": [
+    "Tutor and assist children individually or in small groups to help them master assignments and to reinforce learning concepts presented by teachers.",
+    "Supervise students in classrooms, halls, cafeterias, school yards, and gymnasiums, or on field trips.",
+    "Teach social skills to students."
+   ]
+  },
+  "principal": {
+   "exposure": 0.45,
+   "exposedShare": 0.65,
+   "autoShare": 0.07,
+   "tasksRated": 23,
+   "speed": [
+    "Set educational standards and goals, and help establish policies and procedures to carry them out.",
+    "Plan and develop instructional methods and content for educational, vocational, or student activity programs.",
+    "Prepare and submit budget requests and recommendations, or grant proposals to solicit program funding."
+   ],
+   "human": [
+    "Direct and coordinate activities of teachers, administrators, and support staff at schools, public agencies, and institutions.",
+    "Confer with parents and staff to discuss educational activities, policies, and student behavior or learning problems.",
+    "Participate in special education-related activities, such as attending meetings and providing support to special educators throughout the district."
+   ]
+  },
+  "instructional-designer": {
+   "exposure": 0.53,
+   "exposedShare": 0.6,
+   "autoShare": 0,
+   "tasksRated": 10,
+   "speed": [
+    "Advise teaching and administrative staff in curriculum development, use of materials and equipment, and implementation of state and federal programs and procedures.",
+    "Interpret and enforce provisions of state education codes and rules and regulations of state education boards.",
+    "Research, evaluate, and prepare recommendations on curricula, instructional methods, and materials for school systems."
+   ],
+   "human": [
+    "Plan and conduct teacher training programs and conferences dealing with new classroom procedures, instructional materials and equipment, and teaching aids.",
+    "Observe work of teaching staff to evaluate performance and to recommend changes that could strengthen teaching skills.",
+    "Conduct or participate in workshops, committees, and conferences designed to promote the intellectual, social, and physical welfare of students."
+   ]
+  },
+  "coach": {
+   "exposure": 0.14,
+   "exposedShare": 0.24,
+   "autoShare": 0,
+   "tasksRated": 17,
+   "speed": [
+    "Coordinate travel arrangements and travel with team to away contests.",
+    "Adjust coaching techniques, based on the strengths and weaknesses of athletes.",
+    "Contact the parents of players to provide information and answer questions."
+   ],
+   "human": [
+    "Evaluate athletes' skills and review performance records to determine their fitness and potential in a particular area of athletics.",
+    "Plan strategies and choose team members for individual games or sports seasons.",
+    "Counsel student athletes on academic, athletic, and personal issues."
+   ]
+  },
+  "marriage-family-therapist": {
+   "exposure": 0.28,
+   "exposedShare": 0.36,
+   "autoShare": 0.25,
+   "tasksRated": 11,
+   "speed": [
+    "Ask questions that will help clients identify their feelings and behaviors.",
+    "Provide instructions to clients on how to obtain help with legal, financial, and other personal issues.",
+    "Maintain case files that include activities, progress notes, evaluations, and recommendations."
+   ],
+   "human": [
+    "Develop and implement individualized treatment plans addressing family relationship problems, destructive patterns of behavior, and other personal issues.",
+    "Confer with other counselors, doctors, and professionals to analyze individual cases and to coordinate counseling services.",
+    "Encourage individuals and family members to develop and use skills and strategies for confronting their problems in a constructive manner."
+   ]
+  },
+  "psychologist": {
+   "exposure": 0.51,
+   "exposedShare": 0.67,
+   "autoShare": 0.19,
+   "tasksRated": 24,
+   "speed": [
+    "Obtain and study medical, psychological, social, and family histories by interviewing individuals, couples, or families and by reviewing records.",
+    "Advise clients on how they could be helped by counseling.",
+    "Consult with or provide consultation to other doctors, therapists, or clinicians regarding patient care."
+   ],
+   "human": [
+    "Counsel individuals, groups, or families to help them understand problems, deal with crisis situations, define goals, and develop realistic action plans.",
+    "Identify psychological, emotional, or behavioral issues and diagnose disorders, using information obtained from interviews, tests, records, or reference materials.",
+    "Conduct assessments of patients' risk for harm to self or others."
+   ]
+  },
+  "youth-pastor": {
+   "exposure": 0.45,
+   "exposedShare": 0.64,
+   "autoShare": 0.33,
+   "tasksRated": 14,
+   "speed": [
+    "Schedule special events, such as camps, conferences, meetings, seminars, or retreats.",
+    "Implement program plans by ordering needed materials, scheduling speakers, reserving space, or handling other administrative details.",
+    "Attend workshops, seminars, or conferences to obtain program ideas, information, or resources."
+   ],
+   "human": [
+    "Identify and recruit potential volunteer workers.",
+    "Collaborate with other ministry members to establish goals and objectives for religious education programs or to develop ways to encourage program participation.",
+    "Train and supervise religious education instructional staff."
+   ]
+  },
+  "community-health-worker": {
+   "exposure": 0.35,
+   "exposedShare": 0.43,
+   "autoShare": 0.33,
+   "tasksRated": 7,
+   "speed": [
+    "Refer community members to needed health services.",
+    "Advise clients or community groups on issues related to improving general health, such as diet or exercise.",
+    "Maintain updated client records with plans, notes, appropriate forms, or related information."
+   ],
+   "human": [
+    "Attend community meetings or health fairs to understand community issues or build relationships with community members.",
+    "Identify or contact members of high-risk or otherwise targeted groups, such as members of minority populations, low-income populations, or pregnant women.",
+    "Contact clients in person, by phone, or in writing to ensure they have completed required or recommended actions."
+   ]
+  },
+  "childcare-worker": {
+   "exposure": 0.33,
+   "exposedShare": 0.47,
+   "autoShare": 0.22,
+   "tasksRated": 19,
+   "speed": [
+    "Read to children and teach them simple painting, drawing, handicrafts, and songs.",
+    "Discipline children and recommend or initiate other measures to control behavior, such as caring for own clothing and picking up toys and books.",
+    "Instruct children in health and personal habits, such as eating, resting, and toilet habits."
+   ],
+   "human": [
+    "Care for children in institutional setting, such as group homes, nursery schools, private businesses, or schools for the handicapped.",
+    "Observe and monitor children's play activities.",
+    "Support children's emotional and social development, encouraging understanding of others and positive self-concepts."
+   ]
+  },
+  "air-traffic-controller": {
+   "exposure": 0.31,
+   "exposedShare": 0.62,
+   "autoShare": 0.69,
+   "tasksRated": 21,
+   "speed": [
+    "Transfer control of departing flights to traffic control centers and accept control of arriving flights.",
+    "Relay air traffic information, such as courses, altitudes, or expected arrival times, to control centers.",
+    "Maintain radio or telephone contact with adjacent control towers, terminal control units, or other area control centers to coordinate aircraft movement."
+   ],
+   "human": [
+    "Direct pilots to runways when space is available or direct them to maintain a traffic pattern until there is space for them to land.",
+    "Provide on-the-job training to new air traffic controllers.",
+    "Monitor or direct the movement of aircraft within an assigned air space or on the ground at airports to minimize delays and maximize safety."
+   ]
+  },
+  "dispatcher": {
+   "exposure": 0.59,
+   "exposedShare": 0.86,
+   "autoShare": 0.5,
+   "tasksRated": 14,
+   "speed": [
+    "Answer routine inquiries, and refer calls not requiring dispatches to appropriate departments and agencies.",
+    "Scan status charts and computer screens, and contact emergency response field units to determine emergency units available for dispatch.",
+    "Record details of calls, dispatches, and messages."
+   ],
+   "human": [
+    "Observe alarm registers and scan maps to determine whether a specific emergency is in the dispatch service area.",
+    "Read and effectively interpret small-scale maps and information from a computer screen to determine locations and provide directions.",
+    "Provide emergency medical instructions to callers."
+   ]
+  },
+  "correctional-officer": {
+   "exposure": 0.24,
+   "exposedShare": 0.39,
+   "autoShare": 0.57,
+   "tasksRated": 18,
+   "speed": [
+    "Counsel inmates and respond to legitimate questions, concerns, and requests.",
+    "Record information, such as prisoner identification, charges, and incidents of inmate disturbance, keeping daily logs of prisoner activities.",
+    "Process or book convicted individuals into prison."
+   ],
+   "human": [
+    "Inspect conditions of locks, window bars, grills, doors, and gates at correctional facilities to ensure security and help prevent escapes.",
+    "Settle disputes between inmates.",
+    "Participate in required job training."
+   ]
+  },
+  "probation-officer": {
+   "exposure": 0.45,
+   "exposedShare": 0.59,
+   "autoShare": 0.3,
+   "tasksRated": 17,
+   "speed": [
+    "Write reports describing offenders' progress.",
+    "Arrange for medical, mental health, or substance abuse treatment services according to individual needs or court orders.",
+    "Inform offenders or inmates of requirements of conditional release, such as office visits, restitution payments, or educational and employment stipulations."
+   ],
+   "human": [
+    "Administer drug and alcohol tests, including random drug screens of offenders, to verify compliance with substance abuse treatment programs.",
+    "Discuss with offenders how such issues as drug and alcohol abuse and anger management problems might have played roles in their criminal behavior.",
+    "Gather information about offenders' backgrounds by talking to offenders, their families and friends, and other people who have relevant information."
+   ]
+  },
+  "detective": {
+   "exposure": 0.3,
+   "exposedShare": 0.53,
+   "autoShare": 0.19,
+   "tasksRated": 30,
+   "speed": [
+    "Prepare reports that detail investigation findings.",
+    "Record progress of investigation, maintain informational files on suspects, and submit reports to commanding officer or magistrate to authorize warrants.",
+    "Obtain summary of incident from officer in charge at crime scene, taking care to avoid disturbing evidence."
+   ],
+   "human": [
+    "Obtain and verify evidence by interviewing and observing suspects and witnesses or by analyzing records.",
+    "Preserve, process, and analyze items of evidence obtained from crime scenes and suspects, placing them in proper containers and destroying evidence no longer needed.",
+    "Search for and collect evidence, such as fingerprints, using investigative equipment."
+   ]
+  },
+  "emergency-manager": {
+   "exposure": 0.6,
+   "exposedShare": 0.82,
+   "autoShare": 0.11,
+   "tasksRated": 22,
+   "speed": [
+    "Provide communities with assistance in applying for federal funding for emergency management facilities, radiological instrumentation, and related items.",
+    "Review emergency plans of individual organizations, such as medical facilities, to ensure their adequacy.",
+    "Collaborate with other officials to prepare and analyze damage assessments following disasters or emergencies."
+   ],
+   "human": [
+    "Coordinate disaster response or crisis management activities, such as ordering evacuations, opening public shelters, and implementing special needs plans and programs.",
+    "Train local groups in the preparation of long-term plans that are compatible with federal and state plans."
+   ]
+  },
+  "postal-carrier": {
+   "exposure": 0.35,
+   "exposedShare": 0.53,
+   "autoShare": 0.44,
+   "tasksRated": 17,
+   "speed": [
+    "Return to the post office with mail collected from homes, businesses, and public mailboxes.",
+    "Answer customers' questions about postal services and regulations.",
+    "Record address changes and redirect mail for those addresses."
+   ],
+   "human": [
+    "Deliver mail to residences and business establishments along specified routes by walking or driving, using a combination of satchels, carts, cars, and small trucks.",
+    "Turn in money and receipts collected along mail routes.",
+    "Sort mail for delivery, arranging it in delivery sequence."
+   ]
+  },
+  "interpreter": {
+   "exposure": 0.84,
+   "exposedShare": 0.88,
+   "autoShare": 0.57,
+   "tasksRated": 8,
+   "speed": [
+    "Compile terminology and information to be used in translations, including technical terms such as those for legal or medical material.",
+    "Follow ethical codes that protect the confidentiality of information.",
+    "Listen to speakers' statements to determine meanings and to prepare translations, using electronic listening systems as necessary."
+   ],
+   "human": [
+    "Check translations of technical terms and terminology to ensure that they are accurate and remain consistent throughout translation revisions.",
+    "Check original texts or confer with authors to ensure that translations retain the content, meaning, and feeling of the original material."
+   ]
+  },
+  "policy-analyst": {
+   "exposure": 0.54,
+   "exposedShare": 0.8,
+   "autoShare": 0.25,
+   "tasksRated": 10,
+   "speed": [
+    "Identify issues for research and analysis.",
+    "Disseminate research results through academic publications, written reports, or public presentations.",
+    "Interpret and analyze policies, public issues, legislation, or the operations of governments, businesses, and organizations."
+   ],
+   "human": [
+    "Teach political science.",
+    "Serve on committees."
+   ]
+  },
+  "judge": {
+   "exposure": 0.25,
+   "exposedShare": 0.47,
+   "autoShare": 0.57,
+   "tasksRated": 15,
+   "speed": [
+    "Write decisions on cases.",
+    "Research legal issues and write opinions on the issues.",
+    "Preside over hearings and listen to allegations made by plaintiffs to determine whether the evidence supports the charges."
+   ],
+   "human": [
+    "Instruct juries on applicable laws, direct juries to deduce the facts from the evidence presented, and hear their verdicts.",
+    "Rule on admissibility of evidence and methods of conducting testimony.",
+    "Supervise other judges, court officers, and the court's administrative staff."
+   ]
+  },
+  "mediator": {
+   "exposure": 0.37,
+   "exposedShare": 0.64,
+   "autoShare": 0.57,
+   "tasksRated": 11,
+   "speed": [
+    "Prepare settlement agreements for disputants to sign.",
+    "Set up appointments for parties to meet for mediation.",
+    "Research laws, regulations, policies, or precedent decisions to prepare for hearings."
+   ],
+   "human": [
+    "Apply relevant laws, regulations, policies, or precedents to reach conclusions.",
+    "Specialize in the negotiation and resolution of environmental conflicts involving issues such as natural resource allocation or regional development planning.",
+    "Participate in court proceedings."
+   ]
+  },
+  "court-reporter": {
+   "exposure": 0.52,
+   "exposedShare": 0.9,
+   "autoShare": 0.89,
+   "tasksRated": 10,
+   "speed": [
+    "File a legible transcript of records of a court case with the court clerk's office.",
+    "Log and store exhibits from court proceedings.",
+    "Proofread transcripts for correct spelling of words."
+   ],
+   "human": [
+    "Ask speakers to clarify inaudible statements."
+   ]
+  },
+  "security-guard": {
+   "exposure": 0.25,
+   "exposedShare": 0.4,
+   "autoShare": 0.5,
+   "tasksRated": 10,
+   "speed": [
+    "Write reports of daily activities and irregularities, such as equipment or property damage, theft, presence of unauthorized persons, or unusual occurrences.",
+    "Patrol industrial or commercial premises to prevent and detect signs of intrusion and ensure security of doors, windows, and gates."
+   ],
+   "human": [
+    "Monitor and authorize entrance and departure of employees, visitors, and other persons to guard against theft and maintain security of premises.",
+    "Circulate among visitors, patrons, or employees to preserve order and protect property.",
+    "Lock doors and gates of entrances and exits to secure buildings."
+   ]
+  },
+  "game-warden": {
+   "exposure": 0.16,
+   "exposedShare": 0.25,
+   "autoShare": 0.4,
+   "tasksRated": 20,
+   "speed": [
+    "Collect and report information on populations or conditions of fish and wildlife in their habitats, availability of game food or cover, or suspected pollution.",
+    "Address schools, civic groups, sporting clubs, or the media to disseminate information concerning wildlife conservation and regulations.",
+    "Issue licenses, permits, or other documentation."
+   ],
+   "human": [
+    "Patrol assigned areas by car, boat, airplane, horse, or on foot to enforce game, fish, or boating laws or to manage wildlife programs, lakes, or land.",
+    "Investigate hunting accidents or reports of fish or game law violations.",
+    "Seize equipment used in fish and game law violations."
+   ]
+  },
+  "web-developer": {
+   "exposure": 0.63,
+   "exposedShare": 0.96,
+   "autoShare": 0.68,
+   "tasksRated": 23,
+   "speed": [
+    "Perform Web site tests according to planned schedules, or after any Web site or product revision.",
+    "Perform or direct Web site updates.",
+    "Develop or implement procedures for ongoing Web site revision."
+   ],
+   "human": [
+    "Evaluate or recommend server hardware or software."
+   ]
+  },
+  "game-developer": {
+   "exposure": 0.45,
+   "exposedShare": 0.84,
+   "autoShare": 0.38,
+   "tasksRated": 19,
+   "speed": [
+    "Consult with customers or other departments on project status, proposals, or technical issues, such as software system design or maintenance.",
+    "Modify existing software to correct errors, adapt it to new hardware, or upgrade interfaces and improve performance.",
+    "Determine system performance standards."
+   ],
+   "human": [
+    "Supervise and assign work to programmers, designers, technologists, technicians, or other engineering or scientific personnel.",
+    "Confer with data processing or project managers to obtain information on limitations or capabilities for data processing projects."
+   ]
+  },
+  "network-administrator": {
+   "exposure": 0.51,
+   "exposedShare": 0.88,
+   "autoShare": 0.53,
+   "tasksRated": 17,
+   "speed": [
+    "Recommend changes to improve systems and network configurations, and determine hardware or software requirements related to such changes.",
+    "Monitor network performance to determine whether adjustments are needed and where changes will be needed in the future.",
+    "Plan, coordinate, and implement network security measures to protect data, software, and hardware."
+   ],
+   "human": [
+    "Confer with network users about solutions to existing system problems.",
+    "Load computer tapes and disks, and install software and printer paper or forms."
+   ]
+  },
+  "cloud-engineer": {
+   "exposure": 0.47,
+   "exposedShare": 0.83,
+   "autoShare": 0.3,
+   "tasksRated": 12,
+   "speed": [
+    "Provide staff and users with assistance solving computer-related problems, such as malfunctions and program problems.",
+    "Coordinate and link the computer systems within an organization to increase compatibility so that information can be shared.",
+    "Use the computer in the analysis and solution of business problems, such as development of integrated production and inventory control and cost analysis systems."
+   ],
+   "human": [
+    "Train staff and users to work with computer systems and programs.",
+    "Test, maintain, and monitor computer programs and systems, including coordinating the installation of computer programs and systems.",
+    "Interview or survey workers, observe job performance, or perform the job to determine what information is processed and how it is processed."
+   ]
+  },
+  "qa-tester": {
+   "exposure": 0.61,
+   "exposedShare": 0.93,
+   "autoShare": 0.64,
+   "tasksRated": 27,
+   "speed": [
+    "Design or develop automated testing tools.",
+    "Design test plans, scenarios, scripts, or procedures.",
+    "Develop testing programs that address areas such as database impacts, software scenarios, regression testing, negative testing, error or bug retests, or usability."
+   ],
+   "human": [
+    "Visit beta testing sites to evaluate software performance.",
+    "Test system modifications to prepare for implementation."
+   ]
+  },
+  "ai-researcher": {
+   "exposure": 0.5,
+   "exposedShare": 0.73,
+   "autoShare": 0,
+   "tasksRated": 11,
+   "speed": [
+    "Analyze problems to develop solutions involving computer hardware and software.",
+    "Design computers and the software that runs them.",
+    "Apply theoretical expertise and innovation to create or apply new technology, such as adapting principles for applying computers to new uses."
+   ],
+   "human": [
+    "Conduct logical analyses of business, scientific, engineering, and other technical problems, formulating mathematical models of problems for solution by computers.",
+    "Participate in multidisciplinary projects in areas such as virtual reality, human-computer interaction, or robotics."
+   ]
+  },
+  "computer-hardware-engineer": {
+   "exposure": 0.32,
+   "exposedShare": 0.47,
+   "autoShare": 0.14,
+   "tasksRated": 15,
+   "speed": [
+    "Analyze user needs and recommend appropriate hardware.",
+    "Write detailed functional specifications that document the hardware development process and support hardware introduction.",
+    "Specify power supply requirements and configuration, drawing on system performance expectations and design specifications."
+   ],
+   "human": [
+    "Build, test, and modify product prototypes, using working models or theoretical models constructed with computer simulation.",
+    "Direct technicians, engineering designers or other technical support personnel as needed.",
+    "Test and verify hardware and support peripherals to ensure that they meet specifications and requirements, by recording and analyzing test data."
+   ]
+  },
+  "management-consultant": {
+   "exposure": 0.5,
+   "exposedShare": 0.8,
+   "autoShare": 0.38,
+   "tasksRated": 10,
+   "speed": [
+    "Design, evaluate, recommend, and approve changes of forms and reports.",
+    "Gather and organize information on problems or procedures.",
+    "Analyze data gathered and develop solutions or alternative methods of proceeding."
+   ],
+   "human": [
+    "Interview personnel and conduct on-site observation to ascertain unit functions, work performed, and methods, equipment, and personnel used.",
+    "Confer with personnel concerned to ensure successful functioning of newly implemented systems or procedures."
+   ]
+  },
+  "loan-officer": {
+   "exposure": 0.65,
+   "exposedShare": 1,
+   "autoShare": 0.57,
+   "tasksRated": 14,
+   "speed": [
+    "Explain to customers the different types of loans and credit options that are available, as well as the terms of those services.",
+    "Market bank products to individuals and firms, promoting bank services that may meet customers' needs.",
+    "Submit applications to credit analysts for verification and recommendation."
+   ],
+   "human": [
+    "Supervise loan personnel.",
+    "Confer with underwriters to resolve mortgage application problems."
+   ]
+  },
+  "insurance-agent": {
+   "exposure": 0.53,
+   "exposedShare": 0.71,
+   "autoShare": 0.4,
+   "tasksRated": 14,
+   "speed": [
+    "Explain features, advantages, and disadvantages of various policies to promote sale of insurance plans.",
+    "Call on policyholders to deliver and explain policy, to analyze insurance program and suggest additions or changes, or to change beneficiaries.",
+    "Contact underwriter and submit forms to obtain binder coverage."
+   ],
+   "human": [
+    "Seek out new clients and develop clientele by networking to find new customers and generate lists of prospective clients.",
+    "Attend meetings, seminars, and programs to learn about new products and services, learn new skills, and receive technical assistance in developing new accounts.",
+    "Inspect property, examining its general condition, type of construction, age, and other characteristics, to decide if it is a good insurance risk."
+   ]
+  },
+  "insurance-underwriter": {
+   "exposure": 0.5,
+   "exposedShare": 0.86,
+   "autoShare": 1,
+   "tasksRated": 7,
+   "speed": [
+    "Write to field representatives, medical personnel, or others to obtain further information, quote rates, or explain company underwriting policies.",
+    "Review company records to determine amount of insurance in force on single risk or group of closely related risks.",
+    "Examine documents to determine degree of risk from factors such as applicant health, financial standing and value, and condition of property."
+   ],
+   "human": [
+    "Decline excessive risks."
+   ]
+  },
+  "actuary": {
+   "exposure": 0.54,
+   "exposedShare": 0.83,
+   "autoShare": 0.6,
+   "tasksRated": 12,
+   "speed": [
+    "Analyze statistical information to estimate mortality, accident, sickness, disability, and retirement rates.",
+    "Design, review, and help administer insurance, annuity and pension plans, determining financial soundness and calculating premiums.",
+    "Construct probability tables for events such as fires, natural disasters, and unemployment, based on analysis of statistical data and other pertinent information."
+   ],
+   "human": [
+    "Testify in court as expert witness or to provide legal evidence on matters such as the value of potential lifetime earnings of a person disabled or killed in an accident.",
+    "Testify before public agencies on proposed legislation affecting businesses."
+   ]
+  },
+  "bookkeeper": {
+   "exposure": 0.31,
+   "exposedShare": 0.46,
+   "autoShare": 1,
+   "tasksRated": 13,
+   "speed": [
+    "Classify, record, and summarize numerical and financial data to compile and keep financial records, using journals and ledgers or computers.",
+    "Reconcile or note and report discrepancies found in records.",
+    "Debit, credit, and total accounts on computer spreadsheets and databases, using specialized accounting software."
+   ],
+   "human": [
+    "Operate computers programmed with accounting software to record, store, and analyze information.",
+    "Check figures, postings, and documents for correct entry, mathematical accuracy, and proper codes.",
+    "Receive, record, and bank cash, checks, and vouchers."
+   ]
+  },
+  "tax-preparer": {
+   "exposure": 0.63,
+   "exposedShare": 1,
+   "autoShare": 0.83,
+   "tasksRated": 12,
+   "speed": [
+    "Explain federal and state tax laws to individuals and companies.",
+    "Answer questions and provide future tax planning to clients.",
+    "Furnish taxpayers with sufficient information and advice to ensure correct tax form completion."
+   ],
+   "human": []
+  },
+  "bank-teller": {
+   "exposure": 0.33,
+   "exposedShare": 0.32,
+   "autoShare": 0.83,
+   "tasksRated": 19,
+   "speed": [
+    "Process transactions, such as term deposits, retirement savings plan contributions, automated teller transactions, night deposits, and mail deposits.",
+    "Answer telephones and assist customers with their questions.",
+    "Resolve problems or discrepancies concerning customers' accounts."
+   ],
+   "human": [
+    "Monitor bank vaults to ensure cash balances are correct.",
+    "Identify transaction mistakes when debits and credits do not balance.",
+    "Carry out special services for customers, such as ordering bank cards and checks."
+   ]
+  },
+  "economist": {
+   "exposure": 0.46,
+   "exposedShare": 0.64,
+   "autoShare": 0.14,
+   "tasksRated": 11,
+   "speed": [
+    "Develop economic guidelines and standards, and prepare points of view used in forecasting trends and formulating economic policy.",
+    "Conduct research on economic issues, and disseminate research findings through technical reports or scientific articles in journals.",
+    "Formulate recommendations, policies, or plans to solve economic problems or to interpret markets."
+   ],
+   "human": [
+    "Compile, analyze, and report data to explain economic phenomena and forecast market trends, applying mathematical models and statistical techniques.",
+    "Supervise research projects and students' study projects.",
+    "Forecast production and consumption of renewable resources and supply, consumption, and depletion of non-renewable resources."
+   ]
+  },
+  "event-planner": {
+   "exposure": 0.36,
+   "exposedShare": 0.63,
+   "autoShare": 0.3,
+   "tasksRated": 16,
+   "speed": [
+    "Consult with customers to determine objectives and requirements for events, such as meetings, conferences, and conventions.",
+    "Plan and develop programs, agendas, budgets, and services according to customer requirements.",
+    "Maintain records of event aspects, including financial details."
+   ],
+   "human": [
+    "Confer with staff at a chosen event site to coordinate details.",
+    "Inspect event facilities to ensure that they conform to customer requirements.",
+    "Monitor event activities to ensure compliance with applicable regulations and laws, satisfaction of participants, and resolution of any problems that arise."
+   ]
+  },
+  "fundraiser": {
+   "exposure": 0.49,
+   "exposedShare": 0.75,
+   "autoShare": 0.56,
+   "tasksRated": 24,
+   "speed": [
+    "Write and send letters of thanks to donors.",
+    "Compile or develop materials to submit to granting or other funding organizations.",
+    "Develop or implement fundraising activities, such as annual giving campaigns or direct mail programs."
+   ],
+   "human": [
+    "Attend community events, meetings, or conferences to promote organizational goals or solicit donations or sponsorships.",
+    "Recruit sponsors, participants, or volunteers for fundraising events.",
+    "Plan and direct special events for fundraising, such as silent auctions, dances, golf events, or walks."
+   ]
+  },
+  "pr-specialist": {
+   "exposure": 0.79,
+   "exposedShare": 0.93,
+   "autoShare": 0.29,
+   "tasksRated": 15,
+   "speed": [
+    "Write press releases or other media communications to promote clients.",
+    "Consult with advertising agencies or staff to arrange promotional campaigns in all types of media for products, organizations, or individuals.",
+    "Develop plans or materials to communicate organizational activities that are beneficial to the environment, public safety, or other important social issues."
+   ],
+   "human": [
+    "Coach client representatives in effective communication with the public or with employees."
+   ]
+  },
+  "purchasing-agent": {
+   "exposure": 0.37,
+   "exposedShare": 0.58,
+   "autoShare": 0.55,
+   "tasksRated": 19,
+   "speed": [
+    "Formulate policies and procedures for bid proposals and procurement of goods and services.",
+    "Maintain and review computerized or manual records of purchased items, costs, deliveries, product performance, and inventories.",
+    "Monitor changes affecting supply and demand, tracking market conditions, price trends, or futures markets."
+   ],
+   "human": [
+    "Interview vendors and visit suppliers' plants and distribution centers to examine and learn about products, services, and prices.",
+    "Prepare purchase orders, solicit bid proposals, and review requisitions for goods and services.",
+    "Hire, train, or supervise purchasing clerks, buyers, and expediters."
+   ]
+  },
+  "health-services-manager": {
+   "exposure": 0.37,
+   "exposedShare": 0.65,
+   "autoShare": 0.09,
+   "tasksRated": 17,
+   "speed": [
+    "Prepare activity reports to inform management of the status and implementation plans of programs, services, and quality initiatives.",
+    "Review and analyze facility activities and data to aid planning and cash and risk management and to improve service utilization.",
+    "Manage change in integrated health care delivery systems, such as work restructuring, technological innovations, and shifts in the focus of care."
+   ],
+   "human": [
+    "Maintain communication between governing boards, medical staff, and department heads by attending board meetings and coordinating interdepartmental functioning.",
+    "Direct, supervise and evaluate work activities of medical, nursing, technical, clerical, service, maintenance, and other personnel.",
+    "Direct or conduct recruitment, hiring, and training of personnel."
+   ]
+  },
+  "retail-manager": {
+   "exposure": 0.41,
+   "exposedShare": 0.63,
+   "autoShare": 0.2,
+   "tasksRated": 16,
+   "speed": [
+    "Establish and implement policies, goals, objectives, and procedures for the department.",
+    "Provide customer service by greeting and assisting customers and responding to customer inquiries and complaints.",
+    "Monitor sales activities to ensure that customers receive satisfactory service and quality goods."
+   ],
+   "human": [
+    "Instruct staff on how to handle difficult and complicated sales.",
+    "Direct and supervise employees engaged in sales, inventory-taking, reconciling cash receipts, or in performing services for customers.",
+    "Review inventory and sales records to prepare reports for management and budget departments."
+   ]
+  },
+  "elevator-technician": {
+   "exposure": 0.08,
+   "exposedShare": 0.17,
+   "autoShare": 0.33,
+   "tasksRated": 18,
+   "speed": [
+    "Maintain log books that detail all repairs and checks performed.",
+    "Check that safety regulations and building codes are met, and complete service reports verifying conformance to standards."
+   ],
+   "human": [
+    "Install electrical wires and controls by attaching conduit along shaft walls from floor to floor and pulling plastic-covered wires through the conduit.",
+    "Bolt or weld steel rails to the walls of shafts to guide elevators, working from scaffolding or platforms.",
+    "Assemble elevator cars, installing each car's platform, walls, and doors."
+   ]
+  },
+  "wind-turbine-technician": {
+   "exposure": 0.04,
+   "exposedShare": 0.1,
+   "autoShare": 0,
+   "tasksRated": 10,
+   "speed": [
+    "Collect turbine data for testing or research and analysis."
+   ],
+   "human": [
+    "Climb wind turbine towers to inspect, maintain, or repair equipment.",
+    "Train end-users, distributors, installers, or other technicians in wind commissioning, testing, or other technical procedures.",
+    "Perform routine maintenance on wind turbine equipment, underground transmission systems, wind fields substations, or fiber optic sensing and control systems."
+   ]
+  },
+  "solar-installer": {
+   "exposure": 0.11,
+   "exposedShare": 0.21,
+   "autoShare": 0.2,
+   "tasksRated": 24,
+   "speed": [
+    "Install required labels on solar system components and hardware.",
+    "Identify methods for laying out, orienting, and mounting modules or arrays to ensure efficient installation, electrical configuration, or system maintenance.",
+    "Compile or maintain records of system operation, performance, and maintenance."
+   ],
+   "human": [
+    "Assemble solar modules, panels, or support structures, as specified.",
+    "Install active solar systems, including solar collectors, concentrators, pumps, or fans.",
+    "Check electrical installation for proper wiring, polarity, grounding, or integrity of terminations."
+   ]
+  },
+  "diesel-technician": {
+   "exposure": 0,
+   "exposedShare": 0,
+   "autoShare": 0,
+   "tasksRated": 23,
+   "speed": [],
+   "human": [
+    "Raise trucks, buses, and heavy parts or equipment using hydraulic jacks or hoists.",
+    "Diagnose and repair vehicle heating and cooling systems.",
+    "Test drive trucks and buses to diagnose malfunctions or to ensure that they are working properly."
+   ]
+  },
+  "aircraft-mechanic": {
+   "exposure": 0.06,
+   "exposedShare": 0.1,
+   "autoShare": 0,
+   "tasksRated": 29,
+   "speed": [
+    "Read and interpret pilots' descriptions of problems to diagnose causes.",
+    "Communicate with other workers to coordinate fitting and alignment of heavy parts, or to facilitate processing of repair parts.",
+    "Determine repair limits for engine hot section parts."
+   ],
+   "human": [
+    "Reassemble engines following repair or inspection and reinstall engines in aircraft.",
+    "Maintain repair logs, documenting all preventive and corrective aircraft maintenance.",
+    "Inspect completed work to certify that maintenance meets standards and that aircraft are ready for operation."
+   ]
+  },
+  "machinist": {
+   "exposure": 0.13,
+   "exposedShare": 0.25,
+   "autoShare": 0.2,
+   "tasksRated": 20,
+   "speed": [
+    "Program computers or electronic instruments, such as numerically controlled machine tools.",
+    "Confer with numerical control programmers to check and ensure that new programs or machinery will function properly and that output will meet specifications.",
+    "Design fixtures, tooling, or experimental parts to meet special engineering needs."
+   ],
+   "human": [
+    "Machine parts to specifications, using machine tools, such as lathes, milling machines, shapers, or grinders.",
+    "Set up, adjust, or operate basic or specialized machine tools used to perform precision machining operations.",
+    "Study sample parts, blueprints, drawings, or engineering information to determine methods or sequences of operations needed to fabricate products."
+   ]
+  },
+  "heavy-equipment-operator": {
+   "exposure": 0.09,
+   "exposedShare": 0.17,
+   "autoShare": 0.33,
+   "tasksRated": 18,
+   "speed": [
+    "Signal operators to guide movement of tractor-drawn machines.",
+    "Keep records of material or equipment usage or problems encountered.",
+    "Check fuel supplies at sites to ensure adequate availability."
+   ],
+   "human": [
+    "Start engines, move throttles, switches, or levers, or depress pedals to operate machines, such as bulldozers, trench excavators, road graders, or backhoes.",
+    "Operate equipment to demolish or remove debris or to remove snow from streets, roads, or parking lots.",
+    "Load and move dirt, rocks, equipment, or other materials, using trucks, crawler tractors, power cranes, shovels, graders, or related equipment."
+   ]
+  },
+  "roofer": {
+   "exposure": 0,
+   "exposedShare": 0,
+   "autoShare": 0,
+   "tasksRated": 22,
+   "speed": [],
+   "human": [
+    "Apply plastic coatings, membranes, fiberglass, or felt over sloped roofs before applying shingles.",
+    "Apply reflective roof coatings, such as special paints or single-ply roofing sheets, to existing roofs to reduce solar heat absorption.",
+    "Install partially overlapping layers of material over roof insulation surfaces, using chalk lines, gauges on shingling hatchets, or lines on shingles."
+   ]
+  },
+  "mason": {
+   "exposure": 0,
+   "exposedShare": 0,
+   "autoShare": 0,
+   "tasksRated": 12,
+   "speed": [],
+   "human": [
+    "Break or cut bricks, tiles, or blocks to size, using trowel edge, hammer, or power saw.",
+    "Remove burned or damaged brick or mortar, using sledgehammer, crowbar, chipping gun, or chisel.",
+    "Mix specified amounts of sand, clay, dirt, or mortar powder with water to form refractory mixtures."
+   ]
+  },
+  "painter": {
+   "exposure": 0.03,
+   "exposedShare": 0.06,
+   "autoShare": 0,
+   "tasksRated": 16,
+   "speed": [
+    "Calculate amounts of required materials and estimate costs, based on surface measurements or work orders."
+   ],
+   "human": [
+    "Apply paint, stain, varnish, enamel, or other finishes to equipment, buildings, bridges, or other structures, using brushes, spray guns, or rollers.",
+    "Apply primers or sealers to prepare new surfaces, such as bare wood or metal, for finish coats.",
+    "Cover surfaces with dropcloths or masking tape and paper to protect surfaces during painting."
+   ]
+  },
+  "landscaper": {
+   "exposure": 0.25,
+   "exposedShare": 0.41,
+   "autoShare": 0.36,
+   "tasksRated": 27,
+   "speed": [
+    "Recommend changes in working conditions or equipment used to increase crew efficiency.",
+    "Maintain required records, such as personnel information or project records.",
+    "Prepare or maintain required records, such as work activity or personnel reports."
+   ],
+   "human": [
+    "Plant or maintain vegetation through activities such as mulching, fertilizing, watering, mowing, or pruning.",
+    "Tour grounds, such as parks, botanical gardens, cemeteries, or golf courses, to inspect conditions of plants and soil.",
+    "Direct activities of workers who perform duties, such as landscaping, cultivating lawns, or pruning trees and shrubs."
+   ]
+  },
+  "cosmetologist": {
+   "exposure": 0.05,
+   "exposedShare": 0.13,
+   "autoShare": 1,
+   "tasksRated": 15,
+   "speed": [
+    "Schedule client appointments.",
+    "Update and maintain customer information records, such as beauty services provided."
+   ],
+   "human": [
+    "Cut, trim and shape hair or hairpieces, based on customers' instructions, hair type, and facial features, using clippers, scissors, trimmers and razors.",
+    "Comb, brush, and spray hair or wigs to set style.",
+    "Demonstrate and sell hair care products and cosmetics."
+   ]
+  },
+  "barber": {
+   "exposure": 0.07,
+   "exposedShare": 0.14,
+   "autoShare": 1,
+   "tasksRated": 14,
+   "speed": [
+    "Record services provided on cashiers' tickets or receive payment from customers.",
+    "Perform clerical and administrative duties such as keeping records, paying bills, and hiring and supervising personnel.",
+    "Keep card files on clientele, recording notes of work done, products used and fees charged after each visit."
+   ],
+   "human": [
+    "Apply lather and shave beards or neck and temple hair contours, using razors.",
+    "Cut and trim hair according to clients' instructions or current hairstyles, using clippers, combs, hand-held blow driers, and scissors.",
+    "Drape and pin protective cloths around customers' shoulders."
+   ]
+  },
+  "truck-driver": {
+   "exposure": 0.17,
+   "exposedShare": 0.38,
+   "autoShare": 0.75,
+   "tasksRated": 21,
+   "speed": [
+    "Inspect loads to ensure that cargo is secure.",
+    "Report vehicle defects, accidents, traffic violations, or damage to the vehicles.",
+    "Collect delivery instructions from appropriate sources, verifying instructions and routes."
+   ],
+   "human": [
+    "Drive trucks to weigh stations before and after loading and along routes in compliance with state regulations.",
+    "Load or unload trucks or help others with loading or unloading, using special loading-related equipment or other equipment as necessary.",
+    "Maneuver trucks into loading or unloading positions, following signals from loading crew and checking that vehicle and loading equipment are properly positioned."
+   ]
+  },
+  "ironworker": {
+   "exposure": 0,
+   "exposedShare": 0,
+   "autoShare": 0,
+   "tasksRated": 15,
+   "speed": [],
+   "human": [
+    "Hoist steel beams, girders, or columns into place, using cranes or signaling hoisting equipment operators to lift and position structural steel members.",
+    "Connect columns, beams, and girders with bolts, following blueprints and instructions from supervisors.",
+    "Bolt aligned structural steel members in position for permanent riveting, bolting, or welding into place."
+   ]
+  },
+  "baker": {
+   "exposure": 0.12,
+   "exposedShare": 0.13,
+   "autoShare": 0.5,
+   "tasksRated": 16,
+   "speed": [
+    "Prepare or maintain inventory or production records.",
+    "Develop new recipes for baked goods."
+   ],
+   "human": [
+    "Decorate baked goods, such as cakes or pastries.",
+    "Direct or coordinate bakery deliveries.",
+    "Combine measured ingredients in bowls of mixing, blending, or cooking machinery."
+   ]
+  },
+  "pilot": {
+   "exposure": 0.22,
+   "exposedShare": 0.5,
+   "autoShare": 0.67,
+   "tasksRated": 18,
+   "speed": [
+    "File instrument flight plans with air traffic control so that flights can be coordinated with other air traffic.",
+    "Obtain and review data such as load weights, fuel supplies, weather conditions, and flight schedules to determine flight plans and identify needed changes.",
+    "Coordinate flight activities with ground crews and air traffic control, and inform crew members of flight and test procedures."
+   ],
+   "human": [
+    "Start engines, operate controls, and pilot airplanes to transport passengers, mail, or freight according to flight plans, regulations, and procedures.",
+    "Order changes in fuel supplies, loads, routes, or schedules to ensure safety of flights.",
+    "Monitor engine operation, fuel consumption, and functioning of aircraft systems during flights."
+   ]
+  },
+  "flight-attendant": {
+   "exposure": 0.15,
+   "exposedShare": 0.26,
+   "autoShare": 0.83,
+   "tasksRated": 23,
+   "speed": [
+    "Answer passengers' questions about flights, aircraft, weather, travel routes and services, arrival times, or schedules.",
+    "Prepare passengers and aircraft for landing, following procedures.",
+    "Announce flight delays and descent preparations."
+   ],
+   "human": [
+    "Assist passengers entering or disembarking the aircraft.",
+    "Greet passengers boarding aircraft and direct them to assigned seats.",
+    "Monitor passenger behavior to identify threats to the safety of the crew and other passengers."
+   ]
+  },
+  "supply-chain-manager": {
+   "exposure": 0.47,
+   "exposedShare": 0.77,
+   "autoShare": 0.15,
+   "tasksRated": 26,
+   "speed": [
+    "Collaborate with other departments to integrate logistics with business systems or processes, such as customer sales, order management, accounting, or shipping.",
+    "Resolve problems concerning transportation, logistics systems, imports or exports, or customer issues.",
+    "Plan, develop, or implement warehouse safety and security programs and activities."
+   ],
+   "human": [
+    "Monitor inventory levels of products or materials in warehouses.",
+    "Interview, select, and train warehouse and supervisory personnel.",
+    "Evaluate contractors or business partners for operational efficiency or safety or environmental performance records."
+   ]
+  },
+  "property-manager": {
+   "exposure": 0.43,
+   "exposedShare": 0.71,
+   "autoShare": 0.25,
+   "tasksRated": 17,
+   "speed": [
+    "Market vacant space to prospective tenants through leasing agents, advertising, or other methods.",
+    "Prepare and administer contracts for provision of property services, such as cleaning, maintenance, and security services.",
+    "Investigate complaints, disturbances, and violations and resolve problems, following management rules and regulations."
+   ],
+   "human": [
+    "Manage and oversee operations, maintenance, administration, and improvement of commercial, industrial, or residential properties.",
+    "Plan, schedule, and coordinate general maintenance, major repairs, and remodeling or construction projects for commercial or residential properties.",
+    "Inspect grounds, facilities, and equipment routinely to determine necessity of repairs or maintenance."
+   ]
+  },
+  "hotel-manager": {
+   "exposure": 0.38,
+   "exposedShare": 0.5,
+   "autoShare": 0.64,
+   "tasksRated": 22,
+   "speed": [
+    "Coordinate front-office activities of hotels or motels, and resolve problems.",
+    "Greet and register guests.",
+    "Answer inquiries pertaining to hotel policies and services, and resolve occupants' complaints."
+   ],
+   "human": [
+    "Manage and maintain temporary or permanent lodging facilities.",
+    "Confer and cooperate with other managers to ensure coordination of hotel activities.",
+    "Organize and coordinate the work of staff and convention personnel for meetings to be held at a particular facility."
+   ]
+  },
+  "restaurant-manager": {
+   "exposure": 0.4,
+   "exposedShare": 0.55,
+   "autoShare": 0.55,
+   "tasksRated": 20,
+   "speed": [
+    "Establish standards for personnel performance and customer service.",
+    "Investigate and resolve complaints regarding food quality, service, or accommodations.",
+    "Review work procedures and operational problems to determine ways to improve service, performance, or safety."
+   ],
+   "human": [
+    "Test cooked food by tasting and smelling it to ensure palatability and flavor conformity.",
+    "Perform some food preparation or service tasks, such as cooking, clearing tables, and serving food and drinks when necessary.",
+    "Schedule and receive food and beverage deliveries, checking delivery contents to verify product quality and quantity."
+   ]
+  },
+  "quality-inspector": {
+   "exposure": 0.18,
+   "exposedShare": 0.31,
+   "autoShare": 0.6,
+   "tasksRated": 16,
+   "speed": [
+    "Write test or inspection reports describing results, recommendations, or needed repairs.",
+    "Record inspection or test data, such as weights, temperatures, grades, or moisture content, and quantities inspected or graded.",
+    "Notify supervisors or other personnel of production problems."
+   ],
+   "human": [
+    "Inspect, test, or measure materials, products, installations, or work for conformance to specifications.",
+    "Discard or reject products, materials, or equipment not meeting specifications.",
+    "Position products, components, or parts for testing."
+   ]
+  },
+  "farmer": {
+   "exposure": 0.24,
+   "exposedShare": 0.42,
+   "autoShare": 0.38,
+   "tasksRated": 19,
+   "speed": [
+    "Provide information to customers on the care of trees, shrubs, flowers, plants, and lawns.",
+    "Maintain financial, operational, production, or employment records for farms or ranches.",
+    "Negotiate with buyers for the sale, storage, or shipment of crops or livestock."
+   ],
+   "human": [
+    "Determine plant growing conditions, such as greenhouses, hydroponics, or natural settings, and set planting and care schedules.",
+    "Position and regulate plant irrigation systems, and program environmental and irrigation control computers.",
+    "Supervise the construction of farm or ranch structures, such as buildings, fences, drainage systems, wells, or roads."
+   ]
+  },
+  "personal-trainer": {
+   "exposure": 0.24,
+   "exposedShare": 0.33,
+   "autoShare": 0,
+   "tasksRated": 12,
+   "speed": [
+    "Explain and enforce safety rules and regulations governing sports, recreational activities, and the use of exercise equipment.",
+    "Plan routines, choose appropriate music, and choose different movements for each set of muscles, depending on participants' capabilities and limitations.",
+    "Advise clients about proper clothing and shoes."
+   ],
+   "human": [
+    "Instruct participants in maintaining exertion levels to maximize benefits from exercise routines.",
+    "Teach proper breathing techniques used during physical exertion.",
+    "Offer alternatives during classes to accommodate different levels of fitness."
+   ]
+  },
+  "content-creator": {
+   "exposure": 0.69,
+   "exposedShare": 0.91,
+   "autoShare": 0.45,
+   "tasksRated": 34,
+   "speed": [
+    "Post and update content on the company's Web site and social media outlets.",
+    "Develop plans or materials to communicate organizational activities that are beneficial to the environment, public safety, or other important social issues.",
+    "Vary language and tone of messages based on product and medium."
+   ],
+   "human": [
+    "Set up and operate computer editing systems, electronic titling systems, video switching equipment, and digital video effects units to produce a final product.",
+    "Coach client representatives in effective communication with the public or with employees.",
+    "Supervise and coordinate activities of workers engaged in film editing, assembling, and recording activities."
+   ],
+   "approximate": true,
+   "basedOn": [
+    "Writers and Authors",
+    "Film and Video Editors",
+    "Public Relations Specialists"
+   ]
+  },
+  "operations-manager": {
+   "exposure": 0.38,
+   "exposedShare": 0.67,
+   "autoShare": 0.33,
+   "tasksRated": 9,
+   "speed": [
+    "Establish or implement departmental policies, goals, objectives, or procedures in conjunction with board members, organization officials, or staff members.",
+    "Prepare staff work schedules and assign specific duties.",
+    "Direct or coordinate financial or budget activities to fund operations, maximize investments, or increase efficiency."
+   ],
+   "human": [
+    "Perform personnel functions, such as selection, training, or evaluation.",
+    "Direct administrative activities directly related to making products or providing services.",
+    "Monitor suppliers to ensure that they efficiently and effectively provide needed goods or services within budgetary limits."
+   ]
+  },
+  "logistician": {
+   "exposure": 0.45,
+   "exposedShare": 0.73,
+   "autoShare": 0.13,
+   "tasksRated": 22,
+   "speed": [
+    "Provide project management services, including the provision and analysis of technical data.",
+    "Explain proposed solutions to customers, management, or other interested parties through written proposals and oral presentations.",
+    "Plan, organize, and execute logistics support activities, such as maintenance planning, repair analysis, and test equipment recommendations."
+   ],
+   "human": [
+    "Maintain and develop positive business relationships with a customer's key personnel involved in, or directly relevant to, a logistics activity.",
+    "Review logistics performance with customers against targets, benchmarks, and service agreements.",
+    "Protect and control proprietary materials."
+   ]
+  },
+  "construction-manager": {
+   "exposure": 0.4,
+   "exposedShare": 0.6,
+   "autoShare": 0.08,
+   "tasksRated": 20,
+   "speed": [
+    "Determine labor requirements for dispatching workers to construction sites.",
+    "Apply for and obtain all necessary permits or licenses.",
+    "Prepare contracts or negotiate revisions to contractual agreements with architects, consultants, clients, suppliers, or subcontractors."
+   ],
+   "human": [
+    "Implement new or modified plans in response to delays, bad weather, or construction site emergencies.",
+    "Plan, organize, or direct activities concerned with the construction or maintenance of structures, facilities, or systems.",
+    "Investigate damage, accidents, or delays at construction sites to ensure that proper construction procedures are being followed."
+   ]
+  },
+  "small-business-owner": {
+   "exposure": 0.37,
+   "exposedShare": 0.57,
+   "autoShare": 0.13,
+   "tasksRated": 28,
+   "speed": [
+    "Direct or conduct studies or research on issues affecting areas of responsibility.",
+    "Interpret and explain policies, rules, regulations, or laws to organizations, government or corporate officials, or individuals.",
+    "Establish or implement departmental policies, goals, objectives, or procedures in conjunction with board members, organization officials, or staff members."
+   ],
+   "human": [
+    "Direct or coordinate an organization's financial or budget activities to fund operations, maximize investments, or increase efficiency.",
+    "Direct administrative activities directly related to making products or providing services.",
+    "Confer with board members, organization officials, or staff members to discuss issues, coordinate activities, or resolve problems."
+   ],
+   "approximate": true,
+   "basedOn": [
+    "General and Operations Managers",
+    "Chief Executives"
+   ]
+  },
+  "urban-planner": {
+   "exposure": 0.58,
+   "exposedShare": 0.89,
+   "autoShare": 0.06,
+   "tasksRated": 19,
+   "speed": [
+    "Create, prepare, or requisition graphic or narrative reports on land use data, including land area maps overlaid with geographic variables, such as population density.",
+    "Evaluate proposals for infrastructure projects or other development for environmental impact or sustainability.",
+    "Advocate sustainability to community groups, government agencies, the general public, or special interest groups."
+   ],
+   "human": [
+    "Determine the effects of regulatory limitations on land use projects.",
+    "Research, compile, analyze and organize information from maps, reports, investigations, and books for use in reports and special projects."
+   ]
+  },
+  "budget-analyst": {
+   "exposure": 0.64,
+   "exposedShare": 1,
+   "autoShare": 0.67,
+   "tasksRated": 12,
+   "speed": [
+    "Direct the preparation of regular and special budget reports.",
+    "Provide advice and technical assistance with cost analysis, fiscal allocation, and budget preparation.",
+    "Summarize budgets and submit recommendations for the approval or disapproval of funds requests."
+   ],
+   "human": [
+    "Testify before examining and fund-granting authorities, clarifying and promoting the proposed budgets."
+   ]
+  },
+  "paralegal": {
+   "exposure": 0.45,
+   "exposedShare": 0.88,
+   "autoShare": 0.71,
+   "tasksRated": 8,
+   "speed": [
+    "Prepare affidavits or other documents, such as legal correspondence, and organize and maintain documents in paper or electronic filing system.",
+    "Gather and analyze research data, such as statutes, decisions, and legal articles, codes, and documents.",
+    "Prepare for trial by performing tasks such as organizing exhibits."
+   ],
+   "human": [
+    "Meet with clients and other professionals to discuss details of case.",
+    "Call upon witnesses to testify at hearing."
+   ]
+  },
+  "lawyer": {
+   "exposure": 0.48,
+   "exposedShare": 0.78,
+   "autoShare": 0.43,
+   "tasksRated": 18,
+   "speed": [
+    "Analyze the probable outcomes of cases, using knowledge of legal precedents.",
+    "Search for and examine public and other legal records to write opinions or establish ownership.",
+    "Evaluate findings and develop strategies and arguments in preparation for presentation of cases."
+   ],
+   "human": [
+    "Represent clients in court or before government agencies.",
+    "Select jurors, argue motions, meet with judges, and question witnesses during the course of a trial.",
+    "Supervise legal assistants."
+   ]
+  },
+  "police-officer": {
+   "exposure": 0.23,
+   "exposedShare": 0.32,
+   "autoShare": 0.11,
+   "tasksRated": 28,
+   "speed": [
+    "Record facts to prepare reports that document incidents and activities.",
+    "Inform citizens of community services and recommend options to facilitate longer-term problem resolution.",
+    "Conduct community programs for all ages concerning topics such as drugs and violence."
+   ],
+   "human": [
+    "Testify in court to present evidence or act as witness in traffic and criminal cases.",
+    "Patrol specific area on foot, horseback, or motorized conveyance, responding promptly to calls for assistance.",
+    "Monitor, note, report, and investigate suspicious persons and situations, safety hazards, and unusual or illegal activity in patrol area."
+   ]
+  },
+  "firefighter": {
+   "exposure": 0.09,
+   "exposedShare": 0.11,
+   "autoShare": 0.33,
+   "tasksRated": 27,
+   "speed": [
+    "Prepare written reports that detail specifics of fire incidents.",
+    "Inform and educate the public on fire prevention.",
+    "Collaborate with other firefighters as a member of a firefighting crew."
+   ],
+   "human": [
+    "Collaborate with police to respond to accidents, disasters, and arson investigation calls.",
+    "Clean and maintain fire stations and fire fighting equipment and apparatus.",
+    "Respond to fire alarms and other calls for assistance, such as automobile and industrial accidents."
+   ]
+  },
+  "software-developer": {
+   "exposure": 0.45,
+   "exposedShare": 0.84,
+   "autoShare": 0.38,
+   "tasksRated": 19,
+   "speed": [
+    "Consult with customers or other departments on project status, proposals, or technical issues, such as software system design or maintenance.",
+    "Store, retrieve, and manipulate data for analysis of system capabilities and requirements.",
+    "Develop or direct software system testing or validation procedures, programming, or documentation."
+   ],
+   "human": [
+    "Confer with data processing or project managers to obtain information on limitations or capabilities for data processing projects.",
+    "Supervise and assign work to programmers, designers, technologists, technicians, or other engineering or scientific personnel."
+   ]
+  },
+  "cybersecurity-analyst": {
+   "exposure": 0.54,
+   "exposedShare": 1,
+   "autoShare": 0.45,
+   "tasksRated": 11,
+   "speed": [
+    "Document computer security and emergency measures policies, procedures, and tests.",
+    "Monitor use of data files and regulate access to safeguard information in computer files.",
+    "Train users and promote security awareness to ensure system security and to improve server and network efficiency."
+   ],
+   "human": []
+  },
+  "data-scientist": {
+   "exposure": 0.59,
+   "exposedShare": 0.94,
+   "autoShare": 0.53,
+   "tasksRated": 16,
+   "speed": [
+    "Recommend data-driven solutions to key stakeholders.",
+    "Propose solutions in engineering, the sciences, and other fields using mathematical theories and techniques.",
+    "Identify solutions to business problems, such as budgeting, staffing, and marketing decisions, using the results of data analysis."
+   ],
+   "human": [
+    "Compare models using statistical performance metrics, such as loss functions or proportion of explained variance."
+   ]
+  },
+  "it-support-specialist": {
+   "exposure": 0.67,
+   "exposedShare": 0.82,
+   "autoShare": 0.67,
+   "tasksRated": 11,
+   "speed": [
+    "Read technical manuals, confer with users, or conduct computer diagnostics to investigate and resolve problems or to provide technical assistance and support.",
+    "Answer user inquiries regarding computer software or hardware operation to resolve problems.",
+    "Develop training materials and procedures, or train users in the proper use of hardware or software."
+   ],
+   "human": [
+    "Set up equipment for employee use, performing or ensuring proper installation of cables, operating systems, or appropriate software.",
+    "Install and perform minor repairs to hardware, software, or peripheral equipment, following design or installation specifications."
+   ]
+  },
+  "ux-designer": {
+   "exposure": 0.68,
+   "exposedShare": 1,
+   "autoShare": 0.57,
+   "tasksRated": 30,
+   "speed": [
+    "Write and edit technical documentation for digital interface products and designs, such as user manuals, testing protocols, and reports.",
+    "Perform Web site tests according to planned schedules, or after any Web site or product revision.",
+    "Communicate with network personnel or Web site hosting agencies to address hardware or software issues affecting Web sites."
+   ],
+   "human": []
+  },
+  "electrician": {
+   "exposure": 0.15,
+   "exposedShare": 0.25,
+   "autoShare": 0.2,
+   "tasksRated": 20,
+   "speed": [
+    "Perform business management duties, such as maintaining records or files, preparing reports, or ordering supplies or equipment.",
+    "Prepare sketches or follow blueprints to determine the location of wiring or equipment and to ensure conformance to building and safety codes.",
+    "Maintain current electrician's license or identification card to meet governmental regulations."
+   ],
+   "human": [
+    "Direct or train workers to install, maintain, or repair electrical wiring, equipment, or fixtures.",
+    "Work from ladders, scaffolds, or roofs to install, maintain, or repair electrical wiring, equipment, or fixtures.",
+    "Assemble, install, test, or maintain electrical or electronic wiring, equipment, appliances, apparatus, or fixtures, using hand tools or power tools."
+   ]
+  },
+  "plumber": {
+   "exposure": 0.06,
+   "exposedShare": 0.13,
+   "autoShare": 0.33,
+   "tasksRated": 24,
+   "speed": [
+    "Estimate time, material, or labor costs for use in project plans.",
+    "Keep records of work assignments.",
+    "Lay out full scale drawings of pipe systems, supports, or related equipment, according to blueprints."
+   ],
+   "human": [
+    "Install pipe assemblies, fittings, valves, appliances such as dishwashers or water heaters, or fixtures such as sinks or toilets, using hand or power tools.",
+    "Fill pipes or plumbing fixtures with water or air and observe pressure gauges to detect and locate leaks.",
+    "Install underground storm, sanitary, or water piping systems, extending piping as needed to connect fixtures and plumbing."
+   ]
+  },
+  "hvac-technician": {
+   "exposure": 0.14,
+   "exposedShare": 0.22,
+   "autoShare": 0.33,
+   "tasksRated": 27,
+   "speed": [
+    "Keep records of repairs and replacements made and causes of malfunctions.",
+    "Discuss heating or cooling system malfunctions with users to isolate problems or to verify that repairs corrected malfunctions.",
+    "Schedule work with customers and initiate work orders, house requisitions, and orders from stock."
+   ],
+   "human": [
+    "Install dehumidifiers or related equipment for spaces that require cool, dry air to operate efficiently, such as computer rooms.",
+    "Install auxiliary components to heating or cooling equipment, such as expansion or discharge valves, air ducts, pipes, blowers, dampers, flues, or stokers.",
+    "Perform mechanical overhauls and refrigerant reclaiming."
+   ]
+  },
+  "welder": {
+   "exposure": 0.04,
+   "exposedShare": 0.1,
+   "autoShare": 0,
+   "tasksRated": 21,
+   "speed": [
+    "Develop templates and models for welding projects, using mathematical calculations based on blueprint information.",
+    "Select and install torches, torch tips, filler rods, and flux, according to welding chart specifications or types and thicknesses of metals."
+   ],
+   "human": [
+    "Recognize, set up, and operate hand and power tools common to the welding trade, such as shielded metal arc and gas metal arc welding equipment.",
+    "Grind, cut, buff, or bend edges of workpieces to be joined to ensure snug fit, using power grinders and hand tools.",
+    "Determine required equipment and welding methods, applying knowledge of metallurgy, geometry, and welding techniques."
+   ]
+  },
+  "carpenter": {
+   "exposure": 0.09,
+   "exposedShare": 0.13,
+   "autoShare": 0.5,
+   "tasksRated": 16,
+   "speed": [
+    "Maintain records, document actions, and present written progress reports.",
+    "Maintain job records and schedule work crew."
+   ],
+   "human": [
+    "Install structures or fixtures, such as windows, frames, floorings, trim, or hardware, using carpenters' hand or power tools.",
+    "Install rough door and window frames, subflooring, fixtures, or temporary supports in structures undergoing construction or repair.",
+    "Study specifications in blueprints, sketches, or building plans to prepare project layout and determine dimensions and materials required."
+   ]
+  },
+  "automotive-technician": {
+   "exposure": 0.07,
+   "exposedShare": 0.12,
+   "autoShare": 0,
+   "tasksRated": 25,
+   "speed": [
+    "Review work orders and discuss work with supervisors.",
+    "Estimate costs of vehicle repair.",
+    "Troubleshoot fuel, ignition, and emissions control systems, using electronic testing equipment."
+   ],
+   "human": [
+    "Confer with customers to obtain descriptions of vehicle problems and to discuss work to be performed and future repair requirements.",
+    "Perform routine and scheduled maintenance services, such as oil changes, lubrications, and tune-ups.",
+    "Repair, reline, replace, and adjust brakes."
+   ]
+  },
+  "lineworker": {
+   "exposure": 0,
+   "exposedShare": 0,
+   "autoShare": 0,
+   "tasksRated": 22,
+   "speed": [],
+   "human": [
+    "Climb poles or use truck-mounted buckets to access equipment.",
+    "Install watt-hour meters and connect service drops between power lines and consumers' facilities.",
+    "Travel in trucks, helicopters, and airplanes to inspect lines for freedom from obstruction and adequacy of insulation."
+   ]
+  },
+  "chef": {
+   "exposure": 0.26,
+   "exposedShare": 0.38,
+   "autoShare": 0.38,
+   "tasksRated": 21,
+   "speed": [
+    "Meet with customers to discuss menus for special occasions, such as weddings, parties, or banquets.",
+    "Determine how food should be presented and create decorative food displays.",
+    "Recruit and hire staff, such as cooks and other kitchen workers."
+   ],
+   "human": [
+    "Plan, direct, or supervise food preparation or cooking activities of multiple kitchens or restaurants in an establishment such as a restaurant chain, hospital, or hotel.",
+    "Coordinate planning, budgeting, or purchasing for all the food operations within establishments such as clubs, hotels, or restaurant chains.",
+    "Prepare and cook foods of all types, either on a regular basis or for special guests or functions."
+   ]
+  }
+ }
+}

@@ -60,15 +60,30 @@ export const DATA_SOURCES = {
   wages: 'U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics and Occupational Outlook Handbook',
   outlook: 'U.S. Bureau of Labor Statistics, Employment Projections 2023 to 2033',
   tasks: 'Written by the Called team, informed by O*NET OnLine task and work-context data',
+  ai: 'Eloundou, Manning, Mishkin & Rock, “GPTs are GPTs,” Science (2024), using O*NET task statements',
+};
+
+/** SOC codes that O*NET OnLine files under a different (current) O*NET-SOC code. */
+const ONET_CODE: Record<string, string> = {
+  '29-2010': '29-2011.00',
+  '25-1099': '25-1199.00',
+  '21-1018': '21-1014.00',
+  '25-2052': '25-2056.00',
 };
 
 export function onetUrl(soc?: string): string | undefined {
   if (!soc) return undefined;
-  const code = soc.length === 7 ? `${soc}.00` : soc;
+  const code = ONET_CODE[soc] ?? (soc.length === 7 ? `${soc}.00` : soc);
   return `https://www.onetonline.org/link/summary/${code}`;
 }
 
+/** SOC codes that BLS wage statistics publish under a combined code. */
+const BLS_CODE: Record<string, string> = { '31-1122': '31-1120' };
+
+/** The BLS occupation profile: national, state and metro wages for the year Called’s figures come from. */
 export function blsUrl(soc?: string): string | undefined {
   if (!soc) return undefined;
-  return `https://www.bls.gov/oes/current/oes${soc.replace('-', '')}.htm`;
+  const code = (BLS_CODE[soc] ?? soc).replace('-', '');
+  const year = DATA_SOURCES.wagesAsOf.match(/(20\d\d)/)?.[1] ?? '2025';
+  return `https://data.bls.gov/oesprofile/?year=${year}&major_group=${code.slice(0, 2)}0000&occupation=${code}&measure=01&areas=INDUSTRY,STATE,MSA`;
 }

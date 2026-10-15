@@ -101,6 +101,13 @@ export default function About() {
             <strong>Tasks, reality checks and day-in-the-life:</strong> {DATA_SOURCES.tasks}.
           </li>
           <li>
+            <strong>How AI is changing each career:</strong> exposure scores and task ratings from Eloundou, Manning, Mishkin and Rock,{' '}
+            <a href="https://www.science.org/doi/10.1126/science.adj0998" target="_blank" rel="noreferrer">
+              “GPTs are GPTs”
+            </a>
+            , Science (2024), using official O*NET task descriptions. Guidance about what holds up is written by Called. Exposure means AI tools could speed up some tasks; it is not a prediction that a job will disappear.
+          </li>
+          <li>
             <strong>Tuition:</strong> College Board, Trends in College Pricing, published tuition and fees before aid.
           </li>
         </ul>

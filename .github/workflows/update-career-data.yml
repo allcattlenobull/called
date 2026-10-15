@@ -21,12 +21,22 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Check data source keys
+        # Reports which API keys are set and accepted (never prints them). Never fails the run.
+        run: node scripts/check-data-keys.mjs
+        env:
+          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+          BEA_API_KEY: ${{ secrets.BEA_API_KEY }}
+          COLLEGE_SCORECARD_API_KEY: ${{ secrets.COLLEGE_SCORECARD_API_KEY }}
+          ONET_API_KEY: ${{ secrets.ONET_API_KEY }}
+          CAREERONESTOP_USER_ID: ${{ secrets.CAREERONESTOP_USER_ID }}
+          CAREERONESTOP_TOKEN: ${{ secrets.CAREERONESTOP_TOKEN }}
       - name: Fetch latest wages
         run: npm run data:update
         env:
           # Optional. Without a key the BLS API allows fewer requests per day.
-          # Stored as the repository secret BLS_GOV (Settings > Secrets and variables > Actions). Never commit keys.
-          BLS_API_KEY: ${{ secrets.BLS_GOV }}
+          # Repository secret BLS_API_KEY (Settings > Secrets and variables > Actions). Never commit keys.
+          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
       - name: Fetch reviewed state market data
         run: npm run data:update:market
         env:

@@ -11,6 +11,7 @@ import { generateRoadmap } from '../../lib/path';
 import { marketFor } from '../../lib/market';
 import { Conflicts, EvidenceBadge, FitStrip, MatchBars, OverallScore } from '../../components/Match';
 import { SaveButton } from '../../components/CareerCard';
+import { AiImpact } from '../../components/AiImpact';
 import { Icon } from '../../components/Icon';
 import { Callout, OptionGroup } from '../../components/ui';
 import type { CareerStatus, RealityResponse } from '../../types';
@@ -242,17 +243,7 @@ export default function CareerDetail() {
             </div>
           </section>
 
-          <section aria-labelledby="ai-work-h" className="ai-work">
-            <div className="section-heading"><div><span className="eyebrow">Evidence-informed · reviewed {aiWork.reviewed}</span><h2 id="ai-work-h">How AI is changing this work</h2></div><span className="tag tag--purpose">{aiWork.signal}</span></div>
-            <Callout tone="info" title="Task exposure is not a job forecast">{aiWork.summary} This section is informational and does not affect your match score.</Callout>
-            <div className="grid grid--2 ai-work__grid">
-              <article className="card"><h3 className="h4">Where tools may assist</h3><ul>{aiWork.likelyAssistance.map((item) => <li key={item}>{item}</li>)}</ul></article>
-              <article className="card"><h3 className="h4">Where people still own the outcome</h3><ul>{aiWork.humanResponsibilities.map((item) => <li key={item}>{item}</li>)}</ul></article>
-              <article className="card"><h3 className="h4">Skills that hold up</h3><div className="chips chips--static">{aiWork.durableSkills.map((item) => <span className="tag" key={item}>{item}</span>)}</div></article>
-              <article className="card"><h3 className="h4">How to prepare</h3><ul>{aiWork.actions.map((item) => <li key={item}>{item}</li>)}</ul></article>
-            </div>
-            <div className="row"><Link to={`/careers/${career.id}/interview`} className="btn btn--secondary">Practice an informational interview</Link><Link to="/research#ai-work" className="btn btn--quiet">Method and sources</Link></div>
-          </section>
+          <AiImpact career={career} guide={aiWork} />
 
           <section aria-labelledby="pay-h">
             <h2 id="pay-h">Pay and outlook</h2>
@@ -525,7 +516,7 @@ export default function CareerDetail() {
                 </a>{' '}
                 and{' '}
                 <a href={blsUrl(career.soc)} target="_blank" rel="noreferrer">
-                  BLS wage data
+                  BLS wages by state and metro area
                 </a>{' '}
                 (SOC {career.soc}). Wage snapshot: {DATA_SOURCES.wagesAsOf}. Descriptions are written by Called and informed by O*NET.
               </>

@@ -1,5 +1,6 @@
 import type { Career, CareerFamily, SkillId } from '../types';
 import { SKILLS } from './vocab';
+import { aiExposure, aiBand } from '../lib/ai';
 
 export const AI_WORK_REVIEWED = 'October 2026';
 
@@ -14,6 +15,7 @@ export interface AiWorkSource {
 }
 
 export const AI_WORK_SOURCES: AiWorkSource[] = [
+  { id: 'eloundou-2024', title: 'GPTs are GPTs: Labor market impact potential of LLMs', authors: 'Eloundou, Manning, Mishkin, and Rock', year: 2024, venue: 'Science', url: 'https://doi.org/10.1126/science.adj0998', finding: 'Human raters scored every O*NET task for whether AI language tools could cut its time in half. Called uses these task ratings for each career’s exposure band and task lists.' },
   { id: 'onet-ai-2026', title: 'Indexing the Impact of AI within the O*NET System', authors: 'Putka, Voss, and Lewis', year: 2026, venue: 'National Center for O*NET Development', url: 'https://www.onetcenter.org/reports/AI_Impact_Review.html', finding: 'Task-only exposure measures can miss contextual and adaptive parts of job performance; O*NET recommends multiple transparent indicators.' },
   { id: 'ilo-2025', title: 'Generative AI and Jobs: A Refined Global Index of Occupational Exposure', authors: 'Gmyrek et al.', year: 2025, venue: 'International Labour Organization Working Paper 140', url: 'https://doi.org/10.54394/HETP0387', finding: 'Exposure varies by task, occupation, and context; transformation is generally more plausible than whole-job replacement.' },
   { id: 'oecd-2024', title: 'Artificial intelligence and the changing demand for skills in the labour market', authors: 'Green', year: 2024, venue: 'OECD Artificial Intelligence Papers', url: 'https://doi.org/10.1787/88684e36-en', finding: 'AI adoption changes task and skill demand, including in occupations whose workers do not need specialized AI credentials.' },
@@ -70,7 +72,16 @@ function skillLabels(skills: SkillId[]): string[] {
 export function aiWorkFor(career: Career): AiWorkGuide {
   const highlyDigitized = career.physical === 1 && career.remote !== 'none' && career.peopleData <= 0;
   const contextHeavy = career.physical >= 2 || career.peopleData >= 1 || career.skills.some((skill) => ['empathy', 'leadership', 'teaching', 'handsOn'].includes(skill));
-  const signal: AiWorkGuide['signal'] = highlyDigitized ? 'Digitized tasks changing quickly' : contextHeavy ? 'Hands-on or human-context work' : 'Mixed task change';
+  // The research-rated exposure band leads when it exists; the descriptive rule is the fallback.
+  const exposure = aiExposure(career.id);
+  const band = exposure === undefined ? undefined : aiBand(exposure);
+  const signal: AiWorkGuide['signal'] = band
+    ? ({ low: 'Hands-on or human-context work', moderate: 'Mixed task change', high: 'Digitized tasks changing quickly' } as const)[band]
+    : highlyDigitized
+      ? 'Digitized tasks changing quickly'
+      : contextHeavy
+        ? 'Hands-on or human-context work'
+        : 'Mixed task change';
   const digitalResponsibilities = career.responsibilities.filter((task) => DIGITAL_TASK.test(task)).slice(0, 2);
   const humanResponsibilities = career.responsibilities.filter((task) => HUMAN_CONTEXT.test(task)).slice(0, 3);
   const retained = unique([...humanResponsibilities, ...career.responsibilities.slice(-2)]).slice(0, 3).map(lowerFirst);
@@ -82,9 +93,9 @@ export function aiWorkFor(career: Career): AiWorkGuide {
 
   return {
     signal,
-    summary: highlyDigitized
+    summary: signal === 'Digitized tasks changing quickly'
       ? `${career.title} includes substantial information-processing work, so individual tasks may change quickly. That is an exposure signal—not a forecast that the occupation will disappear.`
-      : contextHeavy
+      : signal === 'Hands-on or human-context work'
         ? `${career.title} combines work that software may assist with and responsibilities that depend on physical execution, trust, judgment, or live human context. Expect tools and workflows to change more readily than the whole role.`
         : `${career.title} contains a mix of tasks. Some routine information work may be assisted or automated, while responsibility for context, verification, and outcomes remains with people.`,
     likelyAssistance,

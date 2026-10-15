@@ -2293,6 +2293,95 @@
   }
 }
 
+
+/* ===== How AI is changing this work ===== */
+.ai-card {
+  display: grid;
+  gap: var(--s-5);
+}
+.ai-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.ai-head > div:first-child {
+  flex: 1 1 320px;
+}
+.ai-head__line {
+  margin: var(--s-2) 0 0;
+}
+.ai-band {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-lg);
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
+}
+.ai-band--low {
+  background: var(--evidence-tint);
+  color: var(--evidence-text);
+}
+.ai-band--moderate {
+  background: var(--primary-tint);
+  color: var(--text);
+}
+.ai-band--high {
+  background: var(--purpose-tint);
+  color: var(--text);
+}
+.ai-scale {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  min-width: 220px;
+}
+.ai-scale__seg {
+  text-align: center;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  padding-top: var(--s-2);
+  border-top: 6px solid var(--bg-sunken);
+}
+.ai-scale__seg.is-filled {
+  border-top-color: var(--purpose);
+}
+.ai-scale__seg.is-on {
+  color: var(--text);
+  font-weight: 700;
+}
+.ai-tasks h3 {
+  margin-bottom: var(--s-2);
+}
+.ai-list {
+  margin: 0;
+  padding-left: 1.1em;
+  font-size: var(--fs-sm);
+}
+.ai-list--speed li::marker {
+  color: var(--purpose);
+}
+.ai-list--human li::marker {
+  color: var(--evidence);
+}
+.ai-meaning {
+  padding: var(--s-4);
+  border-radius: var(--r-lg);
+  background: var(--bg-subtle);
+}
+.ai-meaning p:last-child {
+  margin-bottom: 0;
+}
+.ai-ask svg {
+  vertical-align: -2px;
+  color: var(--purpose);
+}
+.ai-source {
+  margin: 0;
+}
+
 /* ===== Report ===== */
 
 .report-sheet {
@@ -2318,11 +2407,13 @@
   border-bottom: 2px solid #121a3d;
   margin-bottom: var(--s-4);
 }
-.report__title {
+.report h2.report__title {
   font-size: var(--fs-2xl);
   margin: 0;
+  padding: 0;
+  border: 0;
 }
-.report h2 {
+.report h2:not(.report__title) {
   font-size: var(--fs-lg);
   margin: var(--s-5) 0 var(--s-2);
   padding-bottom: var(--s-1);

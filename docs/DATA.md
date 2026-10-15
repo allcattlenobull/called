@@ -17,13 +17,33 @@ The catalog contains 178 careers across 15 families and every training level. Ca
 | SOC codes | 2018 Standard Occupational Classification | Used to link to O*NET and BLS |
 | Tasks, conditions, reality checks | Written by Called, informed by O*NET OnLine task and work-context data | Rewritten in plain language anyone can follow |
 | Tuition assumptions | College Board, *Trends in College Pricing* | Published tuition and fees before aid |
+| How AI is changing each career | Eloundou, Manning, Mishkin & Rock, “GPTs are GPTs: Labor market impact potential of LLMs,” *Science* 384 (2024); data from [openai/GPTs-are-GPTs](https://github.com/openai/GPTs-are-GPTs) (MIT license) | Human annotators’ ratings of O*NET task statements; “what this means” guidance written by Called |
 
 “Small business owner” has no SOC wage series; its pay is a labeled rough estimate.
+
+## How AI is changing each career
+
+Every career page has a **How AI is changing this work** section, built by [`scripts/build-ai-impact.mjs`](../scripts/build-ai-impact.mjs):
+
+- **Exposure** is the study’s human-rated β score: the share of an occupation’s O*NET tasks that an AI language tool could do at least twice as fast with the same quality (E1), plus half of those that would need extra software built on top (E2). Bands split the study’s 900+ occupations into rough thirds: low (under 0.20), moderate (0.20 to 0.40), high (0.40 and up).
+- **Tasks AI tools could speed up** and **tasks that stay human** are real O*NET task statements rated E1/E2 and E0, chosen to best match Called’s own description of the work.
+- **Assistant vs. doing the work:** the share of exposed tasks the study rated as largely automatable (T3 or T4) decides whether Called says AI mostly assists or could do parts of the work itself.
+- **What this means for you** combines a band explanation with guidance for each career family, written by Called.
+- Six careers without a single matching occupation in the study’s O*NET version use a documented blend (`ALIASES` in the script), and the page says so.
+
+Limits, shown on every page: the ratings describe what AI language tools *could* speed up, not whether jobs will disappear; they were made with 2023-era tools; and they don’t cover robotics. To rebuild:
+
+```bash
+git clone --depth 1 https://github.com/openai/GPTs-are-GPTs /tmp/gpts
+node scripts/build-ai-impact.mjs /tmp/gpts/data
+npm run data:validate
+```
 
 ### Attribution
 
 - Pay and outlook data: U.S. Bureau of Labor Statistics (public domain U.S. government work).
 - O*NET® is a trademark of the U.S. Department of Labor, Employment and Training Administration. Called links to O*NET OnLine and uses O*NET information as a reference under its terms; Called is not affiliated with or endorsed by USDOL/ETA.
+- AI exposure data: © 2024 OpenAI, MIT license; task statements from O*NET by USDOL/ETA, used under CC BY 4.0.
 - The app shows source attribution on every career page and on the About page.
 
 Called may use official APIs, bulk downloads, feeds, and responsible web extraction when the source’s terms, robots/access controls, copyright or license, and applicable law permit it. Prefer stable official APIs or downloads when they exist. Do not bypass authentication, paywalls, CAPTCHAs, rate limits, or other technical access controls.
@@ -41,7 +61,17 @@ The app never depends on automation running; the committed data is always comple
 
 ### Secrets
 
-The BLS API works without a key at lower request limits. This repository uses a key stored as the repository secret `BLS_GOV` (**Settings → Secrets and variables → Actions**); the workflow passes it to the script as `BLS_API_KEY`. Never commit keys to the repository.
+Keys live in **Settings → Secrets and variables → Actions → Repository secrets**, never in the code and never in a `VITE_` variable (those are baked into the public site).
+
+| Secret | Used for | Status |
+| --- | --- | --- |
+| `BLS_API_KEY` | Wages (monthly refresh) | In use |
+| `BEA_API_KEY` | Cost of living by state and metro | Checked monthly; ready for location features |
+| `CAREERONESTOP_USER_ID`, `CAREERONESTOP_TOKEN` | Professional associations, apprenticeships, job centers | Checked monthly; ready for networking features |
+| `COLLEGE_SCORECARD_API_KEY` | School and program costs and earnings | Checked monthly; ready for the ROI tool |
+| `ONET_API_KEY` | O*NET Web Services (v2) | Checked monthly; ready for task and skills refreshes |
+
+Each monthly run starts with `scripts/check-data-keys.mjs`, which reports in the run summary whether every key is present and accepted, without ever printing a key and without failing the run. To check right away, open **Actions → Update career data → Run workflow**.
 
 For the workflow to open its pull request, enable **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
 
@@ -51,7 +81,7 @@ For the workflow to open its pull request, enable **Settings → Actions → Gen
 
 The optional `src/data/market/state-market.json` snapshot is keyed by state abbreviation and SOC. It may contain `pay.median` and/or an `outlook` object with `growth`, `annualOpenings`, `baseYear`, and `projectionYear`. Missing state pay is never treated as zero. The UI explicitly says “U.S. median pay” or “State median pay.”
 
-`npm run data:update:market` imports a reviewed JSON export from `STATE_MARKET_DATA_URL`, validates it, and leaves the existing snapshot untouched on failure. Configure that URL only when it points to an official/state or Projections Central export transformed to the documented shape. The workflow will use it when the repository secret `STATE_MARKET_DATA_URL` is configured. The existing `BLS_GOV` secret continues to serve the national BLS updater.
+`npm run data:update:market` imports a reviewed JSON export from `STATE_MARKET_DATA_URL`, validates it, and leaves the existing snapshot untouched on failure. Configure that URL only when it points to an official/state or Projections Central export transformed to the documented shape. The workflow will use it when the repository secret `STATE_MARKET_DATA_URL` is configured. The `BLS_API_KEY` secret continues to serve the national BLS updater.
 
 Cost of living is intentionally not fabricated. The market model leaves room for a future BEA Regional Price Parities layer so nominal salary and local purchasing power remain separate values.
 

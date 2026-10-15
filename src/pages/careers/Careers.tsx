@@ -1,3 +1,4 @@
+import { AI_BANDS, aiExposure, careerAiBand, type AiBand } from '../../lib/ai';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CAREERS } from '../../data/careers';
@@ -11,7 +12,7 @@ import type { CareerFamily, EducationLevel, InterestId, Career } from '../../typ
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { smartSearchScore } from '../../lib/smartSearch';
 
-type Sort = 'match' | 'az' | 'pay' | 'outlook' | 'training';
+type Sort = 'match' | 'az' | 'pay' | 'outlook' | 'training' | 'ai';
 
 interface Filters {
   maxEducation: EducationLevel | '';
@@ -23,11 +24,12 @@ interface Filters {
   outlook: '' | 'growing';
   orientation: '' | 'people' | 'data';
   schedule: '' | 'regular';
+  ai: '' | AiBand;
   entrepreneurial: boolean;
   saved: boolean;
 }
 
-const EMPTY: Filters = { maxEducation: '', minPay: 0, family: '', interest: '', remote: '', physical: '', outlook: '', orientation: '', schedule: '', entrepreneurial: false, saved: false };
+const EMPTY: Filters = { maxEducation: '', minPay: 0, family: '', interest: '', remote: '', physical: '', outlook: '', orientation: '', schedule: '', ai: '', entrepreneurial: false, saved: false };
 
 function applyFilters(c: Career, f: Filters, q: string, saved: string[]): boolean {
   if (q) {
@@ -45,6 +47,7 @@ function applyFilters(c: Career, f: Filters, q: string, saved: string[]): boolea
   if (f.orientation === 'people' && c.peopleData < 1) return false;
   if (f.orientation === 'data' && c.peopleData > -1) return false;
   if (f.schedule === 'regular' && c.schedule !== 'regular') return false;
+  if (f.ai && careerAiBand(c.id) !== f.ai) return false;
   if (f.entrepreneurial && c.entrepreneurial < 3) return false;
   if (f.saved && !saved.includes(c.id)) return false;
   return true;
@@ -72,6 +75,7 @@ export default function Careers() {
       pay: (a, b) => b.career.pay.median - a.career.pay.median,
       outlook: (a, b) => OUTLOOK[b.career.outlook].rank - OUTLOOK[a.career.outlook].rank,
       training: (a, b) => a.career.education.years - b.career.education.years,
+      ai: (a, b) => (aiExposure(a.career.id) ?? 1) - (aiExposure(b.career.id) ?? 1),
     };
     return [...list].sort((a, b) => q.trim() ? careerSearchScore(b.career, q) - careerSearchScore(a.career, q) || by[sort](a, b) : by[sort](a, b));
   }, [ranked, f, q, sort, profile.saved]);
@@ -122,6 +126,7 @@ export default function Careers() {
               <FilterSelect id="f-remote" label="Remote work" value={f.remote} onChange={(v) => set('remote', v as Filters['remote'])} options={[{ value: 'some', label: 'At least some' }, { value: 'common', label: 'Common' }]} />
               <FilterSelect id="f-phys" label="Physical activity" value={f.physical} onChange={(v) => set('physical', v as Filters['physical'])} options={[{ value: 'desk', label: 'Mostly desk' }, { value: 'active', label: 'Very active' }]} />
               <FilterSelect id="f-out" label="Growth outlook" value={f.outlook} onChange={(v) => set('outlook', v as Filters['outlook'])} options={[{ value: 'growing', label: 'Faster than average' }]} />
+              <FilterSelect id="f-ai" label="Exposure to AI" value={f.ai} onChange={(v) => set('ai', v as Filters['ai'])} options={(['low', 'moderate', 'high'] as AiBand[]).map((b) => ({ value: b, label: AI_BANDS[b].short }))} />
               <FilterSelect id="f-sched" label="Schedule" value={f.schedule} onChange={(v) => set('schedule', v as Filters['schedule'])} options={[{ value: 'regular', label: 'Regular weekday hours' }]} />
               <label className="check">
                 <input type="checkbox" checked={f.entrepreneurial} onChange={(e) => set('entrepreneurial', e.target.checked)} />
@@ -162,6 +167,7 @@ export default function Careers() {
                 <option value="pay">Highest median pay</option>
                 <option value="outlook">Fastest growing</option>
                 <option value="training">Shortest training</option>
+                <option value="ai">Least exposed to AI</option>
               </select>
             </div>
           </div>

@@ -15,6 +15,7 @@ import { Callout, PageHeader } from '../../components/ui';
 import { Icon } from '../../components/Icon';
 import { Logo } from '../../components/ui';
 import { isDone, learnedInsights, nextBestAction, pathEvidence } from '../../lib/path';
+import { AI_BANDS, careerAiBand } from '../../lib/ai';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { createSharedReport, revokeSharedReport, sharedReportsAvailable, type SharedReportLink } from '../../lib/sharedReport';
 import { counselorPacketFile, createCounselorPacket } from '../../lib/counselorReports';
@@ -67,7 +68,8 @@ export default function Report() {
         const c = CAREER_BY_ID[r.careerId];
         const ev = pathEvidence(c, profile);
         const stage = r.stage === 'leading' ? 'Leading path' : r.stage === 'ruledOut' ? 'Ruled out' : 'Exploring';
-        return `${r.goal}: ${stage}. Evidence: ${ev.level}.${r.stage !== 'ruledOut' ? ` Next best step: ${nextBestAction(c, profile, r, ev).title}.` : ''}`;
+        const ai = careerAiBand(c.id);
+        return `${r.goal}: ${stage}. Evidence: ${ev.level}.${ai ? ` Exposure to AI: ${AI_BANDS[ai].short.toLowerCase()}.` : ''}${r.stage !== 'ruledOut' ? ` Next best step: ${nextBestAction(c, profile, r, ev).title}.` : ''}`;
       });
     const next = [
       ...paths,
@@ -124,7 +126,7 @@ export default function Report() {
             <header className="report__head">
               <Logo size={26} />
               <div>
-                <h1 className="report__title">{showName && profile.name ? `${[profile.name, profile.lastName].filter(Boolean).join(' ')}’s exploration report` : 'My exploration report'}</h1>
+                <h2 className="report__title">{showName && profile.name ? `${[profile.name, profile.lastName].filter(Boolean).join(' ')}’s exploration report` : 'My exploration report'}</h2>
                 <p className="small muted">Created {formatDate(new Date().toISOString())}. A snapshot of an ongoing process, not a final answer.</p>
               </div>
             </header>

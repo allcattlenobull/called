@@ -193,6 +193,25 @@ test('the research-backed reasoning pilot records a result without closing caree
   await expect(page.locator('.ccard').first()).toBeVisible();
 });
 
+test('every career explains how AI is changing the work, and careers can be filtered by it', async ({ page }) => {
+  await page.goto('careers/electrician');
+  const ai = page.locator('section', { has: page.getByRole('heading', { name: 'How AI is changing this work' }) });
+  await expect(ai).toContainText('Low exposure to AI');
+  await expect(ai.getByRole('heading', { name: 'Tasks that stay human' })).toBeVisible();
+  await expect(ai.getByRole('link', { name: /GPTs are GPTs/ })).toBeVisible();
+  await page.goto('careers/accountant');
+  await expect(page.getByText('High exposure to AI')).toBeVisible();
+
+  await page.goto('careers');
+  const filters = page.locator('details.filters');
+  await filters.waitFor();
+  if ((await filters.getAttribute('open')) === null) await filters.locator('summary').click();
+  await page.getByLabel('Exposure to AI').selectOption('low');
+  await expect(page.getByRole('heading', { name: /\d+ careers?/ })).toBeVisible();
+  await page.getByRole('link', { name: 'Electrician', exact: true }).first().waitFor();
+  await expect(page.getByRole('link', { name: 'Accountant', exact: true })).toHaveCount(0);
+});
+
 test('unfinished work is saved and offered on return', async ({ page }) => {
   await page.goto('welcome');
   await page.getByLabel('I agree to the Guest Terms of Use').check();

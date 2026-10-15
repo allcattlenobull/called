@@ -79,6 +79,30 @@ describe('market data', () => {
   });
 });
 
+describe('AI impact', () => {
+  it('covers every career with exposure, sourced tasks and guidance', async () => {
+    const detail = (await import('../src/data/careers/overrides/ai-impact.json')).default as { source: string; careers: Record<string, { exposure: number; speed: string[]; human: string[]; tasksRated: number }> };
+    const { AI_FAMILY_GUIDANCE, aiExposure } = await import('../src/lib/ai');
+    expect(detail.source).toMatch(/Science/);
+    for (const c of CAREERS) {
+      const d = detail.careers[c.id];
+      expect(d, c.id).toBeTruthy();
+      expect(d.exposure).toBeGreaterThanOrEqual(0);
+      expect(d.exposure).toBeLessThanOrEqual(1);
+      expect(d.tasksRated, c.id).toBeGreaterThan(3);
+      expect(d.speed.length + d.human.length, c.id).toBeGreaterThanOrEqual(3);
+      expect(aiExposure(c.id)).toBe(d.exposure);
+      expect(AI_FAMILY_GUIDANCE[c.family], c.family).toBeTruthy();
+    }
+  });
+
+  it('ranks hands-on trades as less exposed than desk-based analysis', async () => {
+    const { aiExposure } = await import('../src/lib/ai');
+    expect(aiExposure('electrician')!).toBeLessThan(aiExposure('accountant')!);
+    expect(aiExposure('welder')!).toBeLessThan(aiExposure('software-developer')!);
+  });
+});
+
 describe('assessments and simulations', () => {
   it('ships a broad, uniquely identified simulation library', () => {
     expect(SIMULATIONS).toHaveLength(20);

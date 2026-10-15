@@ -11,6 +11,7 @@ import { Callout, EmptyState, PageHeader } from '../../components/ui';
 import { Icon } from '../../components/Icon';
 import type { Career } from '../../types';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
+import { AI_BANDS, aiBand, aiExposure } from '../../lib/ai';
 
 interface Row {
   label: string;
@@ -49,6 +50,19 @@ const ROWS: Row[] = [
   { group: 'Work and life', label: 'Stress', value: (c) => c.stress, display: (c) => LEVEL_WORDS[c.stress], better: 'low' },
   { group: 'Work and life', label: 'Physical demands', value: () => null, display: (c) => LEVEL_WORDS[c.physical] },
   { group: 'Work and life', label: 'Travel', value: () => null, display: (c) => LEVEL_WORDS[c.travel] },
+  {
+    group: 'Work and life',
+    label: 'Exposure to AI',
+    value: (c) => {
+      const e = aiExposure(c.id);
+      return e === undefined ? null : Math.round(e * 100);
+    },
+    display: (c) => {
+      const e = aiExposure(c.id);
+      return e === undefined ? '–' : AI_BANDS[aiBand(e)].short;
+    },
+    max: 100,
+  },
   { group: 'Work and life', label: 'Where the jobs are', value: () => null, display: (c) => (geography(c) === 'everywhere' ? 'Most communities' : 'Larger cities') },
 ];
 
