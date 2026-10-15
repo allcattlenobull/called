@@ -62,13 +62,13 @@ export function interestSignals(p: Profile): Record<InterestId, InterestSignal> 
 export function skillSignals(p: Profile): Partial<Record<SkillId, number>> {
   const out: Partial<Record<SkillId, number>> = {};
   for (const [k, v] of Object.entries(p.skills)) out[k as SkillId] = (v ?? 0) / 3;
-  // Simulations show what came naturally.
+  // Simulations contribute reflection about the work, not a scored aptitude signal.
   for (const r of p.simulations) {
     const sim = SIM_BY_ID[r.simulationId];
     if (!sim) continue;
     for (const a of sim.aspects) {
       if (!a.skill) continue;
-      if (r.enjoyed.includes(a.id)) out[a.skill] = clamp((out[a.skill] ?? 0.33) + 0.08 * r.quality);
+      // Deliberately do not use the old editorial quality field as a skill score.
     }
   }
   return out;

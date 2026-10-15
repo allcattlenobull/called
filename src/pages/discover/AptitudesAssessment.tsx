@@ -80,8 +80,8 @@ export function AptitudesAssessment() {
     const results = profile.aptitudes;
     return (
       <section className="runner">
-        <h2>Your early signals</h2>
-        <p>Fifteen puzzles are a small sample. Treat these as hints worth testing, not verdicts. Aptitudes also grow with practice.</p>
+        <h2>Your practice results</h2>
+        <p>Fifteen custom puzzles are practice, not a validated aptitude test. Treat the results as prompts for reflection, not evidence that should rank a career.</p>
         <ul className="matchbars" style={{ maxWidth: 560 }}>
           {(Object.keys(APTITUDES) as AptitudeId[]).map((a) => {
             const r = results[a];
@@ -123,7 +123,7 @@ export function AptitudesAssessment() {
         </Callout>
       )}
       {idx === 0 && picked === null && (
-        <Callout title="No timer, no pressure">These puzzles check five kinds of thinking. You’ll see the reasoning after each one.</Callout>
+        <Callout title="No timer, no pressure">These practice puzzles cover five kinds of thinking. You’ll see the reasoning after each one; Called does not use the result to rank careers.</Callout>
       )}
       <p className="runner__count" style={{ marginTop: 'var(--s-4)' }}>
         Puzzle {idx + 1} of {APTITUDE_ITEMS.length}: {APTITUDES[item.aptitude].label.toLowerCase()}

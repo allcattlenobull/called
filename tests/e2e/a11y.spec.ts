@@ -38,6 +38,7 @@ const ROUTES = [
   'path/report',
   'network?career=electrician',
   'about',
+  'research',
   'data',
   'achievements',
   'does-not-exist',

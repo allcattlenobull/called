@@ -10,7 +10,7 @@
 import { CAREERS } from '../data/careers';
 import { SIM_BY_ID } from '../data/simulations';
 import { EXPERIMENT_BY_ID } from '../data/purpose-experiments';
-import { APTITUDES, GIFTS, INTERESTS, PROBLEMS, SERVES, SKILLS, VALUES, WORK_AXES } from '../data/vocab';
+import { GIFTS, INTERESTS, PROBLEMS, SERVES, SKILLS, VALUES, WORK_AXES } from '../data/vocab';
 import { ROUTE_BY_ID } from '../data/education/routes';
 import type { Career, EducationLevel, InterestId, LifestylePrefs, Profile, ValueId, WorkAxis } from '../types';
 import { money } from './format';
@@ -133,12 +133,11 @@ function skillsScore(c: Career, skills: ReturnType<typeof skillSignals>): Dimens
 }
 
 function aptitudeScore(c: Career, apt: ReturnType<typeof aptitudeSignals>): DimensionScore {
-  const known = c.aptitudes.filter((a) => apt[a] !== undefined);
-  if (!known.length) return { id: 'aptitude', score: null, reasons: [] };
-  const s = average(known.map((a) => apt[a]!));
-  const strong = known.filter((a) => apt[a]! >= 0.67).map((a) => APTITUDES[a].label.toLowerCase());
-  const reasons = strong.length ? [`Your puzzles showed early strength in ${list(strong)}.`] : [];
-  return { id: 'aptitude', score: pct(0.25 + 0.75 * s), reasons };
+  // Called’s custom puzzle bank has no norms, reliability study, or criterion validation.
+  // Until a validated instrument is licensed or developed, it must not affect career ranking.
+  void c;
+  void apt;
+  return { id: 'aptitude', score: null, reasons: [] };
 }
 
 function valuesScore(c: Career, weights: Partial<Record<ValueId, number>>, conflicts: Conflict[]): DimensionScore {

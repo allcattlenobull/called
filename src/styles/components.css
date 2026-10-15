@@ -1123,6 +1123,16 @@
   color: var(--primary);
   border-color: transparent;
 }
+.tag--warn {
+  background: var(--danger-tint);
+  color: var(--danger);
+  border-color: transparent;
+}
+.tag--source {
+  text-decoration: none;
+  background: var(--bg-subtle);
+  color: var(--primary);
+}
 
 /* ===== Forms ===== */
 

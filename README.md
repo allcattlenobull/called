@@ -20,6 +20,7 @@ Live site (after the first deploy): `https://<username>.github.io/called/`
 - [Data sources](#data-sources)
 - [Privacy model](#privacy-model)
 - [Recommendation methodology](#recommendation-methodology)
+- [Research and trust audit](docs/RESEARCH.md)
 - [Project structure](#project-structure)
 - [Testing](#testing)
 - [Future roadmap](#future-roadmap)

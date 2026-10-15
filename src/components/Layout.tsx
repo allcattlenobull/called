@@ -17,6 +17,7 @@ const NAV: { to: string; label: string; icon: IconName; end?: boolean }[] = [
   { to: '/path', label: 'My Path', icon: 'path' },
   { to: '/network', label: 'Connections', icon: 'purpose' },
   { to: '/about', label: 'About', icon: 'about' },
+  { to: '/research', label: 'Research', icon: 'about' },
 ];
 
 const TABS = ['/', '/discover', '/purpose', '/careers', '/try'];
@@ -121,6 +122,12 @@ export function Layout({ children }: { children: ReactNode }) {
                   </NavLink>
                 </li>
                 <li>
+                  <NavLink to="/research">
+                    <Icon name="about" />
+                    Research and trust
+                  </NavLink>
+                </li>
+                <li>
                   <NavLink to="/data">
                     <Icon name="lock" />
                     Your data
@@ -158,6 +165,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <Link to="/about">About</Link>
             <Link to="/about#sources">Data sources</Link>
             <Link to="/about#how-matching-works">How matching works</Link>
+            <Link to="/research">Research and trust</Link>
             <Link to="/data">Your data</Link>
           </nav>
         </div>

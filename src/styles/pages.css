@@ -67,6 +67,115 @@
   margin-top: var(--s-7);
   font-size: var(--fs-xl);
 }
+
+/* ===== Research and trust ===== */
+.research-page > .callout {
+  margin: var(--s-6) 0;
+}
+.research-page section + section {
+  margin-top: var(--s-8);
+}
+.research-principles {
+  display: grid;
+  gap: var(--s-3);
+  margin-top: var(--s-5);
+}
+@media (min-width: 700px) {
+  .research-principles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.research-principle {
+  display: grid;
+  gap: var(--s-1);
+  padding: var(--s-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-subtle);
+}
+.research-principle span {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+.research-summary h2,
+.research-audit h2,
+.research-sources h2 {
+  margin-bottom: var(--s-4);
+}
+.research-summary__card {
+  display: grid;
+  gap: var(--s-3);
+}
+.research-summary__card h3,
+.research-summary__card p {
+  margin: 0;
+}
+.research-audit__list {
+  display: grid;
+  gap: var(--s-4);
+}
+.research-card {
+  display: grid;
+  gap: var(--s-5);
+}
+.research-card__head {
+  align-items: flex-start;
+  gap: var(--s-3);
+}
+.research-card__head h3 {
+  margin: 0;
+}
+.research-card__facts {
+  display: grid;
+  gap: var(--s-4);
+  margin: 0;
+}
+.research-card__facts > div {
+  display: grid;
+  gap: var(--s-1);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+}
+.research-card__facts dt {
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.research-card__facts dd {
+  margin: 0;
+  line-height: 1.5;
+}
+.research-card__sources {
+  display: grid;
+  gap: var(--s-2);
+}
+.research-sources__list {
+  display: grid;
+  gap: var(--s-5);
+}
+.research-source {
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--border);
+}
+.research-source:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.research-source h3,
+.research-source p {
+  margin-top: 0;
+}
+.research-source h3 {
+  max-width: 42ch;
+}
+.research-source h3 a {
+  color: var(--text);
+}
+.research-note {
+  margin-top: var(--s-5);
+}
 .prose .table-wrap {
   margin: var(--s-4) 0;
 }

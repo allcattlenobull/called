@@ -17,7 +17,7 @@ export default function Discover() {
 
   return (
     <div className="wrap">
-      <PageHeader title="Discover yourself" lead="Six short assessments build the self and life sides of your Purpose Compass. Take them in any order, skip what you like, and retake them as you change." />
+      <PageHeader title="Discover yourself" lead="Six short exercises build the self and life sides of your Purpose Compass. They are prompts for evidence, not tests of your worth. Take them in any order, skip what you like, and retake them as you change." />
       <div className="discover-progress">
         <Progress value={done} max={ASSESSMENTS.length} label="Assessments completed" />
       </div>

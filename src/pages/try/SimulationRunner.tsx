@@ -365,7 +365,7 @@ export default function SimulationRunner() {
         </table>
       </div>
       <p className="small muted" style={{ marginTop: 'var(--s-3)' }}>
-        In this simulation, {Math.round(quality * 100)}% of your choices matched the approach professionals usually take. That’s a hint about what may come naturally, not a grade.
+        The scenario feedback is for learning, not scoring. Your reflection and reactions are the evidence saved to your path.
       </p>
       <div className="row" style={{ marginTop: 'var(--s-5)' }}>
         <Link to="/try" className="btn btn--primary">

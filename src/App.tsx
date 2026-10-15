@@ -20,6 +20,7 @@ const EducationRoi = lazy(() => import('./pages/compare/EducationRoi'));
 const MyPath = lazy(() => import('./pages/path/MyPath'));
 const Report = lazy(() => import('./pages/path/Report'));
 const About = lazy(() => import('./pages/About'));
+const Research = lazy(() => import('./pages/Research'));
 const YourData = lazy(() => import('./pages/YourData'));
 const Brand = lazy(() => import('./pages/Brand'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -63,6 +64,7 @@ export function App() {
             <Route path="/path/report" element={<Report />} />
             <Route path="/network" element={<Network />} />
             <Route path="/about" element={<About />} />
+            <Route path="/research" element={<Research />} />
             <Route path="/data" element={<YourData />} />
             {SHOW_BRAND && <Route path="/brand" element={<Brand />} />}
             <Route path="/achievements" element={<Achievements />} />

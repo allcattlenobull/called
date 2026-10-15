@@ -276,8 +276,8 @@ export interface SimulationResult {
   frustrated: string[];
   regularly: 'yes' | 'maybe' | 'no';
   natural: string;
-  /** Share of steps where the response matched the strongest professional approach. */
-  quality: number;
+  /** Legacy field retained for imported journeys; unvalidated editorial scores are no longer used. */
+  quality?: number;
 }
 
 export interface ExperimentLog {

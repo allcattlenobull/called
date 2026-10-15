@@ -28,6 +28,10 @@ export default function About() {
     <div className="wrap wrap--narrow about">
       <PageHeader title="About Called" lead="We are not trying to tell anyone what they should become. We are helping them become wise enough to choose." />
 
+      <Callout tone="evidence" title="Want the evidence behind this?">
+        Read the <Link to="/research">research and trust audit</Link> for a component-by-component account of what is supported, what is still unvalidated, and what Called is changing.
+      </Callout>
+
       <section className="prose">
         <h2>What Called is</h2>
         <p>
