@@ -53,7 +53,7 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 | **Purpose** | Guided reflections: gifts, problems I care about, who I want to help, experiences, what others see in me, biblical principles, a private journal, and a versioned *current* purpose statement. |
 | **Career Explorer** | 178 careers across 15 families and every training level (none, certificate, apprenticeship, associate, bachelor’s, master’s, doctoral). Search plus 11 filters and 5 sorts. |
 | **Career pages** | Explainable match on 8 visible dimensions, reasons, potential conflicts, a reality check (“what people imagine” vs. “what the work looks like”), day-to-day, pay range, outlook, training routes, working conditions, related careers, sources. |
-| **Try It** | 11 browser-based career simulations (finance, HR, teaching, software, cybersecurity, marketing, UX research, operations, entrepreneurship, healthcare patient service, skilled trades) with reflection that updates recommendations. |
+| **Try It** | 20 browser-based career simulations across finance, people work, teaching, technology, media, science, design, operations, entrepreneurship, healthcare, hospitality and skilled trades, with reflection that updates recommendations. |
 | **Purpose experiments** | 12 real-world experiments (teach a skill, interview a professional, volunteer, fix something…) with return questions. |
 | **Compare** | Up to three careers side by side across fit, money, education and work-life, with the standout in each row called out. |
 | **Education ROI** | A transparent model of cost, opportunity cost, loan payments, break-even and 10-year net, with every assumption editable. Covers college, community college, certifications, trade school, apprenticeships, military, entrepreneurship and direct-to-work. |
@@ -172,7 +172,7 @@ called/
 │   ├── data/
 │   │   ├── careers/         one file per family + index + overrides/wages.json
 │   │   ├── assessments/     interest items, puzzles, work style, lifestyle
-│   │   ├── simulations/     the 11 simulations
+│   │   ├── simulations/     the 20 simulations
 │   │   ├── purpose-experiments/
 │   │   ├── scripture/       principles and passages
 │   │   ├── purpose/         journal prompts, purpose sections

@@ -69,6 +69,11 @@ describe('market data', () => {
 });
 
 describe('assessments and simulations', () => {
+  it('ships a broad, uniquely identified simulation library', () => {
+    expect(SIMULATIONS).toHaveLength(20);
+    expect(new Set(SIMULATIONS.map((s) => s.id)).size).toBe(SIMULATIONS.length);
+  });
+
   it('has five interest items per interest family', () => {
     const counts: Record<string, number> = {};
     for (const i of INTEREST_ITEMS) counts[i.interest] = (counts[i.interest] ?? 0) + 1;

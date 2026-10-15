@@ -1,4 +1,5 @@
 import type { Simulation } from './types';
+import { ADDITIONAL_SIMULATIONS } from './additional';
 
 export type { Simulation, SimStep, SimBlock, SimOption, SimAspect } from './types';
 
@@ -855,6 +856,7 @@ export const SIMULATIONS: Simulation[] = [
     ],
     realityNote: 'Real service calls involve tools, cramped spaces, cold attics and much harder problems than this one.',
   },
+  ...ADDITIONAL_SIMULATIONS,
 ];
 
 export const SIM_BY_ID: Record<string, Simulation> = Object.fromEntries(SIMULATIONS.map((s) => [s.id, s]));

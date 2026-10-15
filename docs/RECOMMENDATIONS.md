@@ -26,7 +26,7 @@ The engine is a transparent set of rules written by people. It is **not** a vali
 Raw answers become normalized signals in `signals.ts`:
 
 - **Interests:** for each family, `(sum of answers + n) / 2n`, where answers are −1, 0 or 1. Then nudged by evidence: an experience rated 4 or 5 adds 0.06 to its interest families (2 or below subtracts 0.06); an enjoyed simulation aspect adds 0.05 (frustrating subtracts 0.05); a completed experiment averaging 4+ adds 0.07.
-- **Skills:** level ÷ 3, plus up to 0.08 for skills linked to enjoyed simulation aspects (scaled by response quality).
+- **Skills:** level ÷ 3. Simulation response keys do not create a skill score; simulations contribute reflection and interest evidence until a scored version is validated.
 - **Aptitudes:** correct ÷ total for each kind.
 - **Values:** tier weights: essential 3, important 2, somewhat 1, not a priority 0.
 - **Gifts:** the user’s chosen gifts plus gifts named in feedback (1 per mention) and gifts linked to well-rated experiments (0.5).
