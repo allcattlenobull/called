@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useStore } from '../../state/store';
 import { CAREER_BY_ID, CAREERS } from '../../data/careers';
-import { PRINCIPLE_BY_ID } from '../../data/scripture/principles';
+import { FAMILIES } from '../../data/vocab';
 import {
   GATE_ANSWERS,
   HORIZONS,
@@ -26,6 +26,7 @@ import { suggestions } from '../../lib/matching';
 import { progressCounts } from '../../lib/next';
 import { uid } from '../../lib/profile';
 import { formatDate } from '../../lib/format';
+import { smartSearchScore } from '../../lib/smartSearch';
 import { EmptyState, PageHeader } from '../../components/ui';
 import { Icon } from '../../components/Icon';
 import type { Career, GateAnswer, Profile, Roadmap, RoadmapItem } from '../../types';
@@ -394,13 +395,11 @@ function Roadmap_({ c, r, p, update }: { c: Career; r: Roadmap; p: Profile; upda
 
 export default function MyPath() {
   useDocumentTitle('My Path');
-  const { profile, update, settings } = useStore();
+  const { profile, update } = useStore();
   const [params, setParams] = useSearchParams();
   const [newCareer, setNewCareer] = useState('');
   const [gateOpen, setGateOpen] = useState(false);
   const [notice, setNotice] = useState('');
-  const [reflection, setReflection] = useState('');
-  const [savedReflection, setSavedReflection] = useState(false);
 
   const active = profile.roadmaps.filter((r) => r.stage !== 'ruledOut');
   const ruledOut = profile.roadmaps.filter((r) => r.stage === 'ruledOut');
@@ -416,9 +415,18 @@ export default function MyPath() {
   const fallback = useMemo(() => (learned.length < 3 ? insights(profile).filter((t) => !learned.some((l) => l.text === t)) : []), [learned, profile]);
   const counts = progressCounts(profile);
   const ideas = useMemo(() => (profile.roadmaps.length ? [] : suggestions(profile, 3).map((s) => s.career)), [profile]);
-  const stewardship = PRINCIPLE_BY_ID.stewardship;
 
   const candidates = [...profile.saved.map((id) => CAREER_BY_ID[id]).filter(Boolean), ...CAREERS.filter((c) => !profile.saved.includes(c.id))].filter((c) => !profile.roadmaps.some((r) => r.careerId === c.id));
+  const candidateResults = newCareer.trim() ? candidates
+    .map((candidate) => {
+      const score = smartSearchScore(newCareer, [candidate.title, candidate.summary, FAMILIES[candidate.family], candidate.education.majors?.join(' '), candidate.responsibilities.join(' '), candidate.environment, candidate.alternativeRoutes.join(' ')]);
+      const titleScore = smartSearchScore(newCareer, [candidate.title]);
+      return { candidate, score: score < 0 ? score : score + (titleScore >= 0 ? 2 + titleScore : 0) };
+    })
+    .filter(({ score }) => score >= 0)
+    .sort((a, b) => b.score - a.score || Number(profile.saved.includes(b.candidate.id)) - Number(profile.saved.includes(a.candidate.id)) || a.candidate.title.localeCompare(b.candidate.title))
+    .slice(0, 8)
+    : [];
 
   const select = (id: string) => setParams({ career: id }, { replace: true });
 
@@ -482,16 +490,6 @@ export default function MyPath() {
       }
       p.careerStatus[id] = 'exploring';
     });
-
-  const saveReflection = () => {
-    const body = reflection.trim();
-    if (!body) return;
-    update((p) => {
-      p.journal.push({ id: uid('j'), createdAt: new Date().toISOString(), prompt: 'What have you learned that changed the way you think about your future?', body });
-    });
-    setReflection('');
-    setSavedReflection(true);
-  };
 
   return (
     <div className="wrap mypath">
@@ -681,68 +679,31 @@ export default function MyPath() {
         <h2 id="new-h" className="h4">
           {active.length ? 'Test another path alongside' : 'Explore a path'}
         </h2>
-        <p className="small muted">You don’t have to narrow to one career yet. Most people test two or three.</p>
-        <div className="row">
-          <label htmlFor="new-career" className="visually-hidden">
-            Career to explore
-          </label>
-          <select id="new-career" className="select" value={newCareer} onChange={(e) => setNewCareer(e.target.value)} style={{ maxWidth: 360 }}>
-            <option value="">Choose a career…</option>
-            {candidates.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.title}
-                {profile.saved.includes(c.id) ? ' (saved)' : ''}
-              </option>
-            ))}
-          </select>
-          <button type="button" className="btn btn--primary" disabled={!newCareer} onClick={() => explore(newCareer)}>
-            Explore this path
-          </button>
-        </div>
-      </section>
-
-      <section className="path-reflect" aria-labelledby="reflect-h">
-        <span className="path-reflect__eyebrow">A question worth reflecting on</span>
-        <h2 id="reflect-h" className="path-reflect__q">
-          What would faithful stewardship of your abilities look like in the next six months?
-        </h2>
-        {settings.faithLens && stewardship && (
-          <details className="path-reflect__more">
-            <summary>Biblical reflection</summary>
-            <div className="small">
-              <p>{stewardship.idea}</p>
-              {stewardship.passages.map((ps) => (
-                <p key={ps.ref}>
-                  <strong>{ps.ref}.</strong> {ps.kjv ? <em>“{ps.kjv}” </em> : null}
-                  {ps.summary}
-                </p>
-              ))}
-              <p className="muted">This is a lens for reflection, not a verdict about which career you should choose.</p>
-            </div>
-          </details>
-        )}
-        <div className="field path-reflect__field">
-          <label htmlFor="reflect-input">What have you learned that changed the way you think about your future?</label>
-          <textarea
-            id="reflect-input"
-            className="textarea"
-            rows={3}
-            value={reflection}
-            onChange={(e) => {
-              setReflection(e.target.value);
-              setSavedReflection(false);
-            }}
-          />
-          <div className="row">
-            <button type="button" className="btn btn--secondary" disabled={!reflection.trim()} onClick={saveReflection}>
-              Save to my journal
-            </button>
-            {savedReflection && (
-              <span className="small" role="status">
-                Saved. <Link to="/purpose/journal">Open your journal</Link>
-              </span>
-            )}
+        <p className="small muted">Search by career, field or type of work. Close spellings and related terms work too.</p>
+        <div className="path-search">
+          <label htmlFor="new-career">Search for a career path</label>
+          <div className="search">
+            <Icon name="search" size={18} />
+            <input id="new-career" className="input" type="search" autoComplete="off" value={newCareer} onChange={(event) => setNewCareer(event.target.value)} placeholder="Try “nures,” “coder,” or “helping people”" />
           </div>
+          {newCareer.trim() && (
+            <div className="path-search__results" aria-live="polite">
+              {candidateResults.length ? (
+                <ul>
+                  {candidateResults.map(({ candidate }) => (
+                    <li key={candidate.id}>
+                      <button type="button" onClick={() => explore(candidate.id)}>
+                        <span><strong>{candidate.title}</strong><span className="small muted">{FAMILIES[candidate.family]} · {candidate.summary}</span></span>
+                        <span className="path-search__action">Explore <Icon name="arrowRight" size={16} /></span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="small muted">No close matches yet. Try a field, skill or shorter phrase.</p>
+              )}
+            </div>
+          )}
         </div>
       </section>
     </div>

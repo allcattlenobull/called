@@ -90,10 +90,6 @@ test('a new user can go from onboarding to exploring a path, and it persists', a
   await expect(page.getByRole('heading', { name: 'How your interest has changed' })).toBeVisible();
   await expect(page.getByRole('status').filter({ hasText: 'your interest grew' })).toBeVisible();
 
-  // Reflection saves to the journal
-  await page.getByLabel('What have you learned that changed the way you think about your future?').fill('Helping people in a crisis gives me energy.');
-  await page.getByRole('button', { name: 'Save to my journal' }).click();
-  await expect(page.getByText('Saved.')).toBeVisible();
   // A populated My Path stays accessible.
   const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
   expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).slice(0, 3).join(' | ')}`)).toEqual([]);
@@ -159,6 +155,16 @@ test('career and simulation searches handle misspellings and related terms', asy
   await page.goto('try');
   await page.getByLabel('Search simulations').fill('coder');
   await expect(page.getByText('The discount bug', { exact: true })).toBeVisible();
+});
+
+test('the path page finds careers with smart search and has no reflection prompt', async ({ page }) => {
+  await page.goto('path');
+  await expect(page.getByText('A question worth reflecting on')).toHaveCount(0);
+  await expect(page.getByLabel('What have you learned that changed the way you think about your future?')).toHaveCount(0);
+
+  await page.getByLabel('Search for a career path').fill('nures');
+  await page.getByRole('button', { name: /Registered nurse.*Explore/ }).click();
+  await expect(page.getByRole('heading', { name: 'Registered nurse' })).toBeVisible();
 });
 
 test('the research-backed reasoning pilot records a result without closing career exploration', async ({ page }) => {

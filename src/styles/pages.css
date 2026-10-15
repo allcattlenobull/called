@@ -2119,39 +2119,71 @@
   gap: var(--s-2);
   justify-items: center;
 }
-.path-reflect {
-  margin-top: var(--s-7);
-  padding-top: var(--s-6);
-  border-top: 1px solid var(--border);
+.path-search {
   max-width: 760px;
 }
-.path-reflect__eyebrow {
-  font-size: var(--fs-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.path-search > label {
+  display: block;
+  margin-bottom: var(--s-2);
   font-weight: 700;
-  color: var(--purpose);
 }
-.path-reflect__q {
-  font-size: var(--fs-xl);
-  margin: var(--s-2) 0 var(--s-3);
+.path-search__results {
+  margin-top: var(--s-2);
 }
-.path-reflect__more {
-  margin-bottom: var(--s-5);
+.path-search__results > p {
+  margin: var(--s-3) 0 0;
 }
-.path-reflect__more summary {
+.path-search__results ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+.path-search__results li {
+  margin: 0;
+}
+.path-search__results button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  color: var(--text);
+  text-align: left;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
   cursor: pointer;
-  color: var(--purpose);
-  font-weight: 700;
-  width: fit-content;
 }
-.path-reflect__more > div {
-  margin-top: var(--s-3);
-  padding-left: var(--s-4);
-  border-left: 2px solid var(--purpose-tint);
+.path-search__results button:hover {
+  border-color: var(--primary);
+  background: var(--primary-tint);
 }
-.path-reflect__field label {
+.path-search__results button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.path-search__results button > span:first-child {
+  display: grid;
+  gap: var(--s-1);
+}
+.path-search__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  color: var(--primary);
   font-weight: 700;
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .path-search__results button {
+    align-items: flex-start;
+  }
+  .path-search__action {
+    font-size: var(--fs-sm);
+  }
 }
 
 /* ===== Report ===== */
