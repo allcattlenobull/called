@@ -46,6 +46,7 @@ export default function Counselor() {
   const [lastName, setLastName] = useState('');
   const [organization, setOrganization] = useState('');
   const [remember, setRemember] = useState(true);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [authBusy, setAuthBusy] = useState(false);
   const [newCredentials, setNewCredentials] = useState<CounselorCredentials | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -185,8 +186,9 @@ export default function Counselor() {
               <label className="field">Last name<input className="input" autoComplete="family-name" maxLength={100} value={lastName} onChange={(event) => setLastName(event.target.value)} /></label>
             </div>
             <label className="field">School or organization <span className="small muted">(optional)</span><input className="input" maxLength={160} value={organization} onChange={(event) => setOrganization(event.target.value)} /></label>
+            <label className="check"><input type="checkbox" checked={acceptedTerms} onChange={(event) => setAcceptedTerms(event.target.checked)} />I agree to the <Link to="/terms#counselor">Counselor Account Terms</Link>, including the student-data and high-stakes decision rules.</label>
             <label className="check"><input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} />Remember this counselor account on this device</label>
-            <button className="btn btn--primary" disabled={authBusy || !firstName.trim() || !lastName.trim()}>{authBusy ? 'Creating account…' : 'Create secure account'}</button>
+            <button className="btn btn--primary" disabled={authBusy || !firstName.trim() || !lastName.trim() || !acceptedTerms}>{authBusy ? 'Creating account…' : 'Create secure account'}</button>
           </form>
         )}
         {message && <p className="small" role="status">{message}</p>}

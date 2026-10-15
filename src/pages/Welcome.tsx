@@ -7,6 +7,7 @@ import { Icon } from '../components/Icon';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
 import { RestoreForm } from '../components/JourneyCode';
 import type { Profile } from '../types';
+import { TERMS_VERSION } from '../lib/terms';
 
 const EVIDENCE = ['who you are', 'what you value', 'what you’re good at', 'what you’re curious about', 'what kind of life you want', 'and what work might fit'];
 
@@ -21,6 +22,7 @@ export default function Welcome() {
   const [city, setCity] = useState(profile.location?.city ?? '');
   const [state, setState] = useState(profile.location?.state ?? '');
   const [zip, setZip] = useState(profile.location?.zip ?? '');
+  const [acceptedGuestTerms, setAcceptedGuestTerms] = useState(profile.guestTermsAcceptedVersion === TERMS_VERSION);
 
   const finish = (to: string) => {
     update((p) => {
@@ -51,17 +53,30 @@ export default function Welcome() {
           <div className="callout">
             <Icon name="lock" size={20} />
             <div>
-              <strong className="callout__title">Your private Called account</strong>
-              No email or ordinary password is required. Your journey code is the private key to your results, and you can export, move or delete them anytime.
+              <strong className="callout__title">Start without an account</strong>
+              Your work stays in this browser unless you deliberately export, share, or activate a connected feature. You can create a private individual account later.
             </div>
           </div>
           <details className="restore-details">
             <summary>Coming back? Enter your journey code</summary>
             <RestoreForm />
           </details>
+          <div className="terms-consent">
+            <label className="check">
+              <input type="checkbox" checked={acceptedGuestTerms} onChange={(event) => setAcceptedGuestTerms(event.target.checked)} />
+              I agree to the Guest Terms of Use
+            </label>
+            <p className="small muted">Read the <Link to="/terms#guest">Guest Terms</Link>. If you are under 13, use device-only features only with a parent, guardian, or authorized school adult.</p>
+          </div>
           <div className="runner__nav">
             <span />
-            <button type="button" className="btn btn--primary btn--lg" onClick={() => setStep(1)}>
+            <button type="button" className="btn btn--primary btn--lg" disabled={!acceptedGuestTerms} onClick={() => {
+              update((draft) => {
+                draft.guestTermsAcceptedVersion = TERMS_VERSION;
+                draft.guestTermsAcceptedAt = new Date().toISOString();
+              });
+              setStep(1);
+            }}>
               Continue
             </button>
           </div>

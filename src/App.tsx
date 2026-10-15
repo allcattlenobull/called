@@ -32,6 +32,7 @@ const SharedReport = lazy(() => import('./pages/SharedReport'));
 const Feedback = lazy(() => import('./pages/Feedback'));
 const Counselor = lazy(() => import('./pages/Counselor'));
 const Account = lazy(() => import('./pages/Account'));
+const Terms = lazy(() => import('./pages/Terms'));
 
 // The brand system page is an internal tool, not part of the public site. It is available in
 // local development, or in a build made with VITE_SHOW_BRAND=1 (used to render the brand guide PDF).
@@ -74,6 +75,7 @@ export function App() {
             <Route path="/feedback" element={<Feedback />} />
             <Route path="/counselor" element={<Counselor />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/network" element={<Network />} />
             <Route path="/about" element={<About />} />
             <Route path="/research" element={<Research />} />

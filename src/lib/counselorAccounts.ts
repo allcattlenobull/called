@@ -1,4 +1,5 @@
 import { parseCounselorPacket, type CounselorPacket } from './counselorReports';
+import { TERMS_VERSION } from './terms';
 
 const SERVICE_URL = (import.meta.env.VITE_SYNC_URL as string | undefined)?.replace(/\/$/, '');
 export const counselorAccountsAvailable = !!SERVICE_URL;
@@ -126,6 +127,8 @@ export async function createCounselorAccount(firstName: string, lastName: string
         verifier: await accessVerifier(id, accessKey),
         publicKey,
         wrappedPrivateKey: await wrapPrivateKey(keyPair.privateKey, accessKey),
+        termsVersion: TERMS_VERSION,
+        termsAcceptedAt: new Date().toISOString(),
       }),
     });
     if (response.ok) return { id, accessKey };

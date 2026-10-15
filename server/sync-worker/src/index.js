@@ -17,6 +17,7 @@ const PARTICIPANT_RE = /^[0-9a-f]{32}$/;
 const COUNSELOR_ID_RE = /^COUN(?:-[2-9A-HJ-NP-TV-Z]{4}){3}$/;
 const MEMBER_ID_RE = /^CLD(?:-[2-9A-HJ-NP-TV-Z]{4}){3}$/;
 const RESEARCH_KINDS = new Set(['simulation_completion', 'simulation_outcome', 'follow_up', 'page_view', 'usability_feedback']);
+const TERMS_VERSION = '2026-10-15';
 
 function cors(request, env) {
   const origin = request.headers.get('Origin') || '';
@@ -81,7 +82,7 @@ export default {
       if (text.length > 16 * 1024) return reply('{"error":"too large"}', 413, headers);
       let account;
       try { account = JSON.parse(text); } catch { return reply('{"error":"bad body"}', 400, headers); }
-      if (!COUNSELOR_ID_RE.test(account.id) || typeof account.firstName !== 'string' || !account.firstName.trim() || account.firstName.length > 80 || typeof account.lastName !== 'string' || !account.lastName.trim() || account.lastName.length > 100 || (account.organization !== undefined && (typeof account.organization !== 'string' || account.organization.length > 160)) || !/^[A-Za-z0-9_-]{40,50}$/.test(account.verifier) || !/^[A-Za-z0-9_-]{300,1000}$/.test(account.publicKey) || !validWrappedKey(account.wrappedPrivateKey)) {
+      if (!COUNSELOR_ID_RE.test(account.id) || typeof account.firstName !== 'string' || !account.firstName.trim() || account.firstName.length > 80 || typeof account.lastName !== 'string' || !account.lastName.trim() || account.lastName.length > 100 || (account.organization !== undefined && (typeof account.organization !== 'string' || account.organization.length > 160)) || !/^[A-Za-z0-9_-]{40,50}$/.test(account.verifier) || !/^[A-Za-z0-9_-]{300,1000}$/.test(account.publicKey) || !validWrappedKey(account.wrappedPrivateKey) || account.termsVersion !== TERMS_VERSION || typeof account.termsAcceptedAt !== 'string' || Number.isNaN(Date.parse(account.termsAcceptedAt))) {
         return reply('{"error":"invalid counselor account"}', 400, headers);
       }
       const key = `counselor:${account.id}`;

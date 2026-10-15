@@ -385,6 +385,12 @@ export interface Profile {
   createdAt: string;
   updatedAt: string;
   onboarded: boolean;
+  /** Versioned acknowledgement required before the guided guest journey begins. */
+  guestTermsAcceptedVersion?: string;
+  guestTermsAcceptedAt?: string;
+  /** Versioned acknowledgement required before individual account features open. */
+  accountTermsAcceptedVersion?: string;
+  accountTermsAcceptedAt?: string;
   /** First name or preferred name. Kept as `name` for backwards-compatible journey files. */
   name?: string;
   lastName?: string;

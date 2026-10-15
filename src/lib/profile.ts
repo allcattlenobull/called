@@ -1,6 +1,6 @@
 import type { Profile, Settings } from '../types';
 
-export const PROFILE_VERSION = 4 as const;
+export const PROFILE_VERSION = 5 as const;
 
 export function emptyProfile(): Profile {
   const now = new Date().toISOString();
@@ -118,6 +118,10 @@ export function normalizeProfile(input: unknown): Profile {
   if (typeof out.counselorShareId !== 'string' || !/^learner_[a-z0-9-]{8,}$/i.test(out.counselorShareId)) out.counselorShareId = uid('learner');
   out.counselorShares = out.counselorShares.filter((share) => share && typeof share.counselorId === 'string' && typeof share.shareKey === 'string');
   if (typeof out.lastName !== 'string') out.lastName = undefined;
+  if (typeof out.guestTermsAcceptedVersion !== 'string') out.guestTermsAcceptedVersion = undefined;
+  if (typeof out.guestTermsAcceptedAt !== 'string' || Number.isNaN(Date.parse(out.guestTermsAcceptedAt))) out.guestTermsAcceptedAt = undefined;
+  if (typeof out.accountTermsAcceptedVersion !== 'string') out.accountTermsAcceptedVersion = undefined;
+  if (typeof out.accountTermsAcceptedAt !== 'string' || Number.isNaN(Date.parse(out.accountTermsAcceptedAt))) out.accountTermsAcceptedAt = undefined;
   return out;
 }
 

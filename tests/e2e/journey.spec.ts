@@ -11,6 +11,7 @@ test('a new user can go from onboarding to exploring a path, and it persists', a
   await page.getByRole('link', { name: 'Start your journey' }).first().click();
 
   // Onboarding
+  await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByLabel('What should we call you?').fill('Jordan');
   await page.getByText('In high school').click();
@@ -180,6 +181,7 @@ test('the research-backed reasoning pilot records a result without closing caree
 
 test('unfinished work is saved and offered on return', async ({ page }) => {
   await page.goto('welcome');
+  await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByRole('button', { name: /Start exploring now/ }).click();
   await page.goto('try/software');
@@ -197,6 +199,7 @@ test('unfinished work is saved and offered on return', async ({ page }) => {
 
 test('a journey code switches between journeys on a shared device', async ({ page }) => {
   await page.goto('welcome');
+  await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByLabel('What should we call you?').fill('Ana');
   await page.getByRole('button', { name: /Start exploring now/ }).click();
@@ -205,6 +208,7 @@ test('a journey code switches between journeys on a shared device', async ({ pag
   expect(anaCode).toMatch(/^CALL(-[2-9A-Z]{4}){4}$/);
 
   await page.getByRole('button', { name: 'Start a new journey on this device' }).click();
+  await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByLabel('What should we call you?').fill('Ben');
   await page.getByRole('button', { name: /Start exploring now/ }).click();
@@ -219,15 +223,36 @@ test('a journey code switches between journeys on a shared device', async ({ pag
 
 test('an individual account shows identity, results and a stable member ID', async ({ page }) => {
   await page.goto('welcome');
+  await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByLabel('What should we call you?').fill('Jordan');
   await page.getByLabel('Last name').fill('Lee');
   await page.getByRole('button', { name: /Start exploring now/ }).click();
   await page.goto('account');
+  await page.getByLabel('I have read and agree to the Individual Account Terms').check();
+  await page.getByRole('button', { name: 'Create my individual account' }).click();
   await expect(page.getByRole('heading', { name: 'Jordan Lee’s account' })).toBeVisible();
   await expect(page.getByText(/^CLD(?:-[2-9A-HJ-NP-TV-Z]{4}){3}$/)).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Your results at a glance' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Counselor sharing' })).toBeVisible();
+});
+
+test('guest and account terms are distinct and consent is versioned', async ({ page }) => {
+  await page.goto('welcome');
+  const continueButton = page.getByRole('button', { name: 'Continue' });
+  await expect(continueButton).toBeDisabled();
+  await page.getByLabel('I agree to the Guest Terms of Use').check();
+  await expect(continueButton).toBeEnabled();
+  await continueButton.click();
+
+  await page.goto('terms');
+  await expect(page.getByRole('heading', { name: 'Using Called without an account' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Individual account terms' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Counselor account terms' })).toBeVisible();
+
+  await page.goto('account');
+  await expect(page.getByRole('heading', { name: 'Create your individual account' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Create my individual account' })).toBeDisabled();
 });
 
 test('navigation uses one responsive menu', async ({ page }) => {

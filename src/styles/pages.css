@@ -179,6 +179,41 @@
 .prose .table-wrap {
   margin: var(--s-4) 0;
 }
+
+/* ===== Terms of use ===== */
+.terms-page > .callout {
+  margin: var(--s-6) 0;
+}
+.terms-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-5);
+  margin-bottom: var(--s-7);
+}
+.terms-copy section {
+  scroll-margin-top: calc(var(--header-h) + var(--s-4));
+}
+.terms-copy h3 {
+  margin-top: var(--s-5);
+  font-size: var(--fs-lg);
+}
+.terms-copy li + li {
+  margin-top: var(--s-2);
+}
+.terms-consent {
+  margin-top: var(--s-5);
+  padding: var(--s-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-subtle);
+}
+.terms-consent p {
+  margin: var(--s-2) 0 0 var(--s-7);
+}
+.account-create > .callout {
+  margin-bottom: var(--s-5);
+}
 .chips--static {
   gap: 6px;
 }

@@ -44,6 +44,7 @@ const ROUTES = [
   'research/check-in',
   'feedback',
   'counselor',
+  'terms',
   'share/not-a-real-id',
   'data',
   'achievements',
@@ -87,6 +88,7 @@ test('the brand page is not public', async ({ page }) => {
 test('celebration dialog is accessible', async ({ page }) => {
   await page.removeLocatorHandler(page.getByRole('button', { name: 'Keep going', exact: true }));
   await page.goto('welcome');
+  await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByRole('button', { name: /Start exploring now/ }).click();
   // Celebrations lead with what was learned, not the reward.

@@ -24,7 +24,9 @@ describe('counselor account worker', () => {
     const id = 'COUN-ABCD-2345-EFGH';
     const accessKey = 'KEY-234567-89ABCD-EFGHJK-MNPQRS';
     const verifier = await digest(`called-counselor-access:${id}:${accessKey}`);
-    const create = await call(env, '/v1/counselors', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, firstName: 'Avery', lastName: 'Morgan', organization: 'North High', verifier, publicKey: 'A'.repeat(400), wrappedPrivateKey: { salt: 'A'.repeat(22), iv: 'A'.repeat(16), ct: 'A'.repeat(200) } }) });
+    const account = { id, firstName: 'Avery', lastName: 'Morgan', organization: 'North High', verifier, publicKey: 'A'.repeat(400), wrappedPrivateKey: { salt: 'A'.repeat(22), iv: 'A'.repeat(16), ct: 'A'.repeat(200) } };
+    expect((await call(env, '/v1/counselors', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(account) })).status).toBe(400);
+    const create = await call(env, '/v1/counselors', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...account, termsVersion: '2026-10-15', termsAcceptedAt: new Date().toISOString() }) });
     expect(create.status).toBe(201);
 
     const publicAccount = await (await call(env, `/v1/counselors/${id}`)).json();

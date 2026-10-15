@@ -131,6 +131,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <Link to="/feedback">Give feedback</Link>
             <Link to="/counselor">For counselors</Link>
             <Link to="/data">Privacy and data</Link>
+            <Link to="/terms">Terms of use</Link>
           </nav>
         </div>
       </footer>

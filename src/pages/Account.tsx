@@ -12,15 +12,18 @@ import { syncAvailable } from '../lib/sync';
 import { counselorAccountsAvailable, revokeCounselorShare } from '../lib/counselorAccounts';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
 import { useStore } from '../state/store';
+import { TERMS_VERSION } from '../lib/terms';
 
 export default function Account() {
-  useDocumentTitle('My account');
   const { profile, update, syncState } = useStore();
+  const accountTermsAccepted = profile.accountTermsAcceptedVersion === TERMS_VERSION;
+  useDocumentTitle(accountTermsAccepted ? 'My account' : 'Create account');
   const [firstName, setFirstName] = useState(profile.name ?? '');
   const [lastName, setLastName] = useState(profile.lastName ?? '');
   const [editing, setEditing] = useState(!profile.name || !profile.lastName);
   const [saved, setSaved] = useState(false);
   const [shareMessage, setShareMessage] = useState('');
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const counts = progressCounts(profile);
   const top = useMemo(() => suggestions(profile, 3), [profile]);
   const interests = topInterests(profile, 3).map((id) => INTERESTS[id].label);
@@ -35,6 +38,38 @@ export default function Account() {
     setEditing(false);
     setSaved(true);
   };
+
+  if (!accountTermsAccepted) {
+    return (
+      <div className="wrap wrap--narrow account-create">
+        <PageHeader title="Create your individual account" lead="Keep your results together, manage account access, and choose when to share with a counselor." />
+        <Callout tone="evidence" title="You can keep using Called without an account">
+          Guest use remains available. Creating an account adds the account rules for credentials, backup, recovery, and sharing.
+        </Callout>
+        <section className="card stack" aria-labelledby="account-terms-h">
+          <h2 id="account-terms-h" className="h3">Before you create an account</h2>
+          <ul>
+            <li>Keep your journey code private—it works like an account key.</li>
+            <li>Called results support exploration; they should not decide admission, employment, or placement.</li>
+            <li>If you are under 13, do not create an account or use connected sharing features.</li>
+            <li>You control exports and counselor sharing, but revoking access cannot erase copies someone already made.</li>
+          </ul>
+          <label className="check">
+            <input type="checkbox" checked={acceptedTerms} onChange={(event) => setAcceptedTerms(event.target.checked)} />
+            I have read and agree to the Individual Account Terms
+          </label>
+          <p className="small muted"><Link to="/terms#account">Read the full Individual Account Terms</Link> and <Link to="/data">Privacy and data</Link>.</p>
+          <div className="row">
+            <button type="button" className="btn btn--primary" disabled={!acceptedTerms} onClick={() => update((draft) => {
+              draft.accountTermsAcceptedVersion = TERMS_VERSION;
+              draft.accountTermsAcceptedAt = new Date().toISOString();
+            })}>Create my individual account</button>
+            <Link to="/" className="btn btn--quiet">Continue as a guest</Link>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="wrap account">
