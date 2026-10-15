@@ -8,7 +8,7 @@ export const moreHealthcare = [
     plus: ['income', 'helping', 'meaningful', 'recognition', 'stability'], minus: ['familyTime', 'flexibility'],
     ws: { social: 1, structure: 0, pace: 2 }, gifts: ['discernment', 'mercy', 'problemSolving'], serves: ['patients', 'families'], problems: ['health'],
     edu: ['doctoral', 11, ['college', 'graduate'], 'A bachelor’s, four years of medical school (MD or DO), then three to seven years of residency.', ['Biology', 'Chemistry', 'Any major with pre-med courses'], ['MD or DO', 'Board certification']],
-    pay: [240000, 100000, 350000, 'BLS reports many physician wages only as “over $239,200”; pay varies a lot by specialty.'],
+    pay: [240000, 100000, 350000, 'Pay varies a lot by specialty.'],
     outlook: 'average', env: 'Clinics, hospitals', sched: 'irregular', remote: 'some', levels: [2, 1, 3, 2], pd: 2,
     does: ['Examine patients and take histories', 'Diagnose and treat conditions', 'Order and interpret tests', 'Lead the care team'],
     day: ['A full clinic schedule or hospital rounds', 'Hours of charting', 'Calls about patients after hours'],
