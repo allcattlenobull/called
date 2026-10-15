@@ -1,0 +1,49 @@
+name: Update location data
+
+# Refreshes cost of living (BEA), public college costs by state (College Scorecard) and median pay
+# by state and large metro (BLS). Results go to a branch for review; the app never depends on this
+# running, and the committed data is always complete.
+on:
+  schedule:
+    - cron: '41 10 5 1,4,7,10 *' # quarterly, 5th day, 10:41 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Fetch location data
+        run: node scripts/update-location-data.mjs
+        env:
+          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+          BEA_API_KEY: ${{ secrets.BEA_API_KEY }}
+          COLLEGE_SCORECARD_API_KEY: ${{ secrets.COLLEGE_SCORECARD_API_KEY }}
+      - name: Validate data
+        run: npm run data:validate
+      - name: Push for review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet; then
+            echo "No location data changes."
+            exit 0
+          fi
+          branch="data/location-$(date +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add src/data/market/places.json src/data/market/local-wages.json
+          git commit -m "Update location data (cost of living, college costs, local pay)"
+          git push --force origin "$branch"
+          echo "::notice title=Location data::Pushed to $branch for review"
+          gh pr create --title "Update location data" --body "Automated refresh from BEA, College Scorecard and BLS. Review before merging; see docs/DATA.md." --base main --head "$branch" || echo "::notice title=Location data::Pull request not opened (enable Actions to create pull requests in repository settings). Branch $branch is ready to merge."
