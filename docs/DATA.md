@@ -13,7 +13,7 @@ The catalog contains 178 careers across 15 families and every training level. Ca
 | Pay | U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OEWS) | National, rounded estimates entered by hand, replaced by official API figures when the update workflow runs |
 | Outlook | BLS Employment Projections, 2023 to 2033 | Categories: declining, little change, average, faster, much faster |
 | SOC codes | 2018 Standard Occupational Classification | Used to link to O*NET and BLS |
-| Tasks, conditions, reality checks | Written by Called, informed by O*NET OnLine task and work-context data | Rewritten in plain language for teenagers |
+| Tasks, conditions, reality checks | Written by Called, informed by O*NET OnLine task and work-context data | Rewritten in plain language anyone can follow |
 | Tuition assumptions | College Board, *Trends in College Pricing* | Published tuition and fees before aid |
 
 “Small business owner” has no SOC wage series; its pay is a labeled rough estimate.

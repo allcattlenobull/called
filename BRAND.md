@@ -6,7 +6,7 @@ This document is the source of truth for how Called looks, sounds and behaves. A
 
 ## Mission
 
-Help young people become wise enough to choose their direction, by collecting real evidence about who they are, what they value, what they're good at, and what work is actually like.
+Help people become wise enough to choose their direction, by collecting real evidence about who they are, what they value, what they're good at, and what work is actually like.
 
 ## Brand promise
 
@@ -154,7 +154,7 @@ Called offers Auto (follows the device), Light and Dark, switchable from the hea
 | Role | Typeface | Why |
 | --- | --- | --- |
 | Display, headings, numbers | **Bricolage Grotesque** (variable) | A contemporary grotesque with a little irregularity. Confident and human without being corporate or childish. |
-| Body, interface, forms | **Atkinson Hyperlegible** | Designed by the Braille Institute for legibility. Distinct letterforms help younger readers and readers with low vision. |
+| Body, interface, forms | **Atkinson Hyperlegible** | Designed by the Braille Institute for legibility. Distinct letterforms help new readers and readers with low vision. |
 
 Both are self-hosted through Fontsource, so no font request ever leaves the user's browser for a third party.
 
@@ -252,7 +252,7 @@ Durations: 140ms (fast), 260ms (medium), 700ms (slow). `prefers-reduced-motion` 
 ## Design principles
 
 1. **Evidence over verdicts.** Show the reasoning, the inputs and the uncertainty.
-2. **Rewarding, never manipulative.** Exploring should feel fun for a 14-year-old, but rewards only follow real evidence, and nothing is designed to be addictive.
+2. **Rewarding, never manipulative.** Exploring should feel fun at any age, but rewards only follow real evidence, and nothing is designed to be addictive.
 3. **Mature enough for 22, clear enough for 14.** Plain words, real data, no cartoons.
 4. **Faith in the foundation, not the decoration.**
 5. **The next step is always visible.** Every screen ends with something worth exploring.

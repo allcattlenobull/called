@@ -26,12 +26,12 @@ export default function About() {
 
   return (
     <div className="wrap wrap--narrow about">
-      <PageHeader title="About Called" lead="We are not trying to tell young people what they should become. We are helping them become wise enough to choose." />
+      <PageHeader title="About Called" lead="We are not trying to tell anyone what they should become. We are helping them become wise enough to choose." />
 
       <section className="prose">
         <h2>What Called is</h2>
         <p>
-          Called is a free, private place for teenagers and young adults, roughly 14 to 24, to understand who they are, explore what work is really like, try it, reflect on it, and build a path. A 15-year-old can start using it and keep using it into college or early adulthood. It gets more useful the longer you use it.
+          Called is a free, private place to understand who you are, explore what work is really like, try it, reflect on it, and build a path. It works whether you’re in high school, in college, starting out, or years into a career and thinking about a change. It gets more useful the longer you use it.
         </p>
         <p>The journey moves through discover, purpose, explore, experience, reflect, compare, plan, act and reassess. You can start anywhere, skip anything and come back anytime.</p>
 
@@ -111,7 +111,7 @@ export default function About() {
 
         <h2>For parents, counselors, teachers and mentors</h2>
         <p>
-          Young people can share a <Link to="/path/report">Called report</Link> they choose the contents of. The most helpful thing you can do is ask good questions about it: What surprised you? What would you like to try? Who could you talk to? Then help them find real experiences: a job shadow, a volunteer shift, an interview with someone in the field.
+          Anyone using Called can share a <Link to="/path/report">Called report</Link> they choose the contents of. The most helpful thing you can do is ask good questions about it: What surprised you? What would you like to try? Who could you talk to? Then help them find real experiences: a job shadow, a volunteer shift, an interview with someone in the field.
         </p>
       </section>
     </div>

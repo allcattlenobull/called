@@ -20,7 +20,7 @@ export default function SimulationRunner() {
   const sim = SIM_BY_ID[id];
   useDocumentTitle(sim ? `${sim.role} simulation` : undefined);
   const { profile, update } = useStore();
-  // The run is saved as a draft, so a student can close the tab mid-simulation and finish later.
+  // The run is saved as a draft, so someone can close the tab mid-simulation and finish later.
   type Run = { phase: 'intro' | 'steps' | 'reflect' | 'done'; stepIdx: number; answers: Record<string, Answer>; before: Record<string, number | null> };
   const [run, setRun, clearRun, resumed] = useDraft<Run>(`sim:${id}`, { phase: 'intro', stepIdx: 0, answers: {}, before: {} });
   const { phase, stepIdx, answers, before } = run;

@@ -78,7 +78,7 @@ export default function Welcome() {
                 { value: 'highSchool', label: 'In high school' },
                 { value: 'graduated', label: 'Recently graduated' },
                 { value: 'college', label: 'In college or training' },
-                { value: 'working', label: 'Working' },
+                { value: 'working', label: 'Working or changing careers' },
                 { value: 'other', label: 'Something else' },
               ]}
             />

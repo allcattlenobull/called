@@ -2,9 +2,9 @@
 
 **Discover what you’ve been given. Explore where it can take you.**
 
-Called is a free, private career-discovery and purpose platform for teenagers and young adults (roughly 14 to 24). It helps people understand who they are, what they’re good at, what they value, what work is really like, and what to try next, without pretending there is only one right path.
+Called is a free, private career-discovery and purpose platform for anyone working out what to do next: students choosing a first direction, people rethinking a major, and adults changing careers. It helps people understand who they are, what they’re good at, what they value, what work is really like, and what to try next, without pretending there is only one right path.
 
-> We are not trying to tell young people what they should become. We are helping them become wise enough to choose.
+> We are not trying to tell people what they should become. We are helping them become wise enough to choose.
 
 Live site (after the first deploy): `https://<username>.github.io/called/`
 
@@ -129,14 +129,14 @@ How routing works on Pages: GitHub Pages has no single-page-app fallback, so `sc
 | Median pay, 10th and 90th percentiles | U.S. Bureau of Labor Statistics, OEWS / Occupational Outlook Handbook (May 2024) | Rounded, entered by hand for V1; refreshable through the BLS API |
 | Job outlook | BLS Employment Projections 2023 to 2033 | Shown as categories, not exact percentages |
 | Occupation codes | Standard Occupational Classification (SOC) | Each career links to O*NET OnLine and BLS |
-| Tasks, reality checks, day in the life | Written by Called, informed by O*NET task and work-context data | Plain-language summaries for teens |
+| Tasks, reality checks, day in the life | Written by Called, informed by O*NET task and work-context data | Plain-language summaries anyone can follow |
 | Tuition | College Board, *Trends in College Pricing* | Starting assumptions in the ROI tool |
 
 Called does not scrape any website. O*NET is a trademark of the U.S. Department of Labor, Employment and Training Administration; Called is not affiliated with or endorsed by any agency. See [docs/DATA.md](docs/DATA.md) for the update process and attribution.
 
 ## Privacy model
 
-Teenagers use Called, so privacy is a design constraint, not a feature.
+Many people using Called are still in school, so privacy is a design constraint, not a feature.
 
 - **No accounts.** Nothing to sign up for. Each journey has a journey code instead.
 - **Stored on this device.** All profile data lives in the browser (IndexedDB, with localStorage as a fallback).

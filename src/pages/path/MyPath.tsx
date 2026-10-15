@@ -35,7 +35,7 @@ const STAGES: { value: NonNullable<Profile['stage']>; label: string }[] = [
   { value: 'highSchool', label: 'In high school' },
   { value: 'graduated', label: 'Finished high school' },
   { value: 'college', label: 'In college or training' },
-  { value: 'working', label: 'Working' },
+  { value: 'working', label: 'Working or changing careers' },
   { value: 'other', label: 'Something else' },
 ];
 
@@ -519,7 +519,7 @@ export default function MyPath() {
           <h2 id="stage-h" className="h4">
             Where are you right now?
           </h2>
-          <p className="small muted">A 15-year-old and a 23-year-old shouldn’t get the same plan. This tailors your steps.</p>
+          <p className="small muted">A high school student and someone changing careers shouldn’t get the same plan. This tailors your steps.</p>
           <div className="row">
             {STAGES.map((s) => (
               <button

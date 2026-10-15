@@ -10,9 +10,9 @@ Every screen ends with a next step worth exploring. Every score shows its reason
 
 ## Target users
 
-**Primary: ages 14 to 24.** High school students, students unsure about college, college students questioning their major, young adults reconsidering direction or entering the workforce. The interface has to be mature enough that a 22-year-old will use it and clear enough for a 14-year-old.
+**Primary: people choosing or changing direction.** High school students, students unsure about college, college students questioning their major, people entering the workforce, and working adults considering a career change. Our core audience is people early in their working lives, but Called never assumes an age: the language, plans and examples work for a first-time explorer and for someone with years of experience. The interface has to be clear enough for a high school student and respectful enough for a mid-career professional.
 
-**Secondary: parents, school counselors, teachers, mentors, pastors and youth leaders.** They mostly meet Called through the *My Called report* the young person chooses to share, and through the About page’s guidance on asking good questions.
+**Secondary: parents, school counselors, teachers, mentors, pastors and youth leaders.** They mostly meet Called through the *My Called report* the person chooses to share, and through the About page’s guidance on asking good questions.
 
 ## User journey
 
@@ -103,7 +103,7 @@ The **Education ROI** tool models tuition, years of training, living costs, alte
 
 ## Progress and the game layer
 
-Exploring should feel rewarding for a 14-year-old without trivializing life direction.
+Exploring should feel rewarding without trivializing life direction, and never feel childish to an adult changing careers.
 
 - **Points** are derived from the profile, so they always match real activity: assessments (60), simulations (80), purpose experiments (100), feedback from others (30), reflections, reality checks, roadmap steps and more. Repetitive actions are capped so points can’t be farmed by clicking.
 - **Levels:** Curious, Explorer, Seeker, Pathfinder, Builder, Steward, Called.
@@ -122,7 +122,7 @@ The *Achievements* page shows exactly where every point came from.
 
 ## Privacy philosophy
 
-Teenagers deserve tools that don’t harvest them. There are no accounts. Everything lives on the device; the user can export, import, switch and delete journeys. The optional cross-device backup is end-to-end encrypted with the journey code, so the server can’t read it. Reports are built locally and the journal is never included. No analytics or third-party scripts are loaded.
+No one deserves a tool that harvests them, least of all people still in school. There are no accounts. Everything lives on the device; the user can export, import, switch and delete journeys. The optional cross-device backup is end-to-end encrypted with the journey code, so the server can’t read it. Reports are built locally and the journal is never included. No analytics or third-party scripts are loaded.
 
 ## Future features
 

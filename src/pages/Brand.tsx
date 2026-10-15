@@ -166,7 +166,7 @@ export default function Brand() {
           </div>
           <div className="card">
             <p className="type-specimen">Atkinson Hyperlegible</p>
-            <p className="small muted">Body and interface. Designed by the Braille Institute for legibility, with distinct letterforms that help younger readers and readers with low vision.</p>
+            <p className="small muted">Body and interface. Designed by the Braille Institute for legibility, with distinct letterforms that help new readers and readers with low vision.</p>
           </div>
         </div>
         <ul className="type-scale">
@@ -271,7 +271,7 @@ export default function Brand() {
           Game layer
         </h3>
         <p>
-          Levels, badges, weekly quests and short celebrations make exploring feel rewarding for a 14-year-old without trivializing life direction. Points come only from evidence (finishing a simulation, interviewing a professional, reflecting), never from clicks. Streaks are weekly, so missing a day never punishes anyone.
+          Levels, badges, weekly quests and short celebrations make exploring feel rewarding at any age without trivializing life direction. Points come only from evidence (finishing a simulation, interviewing a professional, reflecting), never from clicks. Streaks are weekly, so missing a day never punishes anyone.
         </p>
         <div className="row" style={{ gap: 'var(--s-5)', alignItems: 'center' }}>
           <LevelRing progress={0.62} size={110}>
