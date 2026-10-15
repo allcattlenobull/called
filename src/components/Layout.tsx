@@ -2,6 +2,10 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Icon, type IconName } from './Icon';
 import { Logo } from './ui';
+import { Celebrations, LevelChip } from './Game';
+import { ThemeToggle } from './ThemeToggle';
+import { useStore } from '../state/store';
+import { hasStarted } from '../lib/profile';
 
 const NAV: { to: string; label: string; icon: IconName; end?: boolean }[] = [
   { to: '/', label: 'Home', icon: 'home', end: true },
@@ -19,6 +23,8 @@ const TABS = ['/', '/discover', '/purpose', '/careers', '/try'];
 export function Layout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { profile } = useStore();
+  const started = hasStarted(profile);
   const mainRef = useRef<HTMLElement>(null);
   const first = useRef(true);
 
@@ -62,10 +68,8 @@ export function Layout({ children }: { children: ReactNode }) {
             ))}
           </nav>
           <div className="topbar__actions">
-            <NavLink to="/path" className="btn btn--quiet topbar__path">
-              <Icon name="path" size={18} />
-              My Path
-            </NavLink>
+            {started && <LevelChip />}
+            <ThemeToggle />
             <button type="button" className="btn btn--icon topbar__menu" aria-expanded={open} aria-controls="menu-sheet" onClick={() => setOpen(true)}>
               <Icon name="menu" />
               <span className="visually-hidden">Open menu</span>
@@ -122,9 +126,9 @@ export function Layout({ children }: { children: ReactNode }) {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/brand">
+                  <NavLink to="/achievements">
                     <Icon name="spark" />
-                    Brand system
+                    Achievements
                   </NavLink>
                 </li>
               </ul>
@@ -134,8 +138,11 @@ export function Layout({ children }: { children: ReactNode }) {
       )}
 
       <main id="main" ref={mainRef} tabIndex={-1} className="main">
-        {children}
+        <div className="page-enter" key={location.pathname}>
+          {children}
+        </div>
       </main>
+      <Celebrations />
 
       <footer className="footer">
         <div className="footer__inner">
@@ -150,7 +157,6 @@ export function Layout({ children }: { children: ReactNode }) {
             <Link to="/about">About</Link>
             <Link to="/about#sources">Data sources</Link>
             <Link to="/about#how-matching-works">How matching works</Link>
-            <Link to="/brand">Brand</Link>
             <Link to="/data">Your data</Link>
           </nav>
         </div>

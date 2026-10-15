@@ -25,8 +25,8 @@ jobs:
         run: npm run data:update
         env:
           # Optional. Without a key the BLS API allows fewer requests per day.
-          # Add it under Settings > Secrets and variables > Actions. Never commit keys.
-          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+          # Stored as the repository secret BLS_GOV (Settings > Secrets and variables > Actions). Never commit keys.
+          BLS_API_KEY: ${{ secrets.BLS_GOV }}
       - name: Validate data
         run: npm run data:validate
       - name: Open pull request if anything changed

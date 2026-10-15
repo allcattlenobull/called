@@ -25,7 +25,7 @@ Live site (after the first deploy): `https://<username>.github.io/called/`
 - [Future roadmap](#future-roadmap)
 - [Contributing](#contributing)
 
-Related documents: [BRAND.md](BRAND.md) (brand system), [PRODUCT.md](PRODUCT.md) (product design), [docs/RECOMMENDATIONS.md](docs/RECOMMENDATIONS.md) (scoring), [docs/DATA.md](docs/DATA.md) (data and updates).
+Related documents: [BRAND.md](BRAND.md) (brand system; the designed PDF is generated with `scripts/brand-pdf.mjs`), [PRODUCT.md](PRODUCT.md) (product design), [docs/RECOMMENDATIONS.md](docs/RECOMMENDATIONS.md) (scoring), [docs/DATA.md](docs/DATA.md) (data and updates), [server/sync-worker/README.md](server/sync-worker/README.md) (journey sync).
 
 ---
 
@@ -49,7 +49,7 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 | **Discover** | Six assessments: interests (30 activities), skills (14, evidence-anchored), aptitudes (15 interactive puzzles across 5 kinds of thinking), work style (12 this-or-that choices), values (sort 14 into tiers), lifestyle (11 priorities). |
 | **Purpose Compass** | A living profile with 11 dimensions (interests, skills, aptitudes, work style, values, lifestyle, experience, feedback, gifts, service, problems), each with a strength and an evidence level, drawn as a signature “bloom”. |
 | **Purpose** | Guided reflections: gifts, problems I care about, who I want to help, experiences, what others see in me, biblical principles, a private journal, and a versioned *current* purpose statement. |
-| **Career Explorer** | 56 careers across 15 families and every training level (none, certificate, apprenticeship, associate, bachelor’s, master’s, doctoral). Search plus 11 filters and 5 sorts. |
+| **Career Explorer** | 178 careers across 15 families and every training level (none, certificate, apprenticeship, associate, bachelor’s, master’s, doctoral). Search plus 11 filters and 5 sorts. |
 | **Career pages** | Explainable match on 8 visible dimensions, reasons, potential conflicts, a reality check (“what people imagine” vs. “what the work looks like”), day-to-day, pay range, outlook, training routes, working conditions, related careers, sources. |
 | **Try It** | 11 browser-based career simulations (finance, HR, teaching, software, cybersecurity, marketing, UX research, operations, entrepreneurship, healthcare patient service, skilled trades) with reflection that updates recommendations. |
 | **Purpose experiments** | 12 real-world experiments (teach a skill, interview a professional, volunteer, fix something…) with return questions. |
@@ -57,8 +57,10 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 | **Education ROI** | A transparent model of cost, opportunity cost, loan payments, break-even and 10-year net, with every assumption editable. Covers college, community college, certifications, trade school, apprenticeships, military, entrepreneurship and direct-to-work. |
 | **My Path** | Editable roadmaps (Now, Next 6 months, Next 12 months) with progress tracking. |
 | **My Called report** | A shareable summary for parents and counselors. The user chooses what’s included; the journal is never included. Print, save as PDF, download or copy. |
-| **Your data** | Export, import and delete the journey. Theme and faith-lens settings. |
-| **Brand system** | `/brand` documents the live design system. |
+| **Achievements** | Levels, 20 badges, weekly quests and celebrations, all earned through real exploration. |
+| **Journey codes** | Every journey has a code like `CALL-7KQ2-M9XD-4HPA-R2TW`. Enter it to return to a journey on a shared device or, with the optional sync service, on any device. |
+| **Resume** | Half-finished assessments and simulations are saved; the dashboard offers to pick them back up. |
+| **Your data** | Export, import, switch and delete journeys. Auto, light and dark themes; faith-lens and backup settings. |
 
 ## Tech stack and architecture
 
@@ -66,7 +68,7 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 - **React Router** with lazy-loaded routes (each page is its own chunk).
 - **No UI framework.** Plain CSS with design tokens (`src/styles/tokens.css`), so the brand stays distinctive and the bundle stays small.
 - **Self-hosted fonts** via Fontsource (Bricolage Grotesque, Atkinson Hyperlegible). No third-party requests.
-- **Local-only persistence:** IndexedDB with a localStorage fallback (`src/lib/storage.ts`).
+- **Local-first persistence:** IndexedDB with a localStorage fallback (`src/lib/storage.ts`), plus an optional end-to-end-encrypted backup keyed by the journey code (`src/lib/sync.ts`, `server/sync-worker/`).
 - **No paid AI dependency.** The recommendation engine is a documented rules system. The data model is structured so AI assistance can be added later (see the roadmap).
 - Runtime dependencies: `react`, `react-dom`, `react-router-dom` and two font packages. That’s all.
 
@@ -112,6 +114,8 @@ Deployment is automatic through `.github/workflows/deploy.yml` on every push to 
 
 How routing works on Pages: GitHub Pages has no single-page-app fallback, so `scripts/postbuild.mjs` copies `index.html` to `404.html`. A deep link like `/called/careers/electrician` loads the app, and the router renders the right page. The router’s basename comes from Vite’s `base`, so the same build logic works at a subpath or the domain root.
 
+**Cross-device journey codes (optional):** deploy the small Cloudflare Worker in [`server/sync-worker/`](server/sync-worker/README.md) (free tier), then add a repository variable `SYNC_URL` with its URL and re-run the deploy workflow. Without it, codes work on the same device and Export/Import moves journeys between devices.
+
 **Custom domain:**
 
 1. Add repository variables (**Settings → Secrets and variables → Actions → Variables**): `BASE_PATH` = `/` and `CUSTOM_DOMAIN` = `your.domain`.
@@ -134,8 +138,9 @@ Called does not scrape any website. O*NET is a trademark of the U.S. Department 
 
 Teenagers use Called, so privacy is a design constraint, not a feature.
 
-- **No accounts.** Nothing to sign up for.
-- **Stored on this device.** All profile data lives in the browser (IndexedDB, with localStorage as a fallback). The app makes no network requests with personal data.
+- **No accounts.** Nothing to sign up for. Each journey has a journey code instead.
+- **Stored on this device.** All profile data lives in the browser (IndexedDB, with localStorage as a fallback).
+- **Optional encrypted backup.** If the sync worker is deployed, the journey is encrypted in the browser with a key derived from the journey code (PBKDF2 then AES-256-GCM) before upload. The server stores only ciphertext under a hash of the code and cannot read anything. Users can turn backups off; deleting data also deletes the backup.
 - **No analytics, ads or third-party scripts.** Fonts are bundled.
 - **User control.** Export my journey, Import my journey, and Delete my data are on the *Your data* page.
 - **Reports are built in the browser** and never uploaded; the journal is never included.
@@ -155,7 +160,9 @@ called/
 ├── public/                  favicon, manifest, brand/ logo files
 ├── scripts/
 │   ├── postbuild.mjs        404.html + .nojekyll (+ CNAME) for GitHub Pages
-│   └── update-career-data.mjs  BLS wage refresh
+│   ├── update-career-data.mjs  BLS wage refresh
+│   └── brand-pdf.mjs        renders the internal brand page to a PDF
+├── server/sync-worker/      optional encrypted journey sync (Cloudflare Worker)
 ├── src/
 │   ├── App.tsx, main.tsx    routes and entry
 │   ├── types.ts             every domain type
@@ -177,7 +184,7 @@ called/
 └── .github/workflows/       deploy, ci, update-career-data
 ```
 
-**Adding a career:** add an object to the right file in `src/data/careers/`. Types enforce every field, and `npm test` checks references, pay ranges and reality-check content. Nothing else needs editing. The structure is designed to grow to hundreds or thousands of careers, including generating files from O*NET in the future.
+**Adding a career:** add a `define({...})` entry to one of the `more-*.ts` files in `src/data/careers/` (or a full object in a family file). Types enforce every field, and `npm test` checks references, pay ranges and reality-check content. Nothing else needs editing. The structure is designed to grow to hundreds or thousands of careers, including generating files from O*NET in the future.
 
 **Adding a simulation:** add an entry to `src/data/simulations/index.ts` using the `choice`, `multi` and `text` step types, and set `simulationId` on related careers.
 
@@ -191,7 +198,6 @@ called/
 - Generate the career catalog from the O*NET database and BLS projections, scaling to hundreds of occupations with state-level pay.
 - More simulations, including multi-step, branching scenarios.
 - Optional AI assistance, kept off the critical path: reflection prompts, purpose-statement drafting, career explanations, roadmap generation and mentor-interview preparation. The engine’s structured inputs and reasons are designed to ground such features.
-- Optional, privacy-preserving sync between devices.
 - Counselor and classroom tools that respect student control over what is shared.
 - Spanish and other languages.
 - College Scorecard integration for program-level cost and earnings.

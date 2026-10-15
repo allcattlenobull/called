@@ -13,6 +13,10 @@ import { CAREER_BY_ID } from '../data/careers';
 import { SIMULATIONS } from '../data/simulations';
 import { formatDate } from '../lib/format';
 import { HORIZONS } from '../lib/roadmap';
+import { LevelCard, Quests } from '../components/Game';
+import { Reveal } from '../components/motion';
+import { unfinished } from '../lib/resume';
+import { JourneyCodeCard } from '../components/JourneyCode';
 
 export default function Dashboard() {
   const { profile } = useStore();
@@ -29,6 +33,7 @@ export default function Dashboard() {
   const recent = [...profile.journal].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 2);
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  const resume = unfinished(profile);
 
   return (
     <div className="wrap dash">
@@ -40,6 +45,33 @@ export default function Dashboard() {
         <p className="lead">Here’s what you’ve learned so far, and what’s worth exploring next.</p>
       </header>
 
+      {resume.length > 0 && (
+        <section className="resume" aria-labelledby="resume-h">
+          <h2 id="resume-h" className="h4">
+            Pick up where you left off
+          </h2>
+          <ul className="resume-list">
+            {resume.slice(0, 4).map((r) => (
+              <li key={r.id}>
+                <Link to={r.to} className="resume-item">
+                  <span className="resume-item__ring" style={{ ['--p' as string]: r.progress }} aria-hidden="true" />
+                  <span>
+                    <span className="resume-item__title">{r.title}</span>
+                    <span className="resume-item__detail">{r.detail}</span>
+                  </span>
+                  <Icon name="arrowRight" size={18} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section className="dash__game">
+        <LevelCard />
+        <Quests />
+      </section>
+
       <section className="dash__top" aria-labelledby="compass-h">
         <div className="panel dash__compass">
           <div className="row row--between">
@@ -49,7 +81,7 @@ export default function Dashboard() {
             <span className="tag tag--done">{completeness}% filled in</span>
           </div>
           <div className="dash__compass-body">
-            <CompassBloom dims={dims} size={280} />
+            <CompassBloom dims={dims} size={280} animate />
             <CompassList dims={dims} compact />
           </div>
           <Link to="/purpose" className="btn btn--quiet">
@@ -92,7 +124,7 @@ export default function Dashboard() {
         </div>
       </section>
 
-      <section className="section--tight" aria-labelledby="suggest-h">
+      <Reveal as="section" className="section--tight" aria-labelledby="suggest-h">
         <div className="row row--between section-title">
           <h2 id="suggest-h" className="h3">
             Career suggestions
@@ -110,7 +142,7 @@ export default function Dashboard() {
             Complete one assessment and Called can start organizing careers around you.
           </EmptyState>
         )}
-      </section>
+      </Reveal>
 
       {exploring.length > 0 && (
         <section className="section--tight" aria-labelledby="exploring-h">
@@ -183,7 +215,7 @@ export default function Dashboard() {
         </div>
       </section>
 
-      <section className="section--tight" aria-labelledby="progress-h">
+      <Reveal as="section" className="section--tight" aria-labelledby="progress-h">
         <h2 id="progress-h" className="h3 section-title">
           Progress
         </h2>
@@ -196,6 +228,9 @@ export default function Dashboard() {
           <Stat value={counts.saved} label="Careers saved" />
           <Stat value={counts.comparisons} label="Paths compared" />
         </div>
+      </Reveal>
+      <section className="section--tight">
+        <JourneyCodeCard />
       </section>
     </div>
   );

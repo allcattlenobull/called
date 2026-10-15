@@ -32,6 +32,8 @@ jobs:
           # For a custom domain, set repository variables BASE_PATH=/ and CUSTOM_DOMAIN=your.domain
           BASE_PATH: ${{ vars.BASE_PATH || '/called/' }}
           CUSTOM_DOMAIN: ${{ vars.CUSTOM_DOMAIN }}
+          # Optional: URL of the journey sync worker (server/sync-worker). Enables restoring with a code on any device.
+          VITE_SYNC_URL: ${{ vars.SYNC_URL }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

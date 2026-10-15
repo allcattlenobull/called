@@ -120,6 +120,82 @@ export async function clearProfile(): Promise<void> {
   lsRemove(LS_PROFILE);
 }
 
+/* ---------- Several journeys on one device ---------- */
+
+const STASH_INDEX = 'stash:index';
+const LS_STASH = 'called.stash.';
+
+export interface StashedSummary {
+  code: string;
+  name?: string;
+  updatedAt: string;
+}
+
+async function readIndex(): Promise<StashedSummary[]> {
+  try {
+    return (await idbGet<StashedSummary[]>(STASH_INDEX)) ?? [];
+  } catch {
+    const raw = lsGet(`${LS_STASH}index`);
+    return raw ? (JSON.parse(raw) as StashedSummary[]) : [];
+  }
+}
+
+async function writeIndex(list: StashedSummary[]) {
+  try {
+    await idbSet(STASH_INDEX, list);
+  } catch {
+    lsSet(`${LS_STASH}index`, JSON.stringify(list));
+  }
+}
+
+/** Keep a journey on this device while another one is active. */
+export async function stashProfile(p: Profile): Promise<void> {
+  const hasContent = p.onboarded || Object.keys(p.completed).length > 0 || p.journal.length > 0 || p.saved.length > 0 || p.simulations.length > 0;
+  if (!hasContent) return;
+  try {
+    await idbSet(`stash:${p.code}`, p);
+  } catch {
+    lsSet(`${LS_STASH}${p.code}`, JSON.stringify(p));
+  }
+  const list = (await readIndex()).filter((x) => x.code !== p.code);
+  list.unshift({ code: p.code, name: p.name, updatedAt: p.updatedAt });
+  await writeIndex(list.slice(0, 20));
+}
+
+export async function loadStashed(code: string): Promise<Profile | null> {
+  try {
+    const p = await idbGet<Profile>(`stash:${code}`);
+    if (p) return normalizeProfile(p);
+  } catch {
+    /* fall back */
+  }
+  const raw = lsGet(`${LS_STASH}${code}`);
+  return raw ? normalizeProfile(JSON.parse(raw)) : null;
+}
+
+export async function removeStashed(code: string): Promise<void> {
+  try {
+    await idbDelete(`stash:${code}`);
+  } catch {
+    /* ignore */
+  }
+  lsRemove(`${LS_STASH}${code}`);
+  await writeIndex((await readIndex()).filter((x) => x.code !== code));
+}
+
+export async function listStashed(): Promise<StashedSummary[]> {
+  return readIndex();
+}
+
+/** Ask the browser not to evict Called’s data when storage runs low. Silently ignored if unsupported. */
+export function requestPersistentStorage() {
+  try {
+    navigator.storage?.persist?.();
+  } catch {
+    /* ignore */
+  }
+}
+
 export function loadSettings(): Settings {
   const raw = lsGet(LS_SETTINGS);
   if (!raw) return DEFAULT_SETTINGS;

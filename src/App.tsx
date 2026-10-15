@@ -23,6 +23,11 @@ const About = lazy(() => import('./pages/About'));
 const YourData = lazy(() => import('./pages/YourData'));
 const Brand = lazy(() => import('./pages/Brand'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const Achievements = lazy(() => import('./pages/Achievements'));
+
+// The brand system page is an internal tool, not part of the public site. It is available in
+// local development, or in a build made with VITE_SHOW_BRAND=1 (used to render the brand guide PDF).
+const SHOW_BRAND = import.meta.env.DEV || import.meta.env.VITE_SHOW_BRAND === '1';
 
 function Loading() {
   return (
@@ -57,7 +62,8 @@ export function App() {
             <Route path="/path/report" element={<Report />} />
             <Route path="/about" element={<About />} />
             <Route path="/data" element={<YourData />} />
-            <Route path="/brand" element={<Brand />} />
+            {SHOW_BRAND && <Route path="/brand" element={<Brand />} />}
+            <Route path="/achievements" element={<Achievements />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

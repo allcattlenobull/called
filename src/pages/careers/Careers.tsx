@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CAREERS } from '../../data/careers';
 import { EDUCATION_LEVELS, FAMILIES, INTERESTS, OUTLOOK } from '../../data/vocab';
@@ -72,12 +72,14 @@ export default function Careers() {
     return [...list].sort(by[sort]);
   }, [ranked, f, q, sort, profile.saved]);
 
+  const [limit, setLimit] = useState(24);
+  useEffect(() => setLimit(24), [f, q, sort]);
   const activeCount = Object.entries(f).filter(([k, v]) => v !== EMPTY[k as keyof Filters]).length;
   const set = <K extends keyof Filters>(k: K, v: Filters[K]) => setF((x) => ({ ...x, [k]: v }));
 
   return (
     <div className="wrap">
-      <PageHeader title="Explore careers" lead={`${CAREERS.length} careers across ${Object.keys(FAMILIES).length} fields, from apprenticeships to doctoral degrees. Each one shows what the work is really like.`} />
+      <PageHeader title="Explore careers" lead={`${CAREERS.length} careers across ${Object.keys(FAMILIES).length} fields, from no-degree jobs and apprenticeships to doctoral degrees. Each one shows what the work is really like.`} />
 
       <div className="explorer">
         <aside className="explorer__filters" aria-label="Search and filters">
@@ -166,11 +168,25 @@ export default function Careers() {
             </p>
           )}
           {results.length ? (
-            <div className="grid grid--2">
-              {results.map(({ career, match }) => (
-                <CareerCard key={career.id} career={career} match={match} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid--2">
+                {results.slice(0, limit).map(({ career, match }, i) => (
+                  <div key={career.id} className="card-enter" style={{ ['--i' as string]: i % 24 }}>
+                    <CareerCard career={career} match={match} />
+                  </div>
+                ))}
+              </div>
+              {results.length > limit && (
+                <div className="show-more">
+                  <button type="button" className="btn btn--secondary btn--lg" onClick={() => setLimit((l) => l + 24)}>
+                    Show more careers
+                  </button>
+                  <span className="small muted">
+                    Showing {limit} of {results.length}
+                  </span>
+                </div>
+              )}
+            </>
           ) : (
             <EmptyState icon="search" title="No careers match those filters" action={<button type="button" className="btn btn--secondary" onClick={() => { setF(EMPTY); setQ(''); }}>Clear search and filters</button>}>
               Try removing a filter or two.

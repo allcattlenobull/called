@@ -1,6 +1,6 @@
 # Called brand system
 
-This document is the source of truth for how Called looks, sounds and behaves. The live version, with every component rendered, is at `/brand` in the app. Design tokens live in [`src/styles/tokens.css`](src/styles/tokens.css).
+This document is the source of truth for how Called looks, sounds and behaves. A designed PDF version is generated from the internal brand page with `scripts/brand-pdf.mjs`; that page runs only in local development (`npm run dev`, then `/brand`) and is not part of the public site. Design tokens live in [`src/styles/tokens.css`](src/styles/tokens.css).
 
 ---
 
@@ -145,7 +145,7 @@ Color never carries meaning alone. Every colored bar has a numeric value and a t
 
 ### Dark mode
 
-Called follows the system color scheme, and users can choose a theme in settings. Dark surfaces are deep indigo (`#0C1230`, `#161E47`), never neutral grey-black. Accent colors lighten to keep at least 7 : 1 contrast for text.
+Called offers Auto (follows the device), Light and Dark, switchable from the header on every page. Dark surfaces are deep indigo (`#0C1230`, `#161E47`), never neutral grey-black. Accent colors lighten to keep at least 7 : 1 contrast for text.
 
 ---
 
@@ -198,12 +198,13 @@ Elevation is mostly borders. Shadows are tinted with Ink and appear only on floa
 
 ## Components
 
-All components are documented live at `/brand`.
+All components are rendered in the brand guide PDF.
 
 - **Buttons:** pill-shaped. Primary (Cobalt fill), secondary (outline), quiet (text). Minimum 44px tall. Labels are verbs.
 - **Cards:** 12px radius, 1px Line border, no default shadow. Career cards carry a **fit strip**: a thin segmented bar showing the eight match dimensions, so the score is never a single opaque number.
 - **Chips:** pills for filters, tags and multi-select answers. Selected chips fill with the tint of their dimension family and show a check mark.
-- **Progress:** quiet, linear and countable ("3 of 6 assessments"). No streaks, no confetti, no levels.
+- **Progress:** countable and honest ("3 of 6 assessments"). Every number maps to something the user actually did.
+- **Game layer:** levels (Curious, Explorer, Seeker, Pathfinder, Builder, Steward, Called), 20 badges, three weekly quests and a short celebration when something is earned. Points come only from evidence (finishing a simulation, interviewing a professional, reflecting), never from clicks, and repetitive actions are capped. Streaks are weekly, so missing a day never punishes anyone. Medals use the Self, Life and Purpose family colors; unearned medals are dashed outlines, like unexplored compass petals.
 - **Evidence badges:** Early signal, Growing evidence, Solid evidence. Shown wherever a score appears.
 - **Assessment interface:** one question per view on mobile, generous targets, explicit "I'm not sure" options, progress shown as "Question 4 of 12".
 - **Reflection interface:** Iris-tinted panel, serif-free, unhurried. Prompts are questions, never instructions.
@@ -227,9 +228,18 @@ Geometric and abstract, built from the same parts as the logo: rings, arcs, dots
 
 ## Motion
 
-- One orchestrated moment: the compass bloom unfolds on the home page. Everything else is quiet.
-- Motion answers actions (opening a sheet, saving a career, finishing a step).
-- `prefers-reduced-motion` turns all non-essential motion off.
+Motion makes Called feel alive and always answers what people do. It is quick, eased (`cubic-bezier(0.2, 0.8, 0.2, 1)`) and never blocks reading.
+
+| Moment | Behavior |
+| --- | --- |
+| Page arrival | Each page rises 10px and fades in over 420ms |
+| Scroll reveals | Sections and cards lift into view once, staggered by about 70ms |
+| Hero | The headline arrives word by word; the compass bloom unfolds, then slowly breathes |
+| Feedback | Selections pop, correct answers glow, wrong answers shake slightly, cards lift on hover |
+| Data | Match bars grow from zero, fit strips rise, numbers count up, level rings fill |
+| Celebration | A burst of rings in the three family colors, then a card the user dismisses |
+
+Durations: 140ms (fast), 260ms (medium), 700ms (slow). `prefers-reduced-motion` turns all of it off.
 
 ## Accessibility
 
@@ -242,7 +252,7 @@ Geometric and abstract, built from the same parts as the logo: rings, arcs, dots
 ## Design principles
 
 1. **Evidence over verdicts.** Show the reasoning, the inputs and the uncertainty.
-2. **Calm, not gamified.** Life direction is serious; progress should feel encouraging, not addictive.
+2. **Rewarding, never manipulative.** Exploring should feel fun for a 14-year-old, but rewards only follow real evidence, and nothing is designed to be addictive.
 3. **Mature enough for 22, clear enough for 14.** Plain words, real data, no cartoons.
 4. **Faith in the foundation, not the decoration.**
 5. **The next step is always visible.** Every screen ends with something worth exploring.
@@ -253,5 +263,5 @@ Geometric and abstract, built from the same parts as the logo: rings, arcs, dots
 - Muddy brown-neutral palettes.
 - Church-website tropes: stained glass, script fonts, sunbeams, doves, crosses as decoration.
 - Personality-test tropes: four-letter types, animal avatars, "your results are in".
-- Gamification tropes: confetti, streak flames, XP levels, loot-style badges.
+- Manipulative game tropes: daily streaks that punish a missed day, loot boxes, leaderboards against other users, points for clicks.
 - Generic SaaS tropes: gradient blobs, glassmorphism, stock 3D illustrations.

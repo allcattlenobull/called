@@ -7,6 +7,11 @@ import { trades } from './trades';
 import { publicService } from './public-service';
 import { creativeStem } from './creative-stem';
 import { operations } from './operations';
+import { moreHealthcare } from './more-healthcare';
+import { moreTech, moreBusiness } from './more-tech-business';
+import { morePeople } from './more-people';
+import { moreTrades, moreOps } from './more-trades-ops';
+import { moreCreative, moreStem } from './more-creative-stem';
 import wageOverrides from './overrides/wages.json';
 
 interface WageOverride {
@@ -36,6 +41,14 @@ export const CAREERS: Career[] = [
   ...publicService,
   ...creativeStem,
   ...operations,
+  ...moreHealthcare,
+  ...moreTech,
+  ...moreBusiness,
+  ...morePeople,
+  ...moreTrades,
+  ...moreOps,
+  ...moreCreative,
+  ...moreStem,
 ]
   .map(applyOverrides)
   .sort((a, b) => a.title.localeCompare(b.title));

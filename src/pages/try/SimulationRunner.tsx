@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { SIM_BY_ID, type SimStep } from '../../data/simulations';
 import { CAREER_BY_ID } from '../../data/careers';
 import { useStore } from '../../state/store';
+import { useDraft } from '../../state/useDraft';
 import { matchCareer } from '../../lib/matching';
 import { SimBlocks } from '../../components/SimBlocks';
 import { Callout, Chip, OptionGroup } from '../../components/ui';
@@ -19,10 +20,13 @@ export default function SimulationRunner() {
   const sim = SIM_BY_ID[id];
   useDocumentTitle(sim ? `${sim.role} simulation` : undefined);
   const { profile, update } = useStore();
-  const [phase, setPhase] = useState<'intro' | 'steps' | 'reflect' | 'done'>('intro');
-  const [stepIdx, setStepIdx] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, Answer>>({});
-  const [before, setBefore] = useState<Record<string, number | null>>({});
+  // The run is saved as a draft, so a student can close the tab mid-simulation and finish later.
+  type Run = { phase: 'intro' | 'steps' | 'reflect' | 'done'; stepIdx: number; answers: Record<string, Answer>; before: Record<string, number | null> };
+  const [run, setRun, clearRun, resumed] = useDraft<Run>(`sim:${id}`, { phase: 'intro', stepIdx: 0, answers: {}, before: {} });
+  const { phase, stepIdx, answers, before } = run;
+  const setPhase = (ph: Run['phase']) => setRun((r) => ({ ...r, phase: ph }));
+  const setStepIdx = (fn: (i: number) => number) => setRun((r) => ({ ...r, stepIdx: fn(r.stepIdx) }));
+  const setAnswers = (fn: (prev: Record<string, Answer>) => Record<string, Answer>) => setRun((r) => ({ ...r, answers: fn(r.answers) }));
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   // Reflection
@@ -54,8 +58,7 @@ export default function SimulationRunner() {
   const answer = step ? answers[step.id] : undefined;
 
   const start = () => {
-    setBefore(Object.fromEntries(sim.careerIds.map((c) => [c, CAREER_BY_ID[c] ? matchCareer(CAREER_BY_ID[c], profile).overall : null])));
-    setPhase('steps');
+    setRun({ phase: 'steps', stepIdx: 0, answers: {}, before: Object.fromEntries(sim.careerIds.map((c) => [c, CAREER_BY_ID[c] ? matchCareer(CAREER_BY_ID[c], profile).overall : null])) });
   };
 
   const pick = (s: SimStep, optionId: string) => {
@@ -89,6 +92,7 @@ export default function SimulationRunner() {
       });
     });
     setPhase('done');
+    clearRun();
   };
 
   if (phase === 'intro') {
@@ -135,6 +139,14 @@ export default function SimulationRunner() {
             <SimBlocks blocks={sim.context} />
           </details>
           <section className="runner" aria-live="polite">
+            {resumed && stepIdx > 0 && (
+              <div className="resume-note">
+                <Icon name="check" size={16} /> Picked up where you left off.
+                <button type="button" className="btn btn--quiet btn--sm" onClick={() => setRun({ phase: 'intro', stepIdx: 0, answers: {}, before: {} })}>
+                  Start over
+                </button>
+              </div>
+            )}
             <p className="runner__count">
               Decision {stepIdx + 1} of {sim.steps.length}: {step.title}
             </p>

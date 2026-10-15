@@ -8,6 +8,7 @@ import '@fontsource/atkinson-hyperlegible/400-italic.css';
 import './styles/base.css';
 import './styles/components.css';
 import './styles/pages.css';
+import './styles/motion.css';
 import { App } from './App';
 import { StoreProvider } from './state/store';
 

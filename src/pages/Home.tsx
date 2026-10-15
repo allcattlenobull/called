@@ -11,6 +11,7 @@ import { Conflicts, EvidenceBadge, FitStrip, MatchBars, OverallScore } from '../
 import { SIMULATIONS } from '../data/simulations';
 import Dashboard from './Dashboard';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
+import { Reveal } from '../components/motion';
 
 const JOURNEY = [
   { title: 'Discover yourself', text: 'Interests, skills, aptitudes, values and the life you want.' },
@@ -48,7 +49,15 @@ export default function Home() {
       <section className="hero">
         <div className="wrap hero__inner">
           <div className="hero__copy">
-            <h1 className="hero__title">You don’t need your whole life figured out.</h1>
+            <h1 className="hero__title" aria-label="You don’t need your whole life figured out.">
+              {'You don’t need your whole life figured out.'.split(' ').map((w, i) => (
+                <span key={i} aria-hidden="true">
+                  <span className="hero__word" style={{ ['--i' as string]: i }}>
+                    {w}
+                  </span>{' '}
+                </span>
+              ))}
+            </h1>
             <p className="hero__lead">Discover your gifts, explore careers, try real work, and build a path that fits who you’re becoming.</p>
             <div className="row">
               <Link to="/welcome" className="btn btn--primary btn--lg">
@@ -59,7 +68,7 @@ export default function Home() {
               </Link>
             </div>
             <p className="hero__note">
-              <Icon name="lock" size={16} /> No account. Your answers stay on this device.
+              <Icon name="lock" size={16} /> No account needed. <Link to="/welcome">Coming back? Use your journey code.</Link>
             </p>
           </div>
           <figure className="hero__art">
@@ -80,11 +89,11 @@ export default function Home() {
             </p>
           </div>
           <ol className="journey" aria-label="How Called works">
-            {JOURNEY.map((j) => (
-              <li key={j.title} className="journey__step">
+            {JOURNEY.map((j, i) => (
+              <Reveal as="li" key={j.title} className="journey__step" delay={i * 90}>
                 <h3>{j.title}</h3>
                 <p>{j.text}</p>
-              </li>
+              </Reveal>
             ))}
           </ol>
         </div>
@@ -96,7 +105,7 @@ export default function Home() {
             <h2>Every recommendation shows its reasoning.</h2>
             <p className="lead">No black-box number. Eight dimensions you can see, the reasons behind them, and the tensions worth thinking through.</p>
           </div>
-          <div className="example">
+          <Reveal className="example">
             <div className="example__card">
               <div className="row row--between">
                 <div>
@@ -138,7 +147,7 @@ export default function Home() {
                 <p className="muted">What people imagine versus what the work actually looks like, followed by one honest question: does this still sound interesting?</p>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -149,8 +158,8 @@ export default function Home() {
             <p className="lead">Short simulations put you inside a real problem. Afterward you reflect, and your recommendations adjust to what you actually enjoyed.</p>
           </div>
           <div className="sim-strip">
-            {SIMULATIONS.slice(0, 6).map((s) => (
-              <Link key={s.id} to={`/try/${s.id}`} className="sim-chip">
+            {SIMULATIONS.slice(0, 6).map((s, i) => (
+              <Link key={s.id} to={`/try/${s.id}`} className="sim-chip reveal-child" style={{ ['--i' as string]: i }}>
                 <span className="sim-chip__role">{s.role}</span>
                 <span className="sim-chip__title">{s.title}</span>
                 <span className="sim-chip__time">
@@ -167,7 +176,7 @@ export default function Home() {
 
       <section className="section">
         <div className="wrap">
-          <div className="panel panel--ink purpose-panel">
+          <Reveal className="panel panel--ink purpose-panel">
             <div>
               <h2>Your career is not your purpose.</h2>
               <p className="lead">
@@ -182,7 +191,7 @@ export default function Home() {
             <Link to="/purpose/principles" className="btn btn--secondary">
               Read the principles
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 

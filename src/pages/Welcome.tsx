@@ -5,6 +5,7 @@ import { CompassBloom, SAMPLE_DIMS } from '../components/CompassBloom';
 import { OptionGroup } from '../components/ui';
 import { Icon } from '../components/Icon';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
+import { RestoreForm } from '../components/JourneyCode';
 import type { Profile } from '../types';
 
 const EVIDENCE = ['who you are', 'what you value', 'what you’re good at', 'what you’re curious about', 'what kind of life you want', 'and what work might fit'];
@@ -48,6 +49,10 @@ export default function Welcome() {
               Your personal Called profile is stored on this device. You can export it, move it, or delete it anytime.
             </div>
           </div>
+          <details className="restore-details">
+            <summary>Coming back? Enter your journey code</summary>
+            <RestoreForm />
+          </details>
           <div className="runner__nav">
             <span />
             <button type="button" className="btn btn--primary btn--lg" onClick={() => setStep(1)}>

@@ -101,20 +101,34 @@ Twelve real-world activities, each framed as a hypothesis (“You think you migh
 
 The **Education ROI** tool models tuition, years of training, living costs, alternative earnings, borrowed share and loan rate, and reports cost, opportunity cost, monthly payment, payment as a share of starting pay, break-even years and 10-year net. It treats paid training (apprenticeships, military) differently, and it lists every route: college, community college, certification, trade school, apprenticeship, military, entrepreneurship and straight to work. It never concludes that college is good or bad.
 
-## Progress
+## Progress and the game layer
 
-Countable and calm: assessments completed, careers explored, simulations, interviews, experiments, saved careers, comparisons and reflections. No streaks, levels, badges or confetti.
+Exploring should feel rewarding for a 14-year-old without trivializing life direction.
+
+- **Points** are derived from the profile, so they always match real activity: assessments (60), simulations (80), purpose experiments (100), feedback from others (30), reflections, reality checks, roadmap steps and more. Repetitive actions are capped so points can’t be farmed by clicking.
+- **Levels:** Curious, Explorer, Seeker, Pathfinder, Builder, Steward, Called.
+- **Badges:** 20, from *First step* to *Full tour* (every simulation) and *Honest no* (ruling a career out, because knowing what doesn’t fit is progress).
+- **Weekly quests:** three suggestions each Monday, measured from the start of the week.
+- **Streaks are weekly,** so missing a day never breaks anything.
+- **Celebrations** appear once per new badge or level.
+
+The *Achievements* page shows exactly where every point came from.
+
+## Coming back
+
+- Half-finished assessments, puzzle sets and simulations are saved as drafts. The dashboard opens with **Pick up where you left off**.
+- Every journey has a **journey code**. On a shared device, several people can keep separate journeys and switch with their codes. With the optional sync service, the code restores a journey on any device; the data is encrypted with the code before upload.
+- The app asks the browser for persistent storage so data isn’t evicted.
 
 ## Privacy philosophy
 
-Teenagers deserve tools that don’t harvest them. V1 has no accounts and no server. Everything lives on the device; the user can export, import and delete it. Reports are built locally and the journal is never included. No analytics or third-party scripts are loaded.
+Teenagers deserve tools that don’t harvest them. There are no accounts. Everything lives on the device; the user can export, import, switch and delete journeys. The optional cross-device backup is end-to-end encrypted with the journey code, so the server can’t read it. Reports are built locally and the journal is never included. No analytics or third-party scripts are loaded.
 
 ## Future features
 
 - O*NET-generated catalog with hundreds of careers and state-level wages
 - Branching simulations and more fields
 - Optional AI assistance for reflection, purpose statements, explanations, roadmaps and interview prep, grounded in the engine’s structured reasons and never required
-- Optional encrypted sync
 - Counselor tools that keep the student in control of what’s shared
 - Mentor matching and interview scheduling
 - Translations

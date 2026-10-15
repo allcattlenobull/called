@@ -84,7 +84,7 @@ export default function About() {
 
         <h2 id="sources">Data sources</h2>
         <p>
-          Called includes {CAREERS.length} careers for this first version, chosen to cover healthcare, technology, business, finance, education, skilled trades, government, creative work, human services, engineering, science, entrepreneurship, operations, legal and public safety, and every level of training from none to doctoral.
+          Called includes {CAREERS.length} careers, chosen to cover healthcare, technology, business, finance, education, skilled trades, government, creative work, human services, engineering, science, entrepreneurship, operations, legal and public safety, and every level of training from none to doctoral.
         </p>
         <ul>
           <li>
@@ -106,7 +106,7 @@ export default function About() {
 
         <h2>Privacy</h2>
         <p>
-          Called has no accounts and no servers that receive your answers. Your profile, journal and results are stored in your browser on this device. Fonts are bundled with the app, and there are no analytics or advertising scripts. You can <Link to="/data">export, import or delete everything</Link> at any time.
+          Called has no accounts. Your profile, journal and results are stored in your browser on this device, and every journey has its own journey code. If cross-device restore is turned on, an encrypted copy is saved under a scrambled version of your code; it is locked with your code before it leaves your browser, so no one else, including Called, can read it. Fonts are bundled with the app, and there are no analytics or advertising scripts. You can <Link to="/data">export, import, switch or delete everything</Link> at any time.
         </p>
 
         <h2>For parents, counselors, teachers and mentors</h2>

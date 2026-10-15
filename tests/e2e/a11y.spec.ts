@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+test.beforeEach(async ({ page }) => {
+  // Badge celebrations are modal; dismiss them whenever they appear.
+  await page.addLocatorHandler(page.getByRole('button', { name: 'Keep going', exact: true }), async (btn) => btn.click());
+});
+
 const ROUTES = [
   '',
   'welcome',
@@ -33,7 +38,7 @@ const ROUTES = [
   'path/report',
   'about',
   'data',
-  'brand',
+  'achievements',
   'does-not-exist',
 ];
 
@@ -56,7 +61,7 @@ for (const route of ROUTES) {
 
 test.describe('dark mode', () => {
   test.use({ colorScheme: 'dark' });
-  for (const route of ['', 'careers', 'careers/registered-nurse', 'purpose', 'try/healthcare', 'compare', 'brand', 'data']) {
+  for (const route of ['', 'careers', 'careers/registered-nurse', 'purpose', 'try/healthcare', 'compare', 'achievements', 'data']) {
     test(`/${route} has sufficient contrast in dark mode`, async ({ page }) => {
       await page.goto(route);
       await expect(page.locator('main h1').first()).toBeVisible();
@@ -64,4 +69,22 @@ test.describe('dark mode', () => {
       expect(results.violations.flatMap((v) => v.nodes.map((n) => n.target.join(' '))).slice(0, 5)).toEqual([]);
     });
   }
+});
+
+test('the brand page is not public', async ({ page }) => {
+  await page.goto('brand');
+  await expect(page.getByRole('heading', { name: 'This page doesn’t exist' })).toBeVisible();
+});
+
+test('celebration dialog is accessible', async ({ page }) => {
+  await page.removeLocatorHandler(page.getByRole('button', { name: 'Keep going', exact: true }));
+  await page.goto('welcome');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: /Start exploring now/ }).click();
+  const dialog = page.getByRole('dialog', { name: /First step/ });
+  await expect(dialog).toBeVisible();
+  const results = await new AxeBuilder({ page }).include('.celebrate').withTags(['wcag2a', 'wcag2aa']).analyze();
+  expect(results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id)).toEqual([]);
+  await page.getByRole('button', { name: 'Keep going', exact: true }).click();
+  await expect(dialog).toBeHidden();
 });

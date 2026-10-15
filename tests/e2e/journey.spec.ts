@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addLocatorHandler(page.getByRole('button', { name: 'Keep going', exact: true }), async (btn) => btn.click());
+});
+
 test('a new user can go from onboarding to a roadmap, and it persists', async ({ page }) => {
   await page.goto('');
   await expect(page.getByRole('heading', { name: 'You don’t need your whole life figured out.' })).toBeVisible();
@@ -118,4 +122,56 @@ test('compare and education ROI work together', async ({ page }) => {
 test('deep links load directly', async ({ page }) => {
   await page.goto('careers/lineworker');
   await expect(page.getByRole('heading', { name: 'Electrical lineworker', level: 1 })).toBeVisible();
+});
+
+test('unfinished work is saved and offered on return', async ({ page }) => {
+  await page.goto('welcome');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: /Start exploring now/ }).click();
+  await page.goto('try/software');
+  await page.getByRole('button', { name: 'Start simulation' }).click();
+  await page.locator('.sim-option').first().click();
+  await page.getByRole('button', { name: 'Next decision' }).click();
+  await expect(page.getByText('Decision 2 of 4')).toBeVisible();
+  // Leave and come back later.
+  await page.goto('');
+  await expect(page.getByRole('heading', { name: 'Pick up where you left off' })).toBeVisible();
+  await page.getByRole('link', { name: /Simulation: The discount bug/ }).click();
+  await expect(page.getByText('Picked up where you left off.')).toBeVisible();
+  await expect(page.getByText(/Decision 2 of 4/)).toBeVisible();
+});
+
+test('a journey code switches between journeys on a shared device', async ({ page }) => {
+  await page.goto('welcome');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByLabel('What should we call you?').fill('Ana');
+  await page.getByRole('button', { name: /Start exploring now/ }).click();
+  await page.goto('data');
+  const anaCode = (await page.locator('.code-display__code').first().innerText()).trim();
+  expect(anaCode).toMatch(/^CALL(-[2-9A-Z]{4}){4}$/);
+
+  await page.getByRole('button', { name: 'Start a new journey on this device' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByLabel('What should we call you?').fill('Ben');
+  await page.getByRole('button', { name: /Start exploring now/ }).click();
+  await page.goto('');
+  await expect(page.getByRole('heading', { name: /Ben\./ })).toBeVisible();
+
+  await page.goto('data');
+  await page.getByLabel('Enter a journey code').fill(anaCode.toLowerCase().replace(/-/g, ' '));
+  await page.getByRole('button', { name: 'Restore' }).click();
+  await expect(page.getByRole('heading', { name: /Ana\./ })).toBeVisible();
+});
+
+test('theme toggle cycles auto, light and dark', async ({ page }) => {
+  await page.goto('');
+  const toggle = page.getByRole('button', { name: /^Theme:/ });
+  await toggle.click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await toggle.click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.getByRole('button', { name: /^Theme:/ }).click();
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme', /.+/);
 });

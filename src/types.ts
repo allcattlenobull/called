@@ -340,9 +340,21 @@ export interface Profile {
   roadmaps: Roadmap[];
   comparisons: number;
   interviews: number;
+
+  /** Unique journey code, e.g. CALL-7KQ2-M9XD-4HPA-R2TW. Used to restore this journey. */
+  code: string;
+  /** Dates (YYYY-MM-DD) the user did something, for gentle weekly streaks. */
+  activeDays: string[];
+  /** Badges and level the user has already been celebrated for. */
+  seenBadges: string[];
+  seenLevel: number;
+  /** Unfinished work saved so the user can come back and finish it. */
+  drafts: Record<string, unknown>;
 }
 
 export interface Settings {
   faithLens: boolean;
   theme: 'system' | 'light' | 'dark';
+  /** Keep an encrypted backup tied to the journey code (only when a sync service is configured). */
+  cloudBackup: boolean;
 }

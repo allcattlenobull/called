@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useDraft } from '../../state/useDraft';
 import { APTITUDE_ITEMS, type Grid } from '../../data/assessments';
 import { APTITUDES } from '../../data/vocab';
 import { useStore } from '../../state/store';
@@ -43,19 +44,22 @@ function spatialOptions(g: Grid, seed: number) {
 
 export function AptitudesAssessment() {
   const { profile, update } = useStore();
-  const [idx, setIdx] = useState(profile.completed.aptitudes ? APTITUDE_ITEMS.length : 0);
-  const [picked, setPicked] = useState<number | null>(null);
-  const [session, setSession] = useState<Record<string, boolean>>({});
+  // Progress is saved as a draft so a half-finished set of puzzles survives closing the tab.
+  const [state, setState, clearState, resumed] = useDraft<{ idx: number; picked: number | null; session: Record<string, boolean> }>('aptitudes', () => ({
+    idx: profile.completed.aptitudes ? APTITUDE_ITEMS.length : 0,
+    picked: null,
+    session: {},
+  }));
+  const { idx, picked, session } = state;
   const done = idx >= APTITUDE_ITEMS.length;
   const item = APTITUDE_ITEMS[idx];
   const spatial = useMemo(() => (item?.grid ? spatialOptions(item.grid, idx) : null), [item, idx]);
 
   const choose = (i: number) => {
     if (picked !== null) return;
-    setPicked(i);
     const correct = spatial ? spatial[i].correct : i === item.answer;
     const next = { ...session, [item.id]: correct };
-    setSession(next);
+    setState((s) => ({ ...s, picked: i, session: next }));
     if (idx === APTITUDE_ITEMS.length - 1) {
       update((p) => {
         const totals: Partial<Record<AptitudeId, { correct: number; total: number }>> = {};
@@ -67,6 +71,7 @@ export function AptitudesAssessment() {
         }
         p.aptitudes = totals;
         p.completed.aptitudes = new Date().toISOString();
+        delete p.drafts.aptitudes;
       });
     }
   };
@@ -98,11 +103,7 @@ export function AptitudesAssessment() {
           <button
             type="button"
             className="btn btn--quiet"
-            onClick={() => {
-              setIdx(0);
-              setPicked(null);
-              setSession({});
-            }}
+            onClick={() => setState({ idx: 0, picked: null, session: {} })}
           >
             Retake the puzzles
           </button>
@@ -116,6 +117,11 @@ export function AptitudesAssessment() {
 
   return (
     <section className="runner">
+      {resumed && idx > 0 && idx < APTITUDE_ITEMS.length && (
+        <Callout tone="evidence" title="Welcome back">
+          Your answers were saved. You’re on puzzle {idx + 1}.
+        </Callout>
+      )}
       {idx === 0 && picked === null && (
         <Callout title="No timer, no pressure">These puzzles check five kinds of thinking. You’ll see the reasoning after each one.</Callout>
       )}
@@ -163,8 +169,9 @@ export function AptitudesAssessment() {
           className="btn btn--primary"
           disabled={picked === null}
           onClick={() => {
-            setIdx((i) => i + 1);
-            setPicked(null);
+            const last = idx === APTITUDE_ITEMS.length - 1;
+            setState((s) => ({ ...s, idx: s.idx + 1, picked: null }));
+            if (last) clearState();
           }}
         >
           {idx === APTITUDE_ITEMS.length - 1 ? 'See my results' : 'Next puzzle'}

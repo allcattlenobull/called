@@ -4,13 +4,13 @@
 
 Careers live in typed TypeScript modules, one per family, under [`src/data/careers/`](../src/data/careers/). Each career includes its SOC code, pay (median, ~10th and ~90th percentile), outlook category, education and routes, working conditions, interest, skill, aptitude, value, gift, service and problem tags, plain-language responsibilities, a day in the life, a reality check, related careers and alternative routes.
 
-Version 1 contains 56 careers across 15 families and every training level.
+The catalog contains 178 careers across 15 families and every training level. Careers added in the second release use the compact `define()` format in `src/data/careers/build.ts`.
 
 ## Sources
 
 | Field | Source | Notes |
 | --- | --- | --- |
-| Pay | U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OEWS), via the Occupational Outlook Handbook | National, May 2024, rounded, entered by hand for V1 |
+| Pay | U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OEWS) | National, rounded estimates entered by hand, replaced by official API figures when the update workflow runs |
 | Outlook | BLS Employment Projections, 2023 to 2033 | Categories: declining, little change, average, faster, much faster |
 | SOC codes | 2018 Standard Occupational Classification | Used to link to O*NET and BLS |
 | Tasks, conditions, reality checks | Written by Called, informed by O*NET OnLine task and work-context data | Rewritten in plain language for teenagers |
@@ -39,7 +39,9 @@ The app never depends on automation running; the committed data is always comple
 
 ### Secrets
 
-The BLS API works without a key at lower request limits. To raise them, register at <https://data.bls.gov/registrationEngine/> and add the key as a repository secret named `BLS_API_KEY` (**Settings → Secrets and variables → Actions**). Never commit keys to the repository.
+The BLS API works without a key at lower request limits. This repository uses a key stored as the repository secret `BLS_GOV` (**Settings → Secrets and variables → Actions**); the workflow passes it to the script as `BLS_API_KEY`. Never commit keys to the repository.
+
+For the workflow to open its pull request, enable **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
 
 ### Running it locally
 

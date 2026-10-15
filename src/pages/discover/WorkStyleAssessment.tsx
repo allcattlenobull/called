@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useDraft } from '../../state/useDraft';
 import { WORK_STYLE_ITEMS } from '../../data/assessments';
 import { WORK_AXES } from '../../data/vocab';
 import { useStore } from '../../state/store';
@@ -10,16 +10,21 @@ const SCALE_LABEL: Record<number, string> = { [-2]: 'Strongly left', [-1]: 'Lean
 
 export function WorkStyleAssessment() {
   const { profile, update } = useStore();
-  const [answers, setAnswers] = useState<Record<string, number>>({});
-  // Returning users see their saved summary first; retaking starts a fresh set of answers.
-  const [idx, setIdx] = useState(profile.completed.workStyle ? WORK_STYLE_ITEMS.length : 0);
+  // Saved as a draft so the user can leave halfway and come back.
+  const [state, setState, clearState] = useDraft<{ idx: number; answers: Record<string, number> }>('workStyle', () => ({
+    idx: profile.completed.workStyle ? WORK_STYLE_ITEMS.length : 0,
+    answers: {},
+  }));
+  const { idx, answers } = state;
+  const setIdx = (fn: (i: number) => number) => setState((s) => ({ ...s, idx: fn(s.idx) }));
   const done = idx >= WORK_STYLE_ITEMS.length;
 
   const choose = (v: number) => {
     const item = WORK_STYLE_ITEMS[idx];
     const next = { ...answers, [item.id]: v };
-    setAnswers(next);
+    setState({ idx: idx + 1, answers: next });
     if (idx === WORK_STYLE_ITEMS.length - 1) {
+      clearState();
       update((p) => {
         const sums: Partial<Record<WorkAxis, number[]>> = {};
         for (const it of WORK_STYLE_ITEMS) if (next[it.id] !== undefined) (sums[it.axis] ??= []).push(next[it.id]);
@@ -29,7 +34,6 @@ export function WorkStyleAssessment() {
         p.completed.workStyle = new Date().toISOString();
       });
     }
-    setIdx((i) => i + 1);
   };
 
   if (done) {
@@ -57,7 +61,7 @@ export function WorkStyleAssessment() {
           })}
         </ul>
         <div className="row" style={{ marginTop: 'var(--s-4)' }}>
-          <button type="button" className="btn btn--quiet" onClick={() => { setAnswers({}); setIdx(0); }}>
+          <button type="button" className="btn btn--quiet" onClick={() => setState({ idx: 0, answers: {} })}>
             Retake
           </button>
         </div>

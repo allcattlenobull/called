@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CONFIDENCE_LABEL, DIMENSIONS, type Confidence, type DimensionId, type MatchResult } from '../lib/matching';
 import { Icon } from './Icon';
+import { CountUp, useMountedFlag } from './motion';
 
 const FAMILY_CLASS = { self: 'fam-self', life: 'fam-life', purpose: 'fam-purpose' } as const;
 
@@ -47,6 +48,7 @@ export function EvidenceBadge({ confidence }: { confidence: Confidence }) {
 }
 
 export function MatchBars({ match }: { match: MatchResult }) {
+  const mounted = useMountedFlag();
   return (
     <ul className="matchbars">
       {DIMENSIONS.map((d) => {
@@ -66,7 +68,7 @@ export function MatchBars({ match }: { match: MatchResult }) {
               </span>
             </div>
             <div className={`matchbar__track${dim.score === null ? ' is-empty' : ''}`} aria-hidden="true">
-              {dim.score !== null && <span style={{ width: `${dim.score}%` }} />}
+              {dim.score !== null && <span style={{ width: mounted ? `${dim.score}%` : 0 }} />}
             </div>
           </li>
         );
@@ -81,7 +83,9 @@ export function OverallScore({ match, size = 'md' }: { match: MatchResult; size?
   }
   return (
     <span className={`overall overall--${size}`} aria-label={`Overall fit ${match.overall} out of 100`}>
-      <span className="overall__num">{match.overall}</span>
+      <span className="overall__num">
+        <CountUp value={match.overall} />
+      </span>
       <span className="overall__of">/100</span>
     </span>
   );

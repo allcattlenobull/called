@@ -1778,7 +1778,7 @@
   flex-direction: column;
   gap: 2px;
 }
-.radius-demo__item span {
+.radius-demo__item > span:first-child {
   width: 96px;
   height: 64px;
   background: var(--primary-tint);
@@ -1851,4 +1851,88 @@
 .compare-pick .field--inline,
 .compare-pick .select {
   max-width: 100%;
+}
+
+/* ===== Brand guide (print / PDF) ===== */
+.brand-cover {
+  display: none;
+}
+@media print {
+  @page {
+    size: Letter;
+    margin: 0.55in;
+  }
+  html,
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .brand .pagehead,
+  .brand .brand-toc {
+    display: none;
+  }
+  .brand-cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 6px;
+    height: 9.7in;
+    padding: 0.8in;
+    margin: -0.1in 0 0;
+    border-radius: 28px;
+    background: #2d3fe3;
+    color: #fff;
+    break-after: page;
+  }
+  .brand-cover__word {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 72px;
+    letter-spacing: -0.04em;
+    margin: 0;
+    line-height: 1;
+  }
+  .brand-cover__title {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 600;
+    margin: 0 0 24px;
+  }
+  .brand-cover__sub {
+    font-size: 20px;
+    max-width: 30ch;
+    margin: 0;
+  }
+  .brand-cover__meta {
+    margin-top: auto;
+    font-size: 13px;
+    opacity: 0.8;
+  }
+  .brand-section {
+    break-before: page;
+    border-top: 0;
+    padding-top: 0;
+  }
+  .brand-section .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .brand .card,
+  .brand .swatch,
+  .brand .badge-card,
+  .brand .type-scale li,
+  .brand .callout {
+    break-inside: avoid;
+  }
+  .brand .grid--3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .reveal,
+  .card-enter,
+  .page-enter {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
 }

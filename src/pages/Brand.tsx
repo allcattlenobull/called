@@ -9,6 +9,8 @@ import { CAREER_BY_ID } from '../data/careers';
 import { matchCareer } from '../lib/matching';
 import { emptyProfile } from '../lib/profile';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
+import { BadgeMedal, LevelRing } from '../components/Game';
+import { BADGES } from '../lib/gamify';
 
 const PALETTE = [
   { name: 'Ink', hex: '#121A3D', role: 'Text, dark surfaces', contrast: '16.9:1', text: '#fff' },
@@ -57,6 +59,16 @@ export default function Brand() {
 
   return (
     <div className="wrap brand">
+      <section className="brand-cover" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="120" height="120">
+          <path d="M33.03 15.38A14 14 0 1 0 33.03 32.62" fill="none" stroke="#fff" strokeWidth="6.5" strokeLinecap="round" />
+          <circle cx="39.5" cy="24" r="4.5" fill="#FFCB2E" />
+        </svg>
+        <p className="brand-cover__word">called</p>
+        <p className="brand-cover__title">Brand system</p>
+        <p className="brand-cover__sub">Discover what you’ve been given. Explore where it can take you.</p>
+        <p className="brand-cover__meta">Version 2, October 2026. Internal use.</p>
+      </section>
       <PageHeader title="The Called brand system" lead="How Called looks, sounds and behaves. Every component on this page is the real one used in the app. The full written guide is BRAND.md in the repository." />
 
       <nav className="brand-toc" aria-label="On this page">
@@ -253,7 +265,27 @@ export default function Brand() {
           <Stat value={4} label="Simulations completed" />
           <Stat value={2} label="Paths compared" />
         </div>
-        <p className="small muted">Countable and calm. No streaks, levels or confetti.</p>
+        <p className="small muted">Progress is countable and honest: every number maps to something the user actually did.</p>
+
+        <h3 className="h4" style={{ marginTop: 'var(--s-5)' }}>
+          Game layer
+        </h3>
+        <p>
+          Levels, badges, weekly quests and short celebrations make exploring feel rewarding for a 14-year-old without trivializing life direction. Points come only from evidence (finishing a simulation, interviewing a professional, reflecting), never from clicks. Streaks are weekly, so missing a day never punishes anyone.
+        </p>
+        <div className="row" style={{ gap: 'var(--s-5)', alignItems: 'center' }}>
+          <LevelRing progress={0.62} size={110}>
+            <span className="level-ring__n">3</span>
+            <span className="level-ring__label">Level</span>
+          </LevelRing>
+          {BADGES.slice(0, 5).map((b, i) => (
+            <span key={b.id} style={{ display: 'grid', justifyItems: 'center', gap: 4 }}>
+              <BadgeMedal badge={b} earned={i < 3} size={64} />
+              <span className="small">{b.name}</span>
+            </span>
+          ))}
+        </div>
+        <p className="small muted">Levels: Curious, Explorer, Seeker, Pathfinder, Builder, Steward, Called. Medals take their color from the Self, Life and Purpose families; unearned medals are dashed outlines, like unexplored compass petals.</p>
 
         <h3 className="h4" style={{ marginTop: 'var(--s-5)' }}>
           Career card
@@ -328,6 +360,29 @@ export default function Brand() {
             </span>
           ))}
         </div>
+      </section>
+
+      <section id="motion" className="brand-section">
+        <h2>Motion</h2>
+        <p>Motion makes Called feel alive and answers what people do. It is quick, eased and never blocks reading.</p>
+        <div className="grid grid--2">
+          {[
+            ['Page arrival', 'Each page rises 10px and fades in over 420ms.'],
+            ['Scroll reveals', 'Sections and cards lift into view once, staggered by 70ms.'],
+            ['Hero', 'The headline arrives word by word; the compass bloom unfolds, then slowly breathes.'],
+            ['Feedback', 'Selections pop, correct answers glow, wrong answers give a small shake, cards lift on hover.'],
+            ['Data', 'Match bars grow from zero, fit strips rise, numbers count up, level rings fill.'],
+            ['Celebration', 'A burst of rings in the three family colors, then a card the user dismisses.'],
+          ].map(([t, d]) => (
+            <div key={t} className="card">
+              <h3 className="h4">{t}</h3>
+              <p className="small muted">{d}</p>
+            </div>
+          ))}
+        </div>
+        <p className="small muted" style={{ marginTop: 'var(--s-4)' }}>
+          Standard easing is cubic-bezier(0.2, 0.8, 0.2, 1). Durations: 140ms (fast), 260ms (medium), 700ms (slow). When a device asks for reduced motion, all of it turns off.
+        </p>
       </section>
 
       <section id="voice" className="brand-section">

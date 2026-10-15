@@ -1,6 +1,7 @@
 import { useId, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, type IconName } from './Icon';
+import { CountUp, useMountedFlag } from './motion';
 
 export function PageHeader({ title, lead, children, back }: { title: string; lead?: ReactNode; children?: ReactNode; back?: { to: string; label: string } }) {
   return (
@@ -19,7 +20,8 @@ export function PageHeader({ title, lead, children, back }: { title: string; lea
 }
 
 export function Progress({ value, max, label }: { value: number; max: number; label: string }) {
-  const pct = max ? Math.round((value / max) * 100) : 0;
+  const mounted = useMountedFlag();
+  const pct = mounted && max ? Math.round((value / max) * 100) : 0;
   return (
     <div className="progress">
       <div className="progress__meta">
@@ -112,7 +114,7 @@ export function Callout({ tone = 'info', title, children }: { tone?: 'info' | 'p
 export function Stat({ value, label }: { value: ReactNode; label: string }) {
   return (
     <div className="stat">
-      <span className="stat__value">{value}</span>
+      <span className="stat__value">{typeof value === 'number' ? <CountUp value={value} /> : value}</span>
       <span className="stat__label">{label}</span>
     </div>
   );
