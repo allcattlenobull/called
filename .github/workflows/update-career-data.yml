@@ -1,0 +1,47 @@
+name: Update career data
+
+# Refreshes wage figures from the U.S. Bureau of Labor Statistics public API and opens a
+# pull request for human review. The app never depends on this running.
+on:
+  schedule:
+    - cron: '17 9 2 * *' # monthly, 2nd day, 09:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Fetch latest wages
+        run: npm run data:update
+        env:
+          # Optional. Without a key the BLS API allows fewer requests per day.
+          # Add it under Settings > Secrets and variables > Actions. Never commit keys.
+          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+      - name: Validate data
+        run: npm run data:validate
+      - name: Open pull request if anything changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet; then
+            echo "No data changes."
+            exit 0
+          fi
+          branch="data/update-$(date +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add src/data/careers/overrides/wages.json
+          git commit -m "Update career wage data from BLS"
+          git push origin "$branch"
+          gh pr create --title "Update career wage data" --body "Automated refresh from the BLS OEWS public API. Review changes before merging; see docs/DATA.md." --base main --head "$branch"

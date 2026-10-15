@@ -1,0 +1,172 @@
+/*
+ * Called design tokens.
+ * Source of truth for color, type, space, radius and motion. Documented in BRAND.md and at /brand.
+ * Rule: no beige, cream, tan, sand, ivory or any warm off-white. Neutrals here are cool by design.
+ */
+
+:root {
+  /* Core palette */
+  --c-ink: #121a3d;        /* Ink: primary text, dark surfaces */
+  --c-cobalt: #2d3fe3;     /* Cobalt: primary action, brand */
+  --c-cobalt-deep: #1f2db8;
+  --c-cobalt-tint: #e6e9ff;
+  --c-lagoon: #037f78;     /* Lagoon: evidence, growth, completed */
+  --c-lagoon-tint: #dcf5f2;
+  --c-iris: #6b3fd4;       /* Iris: purpose, reflection, faith lens */
+  --c-iris-tint: #eee7ff;
+  --c-spark: #ffcb2e;      /* Spark: highlight only, always with Ink text */
+  --c-alert: #b3261e;      /* Alert: conflicts, destructive actions */
+  --c-alert-tint: #fddbe1;
+
+  /* Cool neutrals */
+  --c-white: #ffffff;
+  --c-mist: #f3f5fb;
+  --c-cloud: #e8ecf6;
+  --c-line: #d6dcec;
+  --c-steel: #6e7896;      /* decorative / large text only (4.4:1) */
+  --c-slate: #4a5470;      /* secondary text (7.5:1 on white) */
+
+  /* Semantic roles (light) */
+  --bg: var(--c-white);
+  --bg-subtle: var(--c-mist);
+  --bg-sunken: var(--c-cloud);
+  --surface: var(--c-white);
+  --text: var(--c-ink);
+  --text-muted: var(--c-slate);
+  --border: var(--c-line);
+  --border-strong: #b7c0d9;
+  --primary: var(--c-cobalt);
+  --primary-hover: var(--c-cobalt-deep);
+  --primary-text: #ffffff;
+  --primary-tint: var(--c-cobalt-tint);
+  --evidence: var(--c-lagoon);
+  --evidence-tint: var(--c-lagoon-tint);
+  --evidence-text: #025c57; /* Lagoon darkened for small text on tints (7:1) */
+  --purpose: var(--c-iris);
+  --purpose-tint: var(--c-iris-tint);
+  --highlight: var(--c-spark);
+  --danger: var(--c-alert);
+  --danger-tint: var(--c-alert-tint);
+  --danger-text: #ffffff;
+  --focus-ring: 0 0 0 3px var(--c-white), 0 0 0 6px var(--c-cobalt);
+
+  /* Compass dimension groups */
+  --dim-self: var(--c-cobalt);
+  --dim-life: var(--c-lagoon);
+  --dim-purpose: var(--c-iris);
+
+  /* Type */
+  --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Atkinson Hyperlegible', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Major-third scale (1.25) on a 17px body */
+  --fs-xs: 0.8125rem;   /* 13 */
+  --fs-sm: 0.9375rem;   /* 15 */
+  --fs-md: 1.0625rem;   /* 17 body */
+  --fs-lg: 1.3125rem;   /* 21 */
+  --fs-xl: 1.625rem;    /* 26 */
+  --fs-2xl: 2.0625rem;  /* 33 */
+  --fs-3xl: clamp(2.25rem, 1.6rem + 2.6vw, 2.625rem);   /* 36 to 42 */
+  --fs-hero: clamp(2.5rem, 1.4rem + 4.6vw, 4.75rem);    /* 40 to 76 */
+
+  --lh-tight: 1.05;
+  --lh-snug: 1.25;
+  --lh-body: 1.6;
+
+  /* Space: 4px base */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+
+  /* Radius by hierarchy: panels are softer than cards, chips are pills */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-pill: 999px;
+
+  /* Elevation: tinted with Ink, never grey-brown */
+  --shadow-1: 0 1px 2px rgb(18 26 61 / 0.06);
+  --shadow-2: 0 10px 30px -12px rgb(18 26 61 / 0.25);
+
+  /* Layout */
+  --measure: 66ch;
+  --page-max: 1180px;
+  --gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
+  --header-h: 64px;
+  --tabbar-h: 68px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 140ms;
+  --dur-med: 260ms;
+  --dur-slow: 700ms;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0c1230;
+    --bg-subtle: #121a3d;
+    --bg-sunken: #0a0f28;
+    --surface: #161e47;
+    --text: #f4f6ff;
+    --text-muted: #a7b0cc;
+    --border: #2a3466;
+    --border-strong: #3e4a85;
+    --primary: #8fa0ff;
+    --primary-hover: #b3bfff;
+    --primary-text: #0c1230;
+    --primary-tint: #1f2a66;
+    --evidence: #4fd1c5;
+    --evidence-tint: #0f3a40;
+    --evidence-text: #7ee3d9;
+    --purpose: #b9a2ff;
+    --purpose-tint: #2a1f5c;
+    --danger: #ff8a80;
+    --danger-tint: #3d1a24;
+    --danger-text: #0c1230;
+    --focus-ring: 0 0 0 3px #0c1230, 0 0 0 6px #ffcb2e;
+    --dim-self: #8fa0ff;
+    --dim-life: #4fd1c5;
+    --dim-purpose: #b9a2ff;
+    --shadow-2: 0 10px 30px -12px rgb(0 0 0 / 0.6);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0c1230;
+  --bg-subtle: #121a3d;
+  --bg-sunken: #0a0f28;
+  --surface: #161e47;
+  --text: #f4f6ff;
+  --text-muted: #a7b0cc;
+  --border: #2a3466;
+  --border-strong: #3e4a85;
+  --primary: #8fa0ff;
+  --primary-hover: #b3bfff;
+  --primary-text: #0c1230;
+  --primary-tint: #1f2a66;
+  --evidence: #4fd1c5;
+  --evidence-tint: #0f3a40;
+  --evidence-text: #7ee3d9;
+  --purpose: #b9a2ff;
+  --purpose-tint: #2a1f5c;
+  --danger: #ff8a80;
+  --danger-tint: #3d1a24;
+  --danger-text: #0c1230;
+  --focus-ring: 0 0 0 3px #0c1230, 0 0 0 6px #ffcb2e;
+  --dim-self: #8fa0ff;
+  --dim-life: #4fd1c5;
+  --dim-purpose: #b9a2ff;
+  --shadow-2: 0 10px 30px -12px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}

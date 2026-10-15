@@ -1,0 +1,14 @@
+{
+  "name": "Called",
+  "short_name": "Called",
+  "description": "Discover what you've been given. Explore where it can take you.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#2D3FE3",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "brand/called-app-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "_comment": "Written by scripts/update-career-data.mjs from the BLS OEWS API. Keys are SOC codes. Empty means the hand-entered figures in each career file are used.",
+  "asOf": null,
+  "wages": {}
+}

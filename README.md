@@ -1,0 +1,210 @@
+# Called
+
+**Discover what you’ve been given. Explore where it can take you.**
+
+Called is a free, private career-discovery and purpose platform for teenagers and young adults (roughly 14 to 24). It helps people understand who they are, what they’re good at, what they value, what work is really like, and what to try next, without pretending there is only one right path.
+
+> We are not trying to tell young people what they should become. We are helping them become wise enough to choose.
+
+Live site (after the first deploy): `https://<username>.github.io/called/`
+
+---
+
+## Contents
+
+- [Mission and philosophy](#mission-and-philosophy)
+- [What’s in version 1](#whats-in-version-1)
+- [Tech stack and architecture](#tech-stack-and-architecture)
+- [Local development](#local-development)
+- [Deployment to GitHub Pages](#deployment-to-github-pages)
+- [Data sources](#data-sources)
+- [Privacy model](#privacy-model)
+- [Recommendation methodology](#recommendation-methodology)
+- [Project structure](#project-structure)
+- [Testing](#testing)
+- [Future roadmap](#future-roadmap)
+- [Contributing](#contributing)
+
+Related documents: [BRAND.md](BRAND.md) (brand system), [PRODUCT.md](PRODUCT.md) (product design), [docs/RECOMMENDATIONS.md](docs/RECOMMENDATIONS.md) (scoring), [docs/DATA.md](docs/DATA.md) (data and updates).
+
+---
+
+## Mission and philosophy
+
+Most career tools try to answer **“What should I be?”** Called is built around a better question: **“What should I explore next?”**
+
+The journey moves through:
+
+```
+DISCOVER → PURPOSE → EXPLORE → EXPERIENCE → REFLECT → COMPARE → PLAN → ACT → REASSESS
+```
+
+Called is built on Christian principles: stewardship, service, wisdom, diligence, gifts, good work, calling and purpose. Faith shapes the philosophy and appears in optional reflection prompts; it never shows up as decoration, and Called never presents a career recommendation as a message from God. The faith lens can be turned off for classrooms.
+
+## What’s in version 1
+
+| Area | What it does |
+| --- | --- |
+| **Onboarding** | Explains that Called collects evidence rather than handing down answers. No account, no giant questionnaire. Start exploring or build a Purpose Compass. |
+| **Discover** | Six assessments: interests (30 activities), skills (14, evidence-anchored), aptitudes (15 interactive puzzles across 5 kinds of thinking), work style (12 this-or-that choices), values (sort 14 into tiers), lifestyle (11 priorities). |
+| **Purpose Compass** | A living profile with 11 dimensions (interests, skills, aptitudes, work style, values, lifestyle, experience, feedback, gifts, service, problems), each with a strength and an evidence level, drawn as a signature “bloom”. |
+| **Purpose** | Guided reflections: gifts, problems I care about, who I want to help, experiences, what others see in me, biblical principles, a private journal, and a versioned *current* purpose statement. |
+| **Career Explorer** | 56 careers across 15 families and every training level (none, certificate, apprenticeship, associate, bachelor’s, master’s, doctoral). Search plus 11 filters and 5 sorts. |
+| **Career pages** | Explainable match on 8 visible dimensions, reasons, potential conflicts, a reality check (“what people imagine” vs. “what the work looks like”), day-to-day, pay range, outlook, training routes, working conditions, related careers, sources. |
+| **Try It** | 11 browser-based career simulations (finance, HR, teaching, software, cybersecurity, marketing, UX research, operations, entrepreneurship, healthcare patient service, skilled trades) with reflection that updates recommendations. |
+| **Purpose experiments** | 12 real-world experiments (teach a skill, interview a professional, volunteer, fix something…) with return questions. |
+| **Compare** | Up to three careers side by side across fit, money, education and work-life, with the standout in each row called out. |
+| **Education ROI** | A transparent model of cost, opportunity cost, loan payments, break-even and 10-year net, with every assumption editable. Covers college, community college, certifications, trade school, apprenticeships, military, entrepreneurship and direct-to-work. |
+| **My Path** | Editable roadmaps (Now, Next 6 months, Next 12 months) with progress tracking. |
+| **My Called report** | A shareable summary for parents and counselors. The user chooses what’s included; the journal is never included. Print, save as PDF, download or copy. |
+| **Your data** | Export, import and delete the journey. Theme and faith-lens settings. |
+| **Brand system** | `/brand` documents the live design system. |
+
+## Tech stack and architecture
+
+- **React 19 + TypeScript + Vite 7**, static-first, deployable anywhere static files are served.
+- **React Router** with lazy-loaded routes (each page is its own chunk).
+- **No UI framework.** Plain CSS with design tokens (`src/styles/tokens.css`), so the brand stays distinctive and the bundle stays small.
+- **Self-hosted fonts** via Fontsource (Bricolage Grotesque, Atkinson Hyperlegible). No third-party requests.
+- **Local-only persistence:** IndexedDB with a localStorage fallback (`src/lib/storage.ts`).
+- **No paid AI dependency.** The recommendation engine is a documented rules system. The data model is structured so AI assistance can be added later (see the roadmap).
+- Runtime dependencies: `react`, `react-dom`, `react-router-dom` and two font packages. That’s all.
+
+```
+UI (pages, components)
+   │ reads/writes
+   ▼
+Store (React context) ── debounced save ──► IndexedDB / localStorage (this device only)
+   │
+   ▼
+Engine (pure functions in src/lib)
+   signals.ts   raw answers → normalized signals
+   compass.ts   11-dimension Purpose Compass
+   matching.ts  8-dimension explainable career match
+   roi.ts       education ROI model
+   roadmap.ts   starter roadmaps
+   │
+   ▼
+Data (typed modules in src/data, plus JSON overrides written by automation)
+```
+
+## Local development
+
+Requires Node.js 20.19 or newer.
+
+```bash
+npm install
+npm run dev          # http://localhost:5173/called/
+npm test             # unit tests (Vitest)
+npm run typecheck
+npm run build        # production build in dist/
+npm run preview      # serve the build at http://localhost:4173/called/
+npm run test:e2e     # Playwright end-to-end + axe accessibility tests (run `npx playwright install chromium` once)
+```
+
+The repository includes `.npmrc` with `legacy-peer-deps=true` to avoid an npm peer-resolution bug with the current test tooling.
+
+## Deployment to GitHub Pages
+
+Deployment is automatic through `.github/workflows/deploy.yml` on every push to `main`.
+
+**One-time setup:** in the repository, go to **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**. The next push to `main` (or a manual run of the *Deploy to GitHub Pages* workflow) publishes the site at `https://<username>.github.io/called/`.
+
+How routing works on Pages: GitHub Pages has no single-page-app fallback, so `scripts/postbuild.mjs` copies `index.html` to `404.html`. A deep link like `/called/careers/electrician` loads the app, and the router renders the right page. The router’s basename comes from Vite’s `base`, so the same build logic works at a subpath or the domain root.
+
+**Custom domain:**
+
+1. Add repository variables (**Settings → Secrets and variables → Actions → Variables**): `BASE_PATH` = `/` and `CUSTOM_DOMAIN` = `your.domain`.
+2. Point DNS at GitHub Pages and set the domain under **Settings → Pages**.
+3. Re-run the deploy workflow. The build writes a `CNAME` file and serves from the root.
+
+## Data sources
+
+| Data | Source | How it’s used |
+| --- | --- | --- |
+| Median pay, 10th and 90th percentiles | U.S. Bureau of Labor Statistics, OEWS / Occupational Outlook Handbook (May 2024) | Rounded, entered by hand for V1; refreshable through the BLS API |
+| Job outlook | BLS Employment Projections 2023 to 2033 | Shown as categories, not exact percentages |
+| Occupation codes | Standard Occupational Classification (SOC) | Each career links to O*NET OnLine and BLS |
+| Tasks, reality checks, day in the life | Written by Called, informed by O*NET task and work-context data | Plain-language summaries for teens |
+| Tuition | College Board, *Trends in College Pricing* | Starting assumptions in the ROI tool |
+
+Called does not scrape any website. O*NET is a trademark of the U.S. Department of Labor, Employment and Training Administration; Called is not affiliated with or endorsed by any agency. See [docs/DATA.md](docs/DATA.md) for the update process and attribution.
+
+## Privacy model
+
+Teenagers use Called, so privacy is a design constraint, not a feature.
+
+- **No accounts.** Nothing to sign up for.
+- **Stored on this device.** All profile data lives in the browser (IndexedDB, with localStorage as a fallback). The app makes no network requests with personal data.
+- **No analytics, ads or third-party scripts.** Fonts are bundled.
+- **User control.** Export my journey, Import my journey, and Delete my data are on the *Your data* page.
+- **Reports are built in the browser** and never uploaded; the journal is never included.
+
+## Recommendation methodology
+
+Each career gets eight component scores (0 to 100, or empty when evidence is missing): **Interest, Skills, Aptitude, Values, Lifestyle, Purpose, Education fit, Financial fit**. The overall score is the weighted average of the components that exist, adjusted by experience (simulations, reality checks, purpose experiments and how the user marks careers), capped at +20 / −30.
+
+Every result shows its components, the reasons it appeared, potential conflicts, and an evidence label (*Early signal*, *Growing evidence*, *Solid evidence*). The rules are written by people and are not a validated psychometric instrument; the UI says so. Full details and weights: [docs/RECOMMENDATIONS.md](docs/RECOMMENDATIONS.md).
+
+## Project structure
+
+```
+called/
+├── BRAND.md, PRODUCT.md, README.md
+├── docs/                    DATA.md, RECOMMENDATIONS.md
+├── public/                  favicon, manifest, brand/ logo files
+├── scripts/
+│   ├── postbuild.mjs        404.html + .nojekyll (+ CNAME) for GitHub Pages
+│   └── update-career-data.mjs  BLS wage refresh
+├── src/
+│   ├── App.tsx, main.tsx    routes and entry
+│   ├── types.ts             every domain type
+│   ├── components/          Layout, Icon, CompassBloom, Match, CareerCard, ui
+│   ├── data/
+│   │   ├── careers/         one file per family + index + overrides/wages.json
+│   │   ├── assessments/     interest items, puzzles, work style, lifestyle
+│   │   ├── simulations/     the 11 simulations
+│   │   ├── purpose-experiments/
+│   │   ├── scripture/       principles and passages
+│   │   ├── purpose/         journal prompts, purpose sections
+│   │   ├── education/       routes and ROI assumptions
+│   │   └── vocab.ts         skills, values, gifts, interests and other vocabularies
+│   ├── lib/                 engine: signals, compass, matching, roi, roadmap, storage
+│   ├── pages/               one folder per section
+│   ├── state/store.tsx      profile store and persistence
+│   └── styles/              tokens.css, base.css, components.css, pages.css
+├── tests/                   Vitest unit tests + tests/e2e Playwright specs
+└── .github/workflows/       deploy, ci, update-career-data
+```
+
+**Adding a career:** add an object to the right file in `src/data/careers/`. Types enforce every field, and `npm test` checks references, pay ranges and reality-check content. Nothing else needs editing. The structure is designed to grow to hundreds or thousands of careers, including generating files from O*NET in the future.
+
+**Adding a simulation:** add an entry to `src/data/simulations/index.ts` using the `choice`, `multi` and `text` step types, and set `simulationId` on related careers.
+
+## Testing
+
+- **Unit (Vitest):** data integrity, brand rules (including an automated check that no warm or beige neutral enters the palette), the matching engine, ROI math, roadmaps, and IndexedDB storage.
+- **End-to-end (Playwright):** every route on desktop and mobile with no console errors, no serious axe accessibility violations, and no horizontal scroll; dark-mode contrast; a full journey from onboarding through an assessment, a reality check, a simulation, a roadmap and the report; export, delete and import; compare and ROI; deep links.
+
+## Future roadmap
+
+- Generate the career catalog from the O*NET database and BLS projections, scaling to hundreds of occupations with state-level pay.
+- More simulations, including multi-step, branching scenarios.
+- Optional AI assistance, kept off the critical path: reflection prompts, purpose-statement drafting, career explanations, roadmap generation and mentor-interview preparation. The engine’s structured inputs and reasons are designed to ground such features.
+- Optional, privacy-preserving sync between devices.
+- Counselor and classroom tools that respect student control over what is shared.
+- Spanish and other languages.
+- College Scorecard integration for program-level cost and earnings.
+
+## Contributing
+
+Contributions are welcome.
+
+1. Open an issue describing the change, especially for new careers, simulations or scoring changes.
+2. Keep the voice: warm, grounded, never deterministic (see BRAND.md).
+3. Follow the brand system. **Beige and beige-adjacent colors are prohibited**; the test suite will fail if a warm neutral is added to the tokens.
+4. Run `npm run typecheck`, `npm test` and, for UI changes, `npm run test:e2e` before opening a pull request. CI runs all three.
+5. For career data, cite sources in the pull request and never scrape sites in violation of their terms.
+6. Never commit secrets. API keys belong in GitHub Actions secrets.
+
+No license has been chosen yet. Until one is added, all rights are reserved by the repository owner.

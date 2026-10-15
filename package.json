@@ -1,0 +1,37 @@
+{
+  "name": "called",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Called: discover what you've been given, explore where it can take you.",
+  "type": "module",
+  "engines": { "node": ">=20.19" },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build && node scripts/postbuild.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "data:validate": "vitest run tests/data.test.ts",
+    "data:update": "node scripts/update-career-data.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.2.0",
+    "@fontsource/atkinson-hyperlegible": "^5.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "fake-indexeddb": "^6.0.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.0",
+    "vitest": "^4.0.0"
+  }
+}
