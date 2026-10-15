@@ -49,7 +49,7 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 
 | Area | What it does |
 | --- | --- |
-| **Onboarding** | Explains that Called collects evidence rather than handing down answers. No account, no giant questionnaire. Start exploring or build a Purpose Compass. |
+| **Onboarding** | Explains that Called collects evidence rather than handing down answers. A private account is created without requiring email; the journey code is its access key. Start exploring or build a Purpose Compass. |
 | **Discover** | Six exploration activities: interests, self-rated skills, unscored reasoning practice plus a separate OMIB pilot, work style, values and lifestyle. Every activity links to its evidence status and limits. |
 | **Purpose Compass** | A living profile with 11 dimensions (including explicitly labeled reasoning practice), each with a strength and an evidence level, drawn as a signature “bloom”. |
 | **Purpose** | Guided reflections: gifts, problems I care about, who I want to help, experiences, what others see in me, biblical principles, a private journal, and a versioned *current* purpose statement. |
@@ -61,7 +61,8 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 | **Education ROI** | A transparent model of cost, opportunity cost, loan payments, break-even and 10-year net, with every assumption editable. Covers college, community college, certifications, trade school, apprenticeships, military, entrepreneurship and direct-to-work. |
 | **My Path** | Decision support for the paths you’re testing: evidence level and checklist, why it fits, unanswered questions, the next best step and why, decision gates, leading paths, stage-aware roadmaps (Now, 6 months, 12 months) that check themselves off, and what you’ve learned about yourself. |
 | **My Called report** | A shareable summary for parents and counselors. The user chooses what’s included; the journal is never included. Print, save as PDF, download, copy, or create a client-encrypted seven-day link. |
-| **Counselor workspace** | Counselors can combine student-approved summary packets, search across students, track follow-up status and keep local notes. Packets exclude journey codes, journals and private item responses; the workspace remains in the counselor’s browser. |
+| **Individual account** | First and last name, stable public member ID, results snapshot, progress, top possibilities, account access, backups and counselor-sharing history in one place. |
+| **Counselor accounts** | Counselors receive their own ID and private access key. People share named, limited reports directly to that account; reports are encrypted in the person’s browser to the counselor and exclude journey codes, journals and item-level responses. A local packet workspace remains available when the account service is not configured. |
 | **Achievements** | Your career evidence (self-understanding, career exposure, real-world experience, decision readiness) first; levels, 20 insight-led badges, weekly quests and evidence points underneath. |
 | **Journey codes** | Every journey has a code like `CALL-7KQ2-M9XD-4HPA-R2TW`. Enter it to return to a journey on a shared device or, with the optional sync service, on any device. |
 | **Resume** | Half-finished assessments and simulations are saved; the dashboard offers to pick them back up. |
@@ -76,6 +77,7 @@ Career and simulation search is typo-tolerant and synonym-aware: close spellings
 - **No UI framework.** Plain CSS with design tokens (`src/styles/tokens.css`), so the brand stays distinctive and the bundle stays small.
 - **Self-hosted fonts** via Fontsource (Bricolage Grotesque, Atkinson Hyperlegible). No third-party requests.
 - **Local-first persistence:** IndexedDB with a localStorage fallback (`src/lib/storage.ts`), plus an optional end-to-end-encrypted backup keyed by the journey code (`src/lib/sync.ts`, `server/sync-worker/`).
+- **End-to-end-encrypted counselor sharing:** the browser creates an RSA-OAEP key pair for each counselor. The public key encrypts shared reports; the private key is wrapped with the counselor’s high-entropy access key before storage.
 - **No paid AI dependency.** The recommendation engine is a documented rules system. The data model is structured so AI assistance can be added later (see the roadmap).
 - Runtime dependencies: `react`, `react-dom`, `react-router-dom` and two font packages. That’s all.
 
@@ -121,7 +123,7 @@ Deployment is automatic through `.github/workflows/deploy.yml` on every push to 
 
 How routing works on Pages: GitHub Pages has no single-page-app fallback, so `scripts/postbuild.mjs` copies `index.html` to `404.html`. A deep link like `/called/careers/electrician` loads the app, and the router renders the right page. The router’s basename comes from Vite’s `base`, so the same build logic works at a subpath or the domain root.
 
-**Cross-device journey codes (optional):** deploy the small Cloudflare Worker in [`server/sync-worker/`](server/sync-worker/README.md) (free tier), then add a repository variable `SYNC_URL` with its URL and re-run the deploy workflow. Without it, codes work on the same device and Export/Import moves journeys between devices.
+**Accounts and cross-device journey codes:** deploy the small Cloudflare Worker in [`server/sync-worker/`](server/sync-worker/README.md) (free tier), then add a repository variable `SYNC_URL` with its URL and re-run the deploy workflow. Without it, individual accounts and journey codes work on the same device, Export/Import moves journeys between devices, and counselors can use the local packet workspace. Connected counselor accounts and direct account-to-account sharing require the Worker.
 
 **Custom domain:**
 
@@ -145,14 +147,14 @@ Called may use official APIs, bulk downloads, feeds, and responsible public web 
 
 Many people using Called are still in school, so privacy is a design constraint, not a feature.
 
-- **No accounts.** Nothing to sign up for. Each journey has a journey code instead.
+- **No email identity required for individual accounts.** Each person receives a stable member ID and a separate high-entropy journey code that unlocks the account.
 - **Stored on this device.** All profile data lives in the browser (IndexedDB, with localStorage as a fallback).
 - **Optional encrypted backup.** If the sync worker is deployed, the journey is encrypted in the browser with a key derived from the journey code (PBKDF2 then AES-256-GCM) before upload. The server stores only ciphertext under a hash of the code and cannot read anything. Users can turn backups off; deleting data also deletes the backup.
 - **No default analytics, ads or third-party scripts.** Fonts are bundled. Minimal page analytics and validation events are separate explicit opt-ins using a random research ID.
 - **User control.** Export my journey, Import my journey, and Delete my data are on the *Your data* page.
 - **Email is user-controlled.** Called can open an email draft for a code or readable report and can hand a backup file to the device share sheet. Called does not collect the recipient address or send email itself.
 - **Reports are built in the browser.** Downloads stay local. Optional seven-day links upload only browser-encrypted report text; the decryption key stays in the URL fragment. The journal is never included.
-- **Counselor sharing is explicit.** A counselor sees only the packet a student exports; there is no automatic school roster or backdoor into a journey.
+- **Counselor sharing is explicit and limited.** A counselor sees first and last name, member ID and the limited report only after the person confirms sharing. The report is encrypted to that counselor’s public key; there is no automatic school roster or backdoor into a journey.
 
 ## Recommendation methodology
 
@@ -207,7 +209,7 @@ called/
 - Generate the career catalog from the O*NET database and BLS projections, scaling to hundreds of occupations with state-level pay.
 - Occupation-expert review and pre-registered validation of versioned simulations before any response score influences matching.
 - Optional AI assistance, kept off the critical path: reflection prompts, purpose-statement drafting, career explanations, roadmap generation and mentor-interview preparation. The engine’s structured inputs and reasons are designed to ground such features.
-- Counselor and classroom tools that respect student control over what is shared.
+- Organization-level counselor administration, invitations and verified school domains, while preserving person-controlled sharing.
 - Spanish and other languages, following the translation and instrument-validation gates in `docs/LOCALIZATION.md`.
 - College Scorecard integration for program-level cost and earnings.
 

@@ -13,7 +13,7 @@ if (process.env.CUSTOM_DOMAIN && !existsSync('dist/CNAME')) {
 const basePath = (process.env.BASE_PATH ?? '/called/').replace(/^\/+|\/+$/g, '');
 const siteOrigin = (process.env.SITE_URL ?? (process.env.CUSTOM_DOMAIN ? `https://${process.env.CUSTOM_DOMAIN}` : 'https://allcattlenobull.github.io')).replace(/\/$/, '');
 const siteBase = `${siteOrigin}/${basePath}`.replace(/\/$/, '');
-const routes = new Set(['', 'discover', 'discover/validated-aptitude', 'purpose', 'careers', 'try', 'try/experiments', 'compare', 'compare/education', 'path', 'about', 'research', 'feedback', 'counselor']);
+const routes = new Set(['', 'discover', 'discover/validated-aptitude', 'purpose', 'careers', 'try', 'try/experiments', 'compare', 'compare/education', 'path', 'account', 'about', 'research', 'feedback', 'counselor']);
 
 for (const file of readdirSync('src/data/careers').filter((name) => name.endsWith('.ts') && name !== 'index.ts')) {
   const source = readFileSync(join('src/data/careers', file), 'utf8');

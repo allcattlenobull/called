@@ -83,7 +83,9 @@ export default function Careers() {
 
   return (
     <div className="wrap">
-      <PageHeader title="Explore careers" lead={`${CAREERS.length} careers across ${Object.keys(FAMILIES).length} fields, from no-degree jobs and apprenticeships to doctoral degrees. Each one shows what the work is really like.`} />
+      <PageHeader title="Explore careers" lead={`${CAREERS.length} careers across ${Object.keys(FAMILIES).length} fields, from no-degree jobs and apprenticeships to doctoral degrees. Each one shows what the work is really like.`}>
+        <div className="row"><Link to="/compare" className="btn btn--secondary"><Icon name="compare" size={18} /> Compare careers</Link><Link to="/network" className="btn btn--quiet">Find connections</Link></div>
+      </PageHeader>
 
       <div className="explorer">
         <aside className="explorer__filters" aria-label="Search and filters">

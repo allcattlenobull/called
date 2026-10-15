@@ -217,6 +217,34 @@ test('a journey code switches between journeys on a shared device', async ({ pag
   await expect(page.getByRole('heading', { name: /Ana\./ })).toBeVisible();
 });
 
+test('an individual account shows identity, results and a stable member ID', async ({ page }) => {
+  await page.goto('welcome');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByLabel('What should we call you?').fill('Jordan');
+  await page.getByLabel('Last name').fill('Lee');
+  await page.getByRole('button', { name: /Start exploring now/ }).click();
+  await page.goto('account');
+  await expect(page.getByRole('heading', { name: 'Jordan Lee’s account' })).toBeVisible();
+  await expect(page.getByText(/^CLD(?:-[2-9A-HJ-NP-TV-Z]{4}){3}$/)).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Your results at a glance' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Counselor sharing' })).toBeVisible();
+});
+
+test('navigation uses one responsive menu', async ({ page }) => {
+  await page.goto('');
+  await expect(page.getByRole('navigation', { name: 'Quick' })).toHaveCount(0);
+  const desktop = (page.viewportSize()?.width ?? 0) >= 1100;
+  if (desktop) {
+    await expect(page.getByRole('navigation', { name: 'Primary' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Open menu' })).toBeHidden();
+  } else {
+    await expect(page.getByRole('navigation', { name: 'Primary' })).toBeHidden();
+    await page.getByRole('button', { name: 'Open menu' }).click();
+    await expect(page.getByRole('dialog', { name: 'Menu' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Account', exact: true })).toBeVisible();
+  }
+});
+
 test('theme toggle cycles auto, light and dark', async ({ page }) => {
   await page.goto('');
   const toggle = page.getByRole('button', { name: /^Theme:/ });

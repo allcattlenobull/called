@@ -1,6 +1,6 @@
 import type { Profile, Settings } from '../types';
 
-export const PROFILE_VERSION = 3 as const;
+export const PROFILE_VERSION = 4 as const;
 
 export function emptyProfile(): Profile {
   const now = new Date().toISOString();
@@ -38,7 +38,9 @@ export function emptyProfile(): Profile {
     interviews: 0,
     conversations: [],
     code: generateCode(),
+    memberId: generateMemberId(),
     counselorShareId: uid('learner'),
+    counselorShares: [],
     activeDays: [],
     seenBadges: [],
     seenLevel: 0,
@@ -57,6 +59,15 @@ export function generateCode(): string {
   else for (let i = 0; i < 16; i++) bytes[i] = Math.floor(Math.random() * 256);
   const chars = Array.from(bytes, (b) => CODE_ALPHABET[b % CODE_ALPHABET.length]).join('');
   return `CALL-${chars.slice(0, 4)}-${chars.slice(4, 8)}-${chars.slice(8, 12)}-${chars.slice(12, 16)}`;
+}
+
+/** A public account ID with about 60 bits of randomness. It is an identifier, never a login secret. */
+export function generateMemberId(): string {
+  const bytes = new Uint8Array(12);
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) crypto.getRandomValues(bytes);
+  else for (let i = 0; i < bytes.length; i += 1) bytes[i] = Math.floor(Math.random() * 256);
+  const chars = Array.from(bytes, (byte) => CODE_ALPHABET[byte % CODE_ALPHABET.length]).join('');
+  return `CLD-${chars.slice(0, 4)}-${chars.slice(4, 8)}-${chars.slice(8, 12)}`;
 }
 
 /** Accepts codes typed with spaces, lowercase or without the CALL prefix. Returns null if invalid. */
@@ -83,7 +94,7 @@ export function normalizeProfile(input: unknown): Profile {
   const p = input as Partial<Profile>;
   const out: Profile = { ...base, ...p, version: PROFILE_VERSION } as Profile;
   // Guard every array and record so malformed imports degrade gracefully.
-  const arrays: (keyof Profile)[] = ['gifts', 'serves', 'problems', 'experiences', 'feedback', 'journal', 'statements', 'careerViews', 'saved', 'compare', 'simulations', 'outcomeCheckIns', 'experiments', 'roadmaps', 'activeDays', 'seenBadges', 'roiChecked', 'conversations'];
+  const arrays: (keyof Profile)[] = ['gifts', 'serves', 'problems', 'experiences', 'feedback', 'journal', 'statements', 'careerViews', 'saved', 'compare', 'simulations', 'outcomeCheckIns', 'experiments', 'roadmaps', 'activeDays', 'seenBadges', 'roiChecked', 'conversations', 'counselorShares'];
   for (const k of arrays) if (!Array.isArray(out[k])) (out as unknown as Record<string, unknown>)[k] = [];
   const records: (keyof Profile)[] = ['interests', 'skills', 'aptitudes', 'workStyle', 'values', 'lifestyle', 'completed', 'principleNotes', 'careerStatus', 'reality', 'drafts'];
   for (const k of records) {
@@ -103,7 +114,10 @@ export function normalizeProfile(input: unknown): Profile {
   if (typeof out.seenLevel !== 'number') out.seenLevel = 0;
   // Older profiles get a code on first load; malformed codes are replaced.
   if (typeof out.code !== 'string' || !normalizeCode(out.code)) out.code = generateCode();
+  if (typeof out.memberId !== 'string' || !/^CLD(?:-[2-9A-HJ-NP-TV-Z]{4}){3}$/.test(out.memberId)) out.memberId = generateMemberId();
   if (typeof out.counselorShareId !== 'string' || !/^learner_[a-z0-9-]{8,}$/i.test(out.counselorShareId)) out.counselorShareId = uid('learner');
+  out.counselorShares = out.counselorShares.filter((share) => share && typeof share.counselorId === 'string' && typeof share.shareKey === 'string');
+  if (typeof out.lastName !== 'string') out.lastName = undefined;
   return out;
 }
 

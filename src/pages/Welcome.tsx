@@ -16,6 +16,7 @@ export default function Welcome() {
   const navigate = useNavigate();
   const [step, setStep] = useState<0 | 1>(0);
   const [name, setName] = useState(profile.name ?? '');
+  const [lastName, setLastName] = useState(profile.lastName ?? '');
   const [stage, setStage] = useState<Profile['stage']>(profile.stage);
   const [city, setCity] = useState(profile.location?.city ?? '');
   const [state, setState] = useState(profile.location?.state ?? '');
@@ -25,6 +26,7 @@ export default function Welcome() {
     update((p) => {
       p.onboarded = true;
       p.name = name.trim() || undefined;
+      p.lastName = lastName.trim() || undefined;
       p.stage = stage;
       if (city.trim() || state.trim() || zip.trim()) p.location = { city: city.trim() || undefined, state: state.trim().toUpperCase() || undefined, zip: zip.trim() || undefined, considering: p.location?.considering ?? [] };
     });
@@ -49,8 +51,8 @@ export default function Welcome() {
           <div className="callout">
             <Icon name="lock" size={20} />
             <div>
-              <strong className="callout__title">No account needed</strong>
-              Your personal Called profile is stored on this device. You can export it, move it, or delete it anytime.
+              <strong className="callout__title">Your private Called account</strong>
+              No email or ordinary password is required. Your journey code is the private key to your results, and you can export, move or delete them anytime.
             </div>
           </div>
           <details className="restore-details">
@@ -67,11 +69,17 @@ export default function Welcome() {
       ) : (
         <section className="runner__step" aria-labelledby="w2-title">
           <h1 id="w2-title">A little about you</h1>
-          <p className="lead">Both are optional. They help Called speak to where you are.</p>
+          <p className="lead">Everything here is optional. It helps Called speak to where you are.</p>
           <div className="stack-lg">
-            <div className="field">
-              <label htmlFor="name">What should we call you?</label>
-              <input id="name" className="input" value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name" placeholder="First name or nickname" maxLength={40} />
+            <div className="grid grid--2">
+              <div className="field">
+                <label htmlFor="name">What should we call you?</label>
+                <input id="name" className="input" value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name" placeholder="First name" maxLength={40} />
+              </div>
+              <div className="field">
+                <label htmlFor="last-name">Last name</label>
+                <input id="last-name" className="input" value={lastName} onChange={(e) => setLastName(e.target.value)} autoComplete="family-name" placeholder="Last name" maxLength={60} />
+              </div>
             </div>
             <OptionGroup
               legend="Where are you right now?"
@@ -88,7 +96,7 @@ export default function Welcome() {
             />
             <div className="field">
               <label>Optional location context</label>
-              <p className="small muted">A city and state help Called show local pay, training and people to learn from. No GPS, birthdate or account required. You can add other places later in <Link to="/network">Local Connections</Link>.</p>
+              <p className="small muted">A city and state help Called show local pay, training and people to learn from. No GPS or birthdate required. You can add other places later in <Link to="/network">Local Connections</Link>.</p>
               <div className="grid grid--2">
                 <input className="input" aria-label="City" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} maxLength={80} />
                 <input className="input" aria-label="State" placeholder="State" value={state} onChange={(e) => setState(e.target.value)} maxLength={30} />

@@ -385,7 +385,9 @@ export interface Profile {
   createdAt: string;
   updatedAt: string;
   onboarded: boolean;
+  /** First name or preferred name. Kept as `name` for backwards-compatible journey files. */
   name?: string;
+  lastName?: string;
   stage?: 'highSchool' | 'graduated' | 'college' | 'working' | 'other';
   location?: ProfileLocation;
 
@@ -422,8 +424,12 @@ export interface Profile {
 
   /** Unique journey code, e.g. CALL-7KQ2-M9XD-4HPA-R2TW. Used to restore this journey. */
   code: string;
+  /** Stable, share-safe account identifier. It cannot restore or unlock a journey. */
+  memberId: string;
   /** Random pseudonymous key used only to update a student-approved counselor packet. */
   counselorShareId: string;
+  /** Counselors this person deliberately shared a limited report with. */
+  counselorShares: Array<{ counselorId: string; counselorName: string; sharedAt: string; updatedAt: string; shareKey: string }>;
   /** Dates (YYYY-MM-DD) the user did something, for gentle weekly streaks. */
   activeDays: string[];
   /** Badges and level the user has already been celebrated for. */

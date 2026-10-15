@@ -68,7 +68,7 @@ export default function Home() {
               </Link>
             </div>
             <p className="hero__note">
-              <Icon name="lock" size={16} /> No account needed. <Link to="/welcome">Coming back? Use your journey code.</Link>
+              <Icon name="lock" size={16} /> Private by default. <Link to="/welcome">Your journey code is your account key.</Link>
             </p>
           </div>
           <figure className="hero__art">

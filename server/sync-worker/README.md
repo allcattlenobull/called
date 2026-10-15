@@ -1,12 +1,14 @@
 # Called journey sync (optional)
 
-This tiny Cloudflare Worker provides encrypted journey restore, seven-day encrypted report links, and an opt-in validation-research endpoint.
+This tiny Cloudflare Worker provides encrypted journey restore, counselor accounts and encrypted rosters, seven-day encrypted report links, and an opt-in validation-research endpoint.
 
 **Privacy design:** the browser encrypts the journey with a key derived from the code (PBKDF2, 210,000 iterations, then AES-256-GCM) before sending it. The worker stores only ciphertext under a SHA-256 hash of the code. Nobody running the worker can read anyone’s answers or recover a lost code. Entries expire after two years without an update.
 
 Shared reports use a fresh AES key kept after the `#` in the link, so the worker stores ciphertext and never receives the key. They expire after seven days. Research events are a separate, explicit opt-in: they use a random research ID rather than a journey code and exclude names, journals, free text and complete profiles.
 
-Without this worker deployed, journey codes still work on the same device, and *Export my journey* still moves data between devices.
+Counselor accounts use a generated 60-bit public counselor ID and a separate high-entropy private access key. The browser generates an RSA-OAEP key pair; only the public key is readable by people sharing reports. The private key is encrypted in the browser with the counselor’s access key. Each person’s limited report is encrypted with a fresh AES-GCM key, which is then encrypted to the counselor’s public key. The Worker stores ciphertext and cannot read names or results. Losing the counselor access key means losing roster access; there is intentionally no server-side recovery.
+
+Without this worker deployed, individual accounts and journey codes still work on the same device, *Export my journey* still moves data between devices, and counselors can use the local packet workspace. Connected counselor accounts require this Worker.
 
 ## Deploy (about 10 minutes, free tier is plenty)
 
@@ -41,6 +43,11 @@ The site turns on cross-device restore automatically once `SYNC_URL` is set. Use
 | `PUT` | `/v1/journeys/:id` | `{"v":1,"iv":"…","ct":"…"}` (max 512 KB) | `{"ok":true}` |
 | `DELETE` | `/v1/journeys/:id` | | `{"ok":true}` |
 | `GET/PUT/DELETE` | `/v1/shares/:id` | Encrypted payload for PUT | Seven-day encrypted report |
+| `POST` | `/v1/counselors` | Public key, wrapped private key, names and access verifier | Creates a counselor account |
+| `GET` | `/v1/counselors/:id` | | Public counselor identity and encryption key |
+| `GET` | `/v1/counselors/:id/account` | Counselor access-key bearer header | Private account metadata |
+| `GET/PUT` | `/v1/counselors/:id/records` | Authenticated list or person-encrypted report | Counselor roster records |
+| `DELETE` | `/v1/counselors/:id/records/:memberId` | Counselor access-key bearer header | Removes a roster record |
 | `POST` | `/v1/research/events` | De-identified consented event | `{"ok":true}` |
 | `DELETE` | `/v1/research/participants/:id` | | Deletes that participant’s events |
 | `GET` | `/v1/research/export` | Bearer token header | Up to 1,000 research events |

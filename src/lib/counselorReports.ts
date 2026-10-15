@@ -11,8 +11,11 @@ import { giftSignals } from './signals';
 export interface CounselorPacket {
   app: 'called';
   kind: 'counselor-report';
-  version: 1;
+  version: 2;
   studentId: string;
+  memberId: string;
+  firstName?: string;
+  lastName?: string;
   displayName?: string;
   generatedAt: string;
   journeyUpdatedAt: string;
@@ -36,9 +39,12 @@ export function createCounselorPacket(profile: Profile, includeName: boolean): C
   return {
     app: 'called',
     kind: 'counselor-report',
-    version: 1,
-    studentId: profile.counselorShareId,
-    displayName: includeName && profile.name ? profile.name : undefined,
+    version: 2,
+    studentId: profile.memberId,
+    memberId: profile.memberId,
+    firstName: includeName ? profile.name : undefined,
+    lastName: includeName ? profile.lastName : undefined,
+    displayName: includeName ? [profile.name, profile.lastName].filter(Boolean).join(' ') || undefined : undefined,
     generatedAt: new Date().toISOString(),
     journeyUpdatedAt: profile.updatedAt,
     summary: {
@@ -68,9 +74,13 @@ export function counselorPacketFile(packet: CounselorPacket): File {
 }
 
 export function parseCounselorPacket(value: string): CounselorPacket {
-  const packet = JSON.parse(value) as Partial<CounselorPacket>;
-  if (packet.app !== 'called' || packet.kind !== 'counselor-report' || packet.version !== 1 || typeof packet.studentId !== 'string' || !packet.summary || !Array.isArray(packet.topCareers) || !Array.isArray(packet.paths)) {
+  const packet = JSON.parse(value) as Omit<Partial<CounselorPacket>, 'version'> & { version?: number };
+  if (packet.app !== 'called' || packet.kind !== 'counselor-report' || ![1, 2].includes(packet.version ?? 0) || typeof packet.studentId !== 'string' || !packet.summary || !Array.isArray(packet.topCareers) || !Array.isArray(packet.paths)) {
     throw new Error('This is not a valid Called counselor packet.');
   }
+  if (packet.version === 1) {
+    return { ...packet, version: 2, memberId: packet.studentId, firstName: packet.displayName } as CounselorPacket;
+  }
+  if (typeof packet.memberId !== 'string') throw new Error('This counselor packet is missing its Called member ID.');
   return packet as CounselorPacket;
 }

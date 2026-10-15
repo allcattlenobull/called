@@ -37,6 +37,7 @@ const ROUTES = [
   'compare/education',
   'path',
   'path/report',
+  'account',
   'network?career=electrician',
   'about',
   'research',

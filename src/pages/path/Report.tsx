@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useStore } from '../../state/store';
 import { topInterests, topSkills, topValues, insights } from '../../lib/compass';
 import { suggestions } from '../../lib/matching';
@@ -18,6 +19,7 @@ import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { createSharedReport, revokeSharedReport, sharedReportsAvailable, type SharedReportLink } from '../../lib/sharedReport';
 import { counselorPacketFile, createCounselorPacket } from '../../lib/counselorReports';
 import { openEmailDraft, shareFile } from '../../lib/email';
+import { counselorAccountsAvailable, findCounselor, shareWithCounselor, type CounselorPublicAccount } from '../../lib/counselorAccounts';
 
 const SECTIONS = [
   { id: 'interests', label: 'Current interests' },
@@ -36,12 +38,15 @@ type SectionId = (typeof SECTIONS)[number]['id'];
 
 export default function Report() {
   useDocumentTitle('My Called report');
-  const { profile } = useStore();
+  const { profile, update } = useStore();
   const [include, setInclude] = useState<Record<SectionId, boolean>>(() => Object.fromEntries(SECTIONS.map((s) => [s.id, true])) as Record<SectionId, boolean>);
   const [showName, setShowName] = useState(true);
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState<SharedReportLink | null>(null);
   const [shareMessage, setShareMessage] = useState('');
+  const [counselorId, setCounselorId] = useState('');
+  const [counselor, setCounselor] = useState<CounselorPublicAccount | null>(null);
+  const [sharingWithCounselor, setSharingWithCounselor] = useState(false);
   const reportRef = useRef<HTMLElement>(null);
 
   const data = useMemo(() => {
@@ -119,7 +124,7 @@ export default function Report() {
             <header className="report__head">
               <Logo size={26} />
               <div>
-                <h1 className="report__title">{showName && profile.name ? `${profile.name}’s exploration report` : 'My exploration report'}</h1>
+                <h1 className="report__title">{showName && profile.name ? `${[profile.name, profile.lastName].filter(Boolean).join(' ')}’s exploration report` : 'My exploration report'}</h1>
                 <p className="small muted">Created {formatDate(new Date().toISOString())}. A snapshot of an ongoing process, not a final answer.</p>
               </div>
             </header>
@@ -252,7 +257,7 @@ export default function Report() {
             {profile.name && (
               <label className="check">
                 <input type="checkbox" checked={showName} onChange={(e) => setShowName(e.target.checked)} />
-                Show my first name
+                Show my full name
               </label>
             )}
           </section>
@@ -307,9 +312,46 @@ export default function Report() {
             )}
             {shareMessage && <p className="small" role="status">{shareMessage}</p>}
           </div>
-          <section className="card stack" aria-labelledby="counselor-share-h">
+          <section className="card stack" id="counselor" aria-labelledby="counselor-share-h">
             <h2 id="counselor-share-h" className="h3">Share with a counselor</h2>
-            <p className="small">A counselor packet includes the structured summary needed for a multi-student workspace. It excludes your journey code, journal, and private assessment responses.</p>
+            <p className="small">A counselor report includes your first and last name, Called member ID and structured results. It excludes your journey code, journal and item-level assessment answers.</p>
+            {counselorAccountsAvailable && (
+              <>
+                {!profile.name || !profile.lastName ? (
+                  <Callout tone="warn">Add your first and last name in <Link to="/account">your account</Link> before sharing with a counselor account.</Callout>
+                ) : (
+                  <>
+                    <label className="field">Counselor ID<input className="input" value={counselorId} onChange={(event) => { setCounselorId(event.target.value); setCounselor(null); }} placeholder="COUN-ABCD-2345-EFGH" autoCapitalize="characters" /></label>
+                    {!counselor ? (
+                      <button type="button" className="btn btn--primary btn--block" disabled={!counselorId.trim()} onClick={async () => {
+                        try { setShareMessage('Finding counselor…'); setCounselor(await findCounselor(counselorId)); setShareMessage(''); }
+                        catch (reason) { setShareMessage(reason instanceof Error ? reason.message : 'Counselor account not found.'); }
+                      }}><Icon name="search" size={18} /> Find counselor</button>
+                    ) : (
+                      <div className="share-confirm">
+                        <p><strong>{counselor.firstName} {counselor.lastName}</strong>{counselor.organization ? <span className="small muted">{counselor.organization}</span> : null}</p>
+                        <button type="button" className="btn btn--primary btn--block" disabled={sharingWithCounselor} onClick={async () => {
+                          setSharingWithCounselor(true);
+                          try {
+                            const prior = profile.counselorShares.find((share) => share.counselorId === counselor.id);
+                            const result = await shareWithCounselor(createCounselorPacket(profile, true), counselor.id, prior?.shareKey);
+                            const now = new Date().toISOString();
+                            update((draft) => {
+                              const existing = draft.counselorShares.find((share) => share.counselorId === result.counselor.id);
+                              if (existing) { existing.counselorName = `${result.counselor.firstName} ${result.counselor.lastName}`; existing.updatedAt = now; existing.shareKey = result.shareKey; }
+                              else draft.counselorShares.push({ counselorId: result.counselor.id, counselorName: `${result.counselor.firstName} ${result.counselor.lastName}`, sharedAt: now, updatedAt: now, shareKey: result.shareKey });
+                            });
+                            setShareMessage(`Results shared with ${result.counselor.firstName} ${result.counselor.lastName}.`);
+                          } catch (reason) { setShareMessage(reason instanceof Error ? reason.message : 'Your counselor report could not be shared.'); }
+                          finally { setSharingWithCounselor(false); }
+                        }}>{sharingWithCounselor ? 'Sharing…' : 'Confirm and share results'}</button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+            {!counselorAccountsAvailable && <p className="small muted">Counselor accounts are not connected in this deployment yet. You can still send a counselor packet directly.</p>}
             <button type="button" className="btn btn--secondary btn--block" onClick={downloadCounselorPacket}><Icon name="download" size={18} /> Download counselor packet</button>
             <button type="button" className="btn btn--quiet btn--block" onClick={async () => {
               try {

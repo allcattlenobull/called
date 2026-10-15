@@ -130,11 +130,11 @@ The *Achievements* page shows the evidence meters first, then levels, badges and
 - Half-finished assessments, puzzle sets and simulations are saved as drafts. The dashboard opens with **Pick up where you left off**.
 - Every journey has a **journey code**. On a shared device, several people can keep separate journeys and switch with their codes. With the optional sync service, the code restores a journey on any device; the data is encrypted with the code before upload.
 - The app asks the browser for persistent storage so data isn’t evicted.
-- Optional city, state, ZIP and up to three considered places stay in the same local profile. No GPS coordinates, birthdate, account, or public networking notes are collected.
+- Optional city, state, ZIP and up to three considered places stay in the same private profile. No GPS coordinates, birthdate or public networking notes are collected.
 
 ## Privacy philosophy
 
-No one deserves a tool that harvests them, least of all people still in school. There are no accounts. Everything lives on the device; the user can export, import, switch and delete journeys. The optional cross-device backup is end-to-end encrypted with the journey code, so the server can’t read it. Reports are built locally and the journal is never included. No analytics or third-party scripts are loaded.
+No one deserves a tool that harvests them, least of all people still in school. Individual accounts require no email identity: a public member ID identifies the account, while a separate high-entropy journey code unlocks it. The profile remains local-first; the user can export, import, switch and delete journeys. Optional cross-device backup is end-to-end encrypted with the journey code. Counselor reports are encrypted to the selected counselor’s public key and never include the journey code, journal or item-level answers. Reports are built locally. Analytics and validation research remain separate opt-ins.
 
 ## Future features
 
