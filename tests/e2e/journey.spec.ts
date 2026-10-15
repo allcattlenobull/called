@@ -322,6 +322,41 @@ test('navigation uses one responsive menu that reaches every section', async ({ 
   }
 });
 
+test('a working adult gets credit for their job, pay, education and skills', async ({ page }) => {
+  await page.goto('now');
+  await page.getByLabel('Closest career to what you do now').fill('teacher');
+  await page.getByRole('button', { name: /High school teacher/ }).click();
+  await page.getByLabel('Yearly pay before taxes').fill('60000');
+  await page.getByLabel('Highest education you’ve finished').selectOption('bachelor');
+  await page.getByLabel(/Field of study/).fill('Education');
+  await page.getByText('No more school than I already have').click();
+  await page.getByRole('button', { name: 'Save where I am now' }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Saved' })).toBeVisible();
+  await page.getByRole('button', { name: /Add the skills high school teachers use/ }).click();
+  await page.getByRole('group', { name: 'How much more school' }).getByRole('button', { name: 'No more school' }).click();
+  const moves = page.locator('.moves');
+  await expect(moves.locator('.move').first()).toBeVisible();
+  await expect(moves.locator('.tag', { hasText: 'No more school' }).first()).toBeVisible();
+  await expect(moves).toContainText('vs. now');
+  await expect(moves).not.toContainText('Registered nurse');
+
+  await page.goto('careers/registered-nurse');
+  await expect(page.locator('.from-here')).toContainText('bridge or accelerated program');
+  await page.goto('careers/hr-specialist');
+  await expect(page.locator('.from-here')).toContainText('No more school');
+
+  await page.goto('compare/education?career=physician-assistant');
+  await expect(page.locator('.roi-place')).toContainText('From where you are');
+  await expect(page.getByLabel('What you’d earn per year instead')).toHaveValue('60000');
+
+  await page.goto('careers');
+  const filters = page.locator('details.filters');
+  await filters.waitFor();
+  if ((await filters.getAttribute('open')) === null) await filters.locator('summary').click();
+  await page.getByLabel('More school from where I am').selectOption('none');
+  await expect(page.getByRole('link', { name: 'Registered nurse', exact: true })).toHaveCount(0);
+});
+
 test('places drive pay, cost of living and study costs', async ({ page }) => {
   await page.goto('places');
   await page.getByLabel('State').first().selectOption('GA');
@@ -344,6 +379,12 @@ test('places drive pay, cost of living and study costs', async ({ page }) => {
   await expect(page.getByLabel('Study or train in')).toHaveValue('TX');
   await expect(page.locator('.roi-place')).toContainText('out of state');
   await expect(page.locator('.roi-place')).toContainText('Many people stay where they study');
+
+  await page.goto('network?career=electrician');
+  const looks = page.locator('section', { has: page.getByRole('heading', { name: 'Look in each of your places' }) });
+  await expect(looks).toContainText('Atlanta area');
+  await expect(looks).toContainText('Texas');
+  await expect(looks.getByRole('link', { name: /IBEW near Texas/ })).toHaveAttribute('href', /google\.com\/maps\/search/);
 });
 
 test('theme toggle cycles auto, light and dark', async ({ page }) => {

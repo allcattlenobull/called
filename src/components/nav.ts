@@ -28,6 +28,7 @@ export const NAV: NavGroup[] = [
     label: 'Discover',
     tagline: 'Know yourself',
     items: [
+      { to: '/now', label: 'Where you are now', blurb: 'Your current job, pay, education and skills, and moves you could make from here', icon: 'briefcase' },
       { to: '/discover', label: 'Assessments', blurb: 'Interests, skills, aptitudes, work style, values and lifestyle', icon: 'discover', match: ['/discover/'] },
       { to: '/purpose', label: 'Purpose', blurb: 'Your gifts, who you want to serve and what you care about', icon: 'purpose', match: ['/purpose/'] },
       { to: '/purpose/journal', label: 'Journal', blurb: 'Private reflections, kept on this device', icon: 'journal' },

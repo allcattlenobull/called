@@ -1,4 +1,5 @@
 import type { Career, ConversationEntry, Profile, ProfileLocation } from '../types';
+import { CAREER_BY_ID } from '../data/careers';
 
 export interface NetworkResource {
   id: string;
@@ -81,7 +82,8 @@ export function outreachScript(career: Career, profile: Profile): string {
   const stage = profile.stage;
   if (stage === 'highSchool') return `Hi — I’m a high school student exploring what working as a ${career.title.toLowerCase()} is really like${where}. Would you be open to a short conversation, an open house, or pointing me toward a student or apprentice who could share what the work and training are like? I’m not asking for a job — I’m trying to learn what to explore next. I’ll be glad to include a teacher, counselor, parent, or other trusted adult.`;
   if (stage === 'college') return `Hi — I’m in college or training and exploring ${career.title.toLowerCase()}${where}. Would you be open to a 20-minute conversation, or point me toward an alumnus, internship contact, or local professional group? I’m not asking for a job — I’m trying to understand the work, training path, and what you wish you had known when you started.`;
-  if (stage === 'working') return `Hi — I’m currently working and considering a career change into ${career.title.toLowerCase()}${where}. Would you be open to a 20-minute conversation, an open house, or pointing me toward someone who helps people explore the field? I’m not asking for a job — I’m trying to understand the work, training path, and what you wish you had known when you started.`;
+  const now = profile.current?.jobTitle || (profile.current?.careerId ? CAREER_BY_ID[profile.current.careerId]?.title.toLowerCase() : undefined);
+  if (stage === 'working') return `Hi — I’m currently ${now ? `working as ${/^[aeiou]/i.test(now) ? 'an' : 'a'} ${now}` : 'working'} and considering a career change into ${career.title.toLowerCase()}${where}. Would you be open to a 20-minute conversation, an open house, or pointing me toward someone who helps people explore the field? I’m not asking for a job — I’m trying to understand the work, training path, and what you wish you had known when you started.`;
   if (stage === 'graduated') return `Hi — I recently graduated and am exploring ${career.title.toLowerCase()}${where}. Would you be open to a 20-minute conversation or point me toward a local professional, training program, or open house? I’m not asking for a job — I’m trying to learn what the work and training path are really like.`;
   return `Hi — I’m exploring what working as a ${career.title.toLowerCase()} is really like${where}. Would you be open to a 20-minute conversation or point me toward someone who could help me understand the work, training path, and what you wish you had known when you started? I’m not asking for a job — I’m trying to learn what to explore next.`;
 }
@@ -107,4 +109,31 @@ export function interviewQuestions(career: Career): string[] {
 export function localContext(profile: Profile): string {
   const place = locationText(profile.location);
   return place ? `near ${place}` : 'in your area';
+}
+
+/** A search on the map for one kind of local help, in one place. */
+export interface PlaceSearch {
+  label: string;
+  query: string;
+  url: string;
+}
+
+/** Google Maps search URL (documented "Maps URLs" format). Opens real, current listings without Called storing them. */
+const mapsSearch = (query: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
+/**
+ * Where to look for people, programs and groups in a specific place. Called doesn't keep a
+ * directory; it opens live searches for established organizations near that place.
+ */
+export function placeSearches(career: Career, where: string): PlaceSearch[] {
+  const job = career.title.toLowerCase();
+  const named = (CAREER_RESOURCES.find(({ test }) => test(career))?.resources ?? []).filter((r) => !/associations|CareerOneStop/i.test(r.name) && !/careeronestop/.test(r.url));
+  const items: [string, string][] = [
+    ...named.map((r): [string, string] => [`${r.name} near ${where}`, `${r.name} ${r.kind === 'career' && /IBEW|United Association/.test(r.name) ? 'local union' : 'chapter'} ${where}`]),
+    [`${career.title} training programs`, `${job} training program ${career.education.level === 'apprenticeship' ? 'apprenticeship ' : ''}${where}`],
+    [`Professional groups for ${job}s`, `${job} professional association chapter ${where}`],
+    ['Community and technical colleges', `community college ${where}`],
+    ['Free career help (American Job Centers)', `American Job Center ${where}`],
+  ];
+  return items.map(([label, query]) => ({ label, query, url: mapsSearch(query) }));
 }

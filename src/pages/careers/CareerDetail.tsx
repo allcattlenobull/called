@@ -13,6 +13,7 @@ import { Conflicts, EvidenceBadge, FitStrip, MatchBars, OverallScore } from '../
 import { SaveButton } from '../../components/CareerCard';
 import { AiImpact } from '../../components/AiImpact';
 import { PlacePay } from '../../components/PlacePay';
+import { FromHere } from '../../components/FromHere';
 import { Icon } from '../../components/Icon';
 import { Callout, OptionGroup } from '../../components/ui';
 import type { CareerStatus, RealityResponse } from '../../types';
@@ -171,6 +172,8 @@ export default function CareerDetail() {
               Called-specific decision support · not a validated prediction. Scores organize your evidence; they don’t predict your future. <Link to="/research#matching">Evidence and limits</Link>
             </p>
           </section>
+
+          <FromHere career={career} profile={profile} />
 
           <section aria-labelledby="reality-h">
             <h2 id="reality-h">Reality check</h2>

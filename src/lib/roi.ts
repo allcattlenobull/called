@@ -1,7 +1,8 @@
 // A transparent education-ROI model. Every assumption is visible and editable in the UI.
-import type { Career } from '../types';
+import type { Career, Profile } from '../types';
 import { ROI_DEFAULTS } from '../data/education/routes';
-import { estimatedEducationCost } from './matching';
+import { estimatedEducationCost, remainingEducationCost } from './matching';
+import { readiness } from './readiness';
 import type { CollegeCosts } from './places';
 
 export interface RoiAssumptions {
@@ -38,6 +39,8 @@ export interface StudyPlan {
   livingAway?: boolean;
   /** Median pay where they'd work afterward. */
   workPay?: number;
+  /** Credits education already finished and uses current pay as what they'd give up. */
+  profile?: Profile;
 }
 
 export function defaultAssumptions(c: Career, plan: StudyPlan = {}): RoiAssumptions {
@@ -45,13 +48,16 @@ export function defaultAssumptions(c: Career, plan: StudyPlan = {}): RoiAssumpti
   const col = plan.college;
   const rates = col ? { uni: plan.outOfState ? col.public4OutOfState : col.public4InState, cc: col.public2InState } : undefined;
   const living = plan.livingAway && c.education.years > 0 && !paid ? (col?.public4RoomBoard ?? 0) : ROI_DEFAULTS.livingCosts;
+  const ready = plan.profile ? readiness(c, plan.profile) : undefined;
+  const years = ready ? ready.years : c.education.years;
+  const currentPay = plan.profile?.current?.pay;
   return {
-    tuition: Math.round(estimatedEducationCost(c, rates)),
-    years: c.education.years,
+    tuition: Math.round(plan.profile ? remainingEducationCost(c, plan.profile, rates) : estimatedEducationCost(c, rates)),
+    years,
     paidWhileTraining: paid,
     medianPay: plan.workPay,
     livingCosts: living,
-    alternativeEarnings: ROI_DEFAULTS.alternativeEarnings,
+    alternativeEarnings: currentPay && currentPay > 0 ? currentPay : ROI_DEFAULTS.alternativeEarnings,
     borrowedShare: ROI_DEFAULTS.borrowedShare,
     loanRate: ROI_DEFAULTS.loanRate,
     repaymentYears: ROI_DEFAULTS.repaymentYears,

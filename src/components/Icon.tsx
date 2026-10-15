@@ -40,6 +40,7 @@ export type IconName =
   | 'copy'
   | 'user'
   | 'pin'
+  | 'briefcase'
   | 'money';
 
 const paths: Record<IconName, ReactElement> = {
@@ -148,6 +149,12 @@ const paths: Record<IconName, ReactElement> = {
   external: <path d="M14 5h5v5M19 5l-8 8M17 14v5H5V7h5" />,
   mail: <path d="M4 6h16v12H4zM4 7l8 6 8-6" />,
   copy: <path d="M9 8h10v12H9zM5 16H4V4h10v1" />,
+  briefcase: (
+    <>
+      <rect x="3.5" y="7" width="17" height="12" rx="2" />
+      <path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3.5 12.5h17" />
+    </>
+  ),
   pin: (
     <>
       <path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z" />

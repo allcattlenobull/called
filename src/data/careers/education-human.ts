@@ -82,7 +82,7 @@ export const educationHuman: Career[] = [
     reality: ['Many students aren’t interested in your subject', 'Grading is endless', 'Discipline and phones are daily battles'],
     frustrations: ['Grading load', 'Student apathy'],
     emotionalDemands: 'Teens bring real struggles; you may be the adult they trust.',
-    related: ['elementary-teacher', 'school-counselor', 'special-education-teacher'],
+    related: ['elementary-teacher', 'school-counselor', 'special-education-teacher', 'instructional-designer'],
     alternativeRoutes: ['Career-and-technical teachers can sometimes certify with industry experience'],
     simulationId: 'teacher',
     experimentIds: ['teach-a-skill', 'lead-something'],

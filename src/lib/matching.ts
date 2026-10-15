@@ -16,6 +16,7 @@ import type { Career, EducationLevel, InterestId, LifestylePrefs, Profile, Value
 import { money } from './format';
 import { aptitudeSignals, average, giftSignals, interestSignals, skillSignals, valueWeights, INTEREST_IDS } from './signals';
 import { marketFor } from './market';
+import { readiness } from './readiness';
 
 export type DimensionId = 'interest' | 'skills' | 'aptitude' | 'values' | 'lifestyle' | 'purpose' | 'education' | 'financial';
 
@@ -293,22 +294,50 @@ function purposeScore(c: Career, p: Profile): DimensionScore {
   return { id: 'purpose', score: pct(average(parts)), reasons };
 }
 
-const MAX_YEARS = { short: 1, two: 2, four: 4, long: 12 } as const;
+const MAX_YEARS = { none: 0, short: 1, two: 2, four: 4, long: 12 } as const;
 
-function educationScore(c: Career, l: LifestylePrefs, conflicts: Conflict[]): DimensionScore {
+function educationScore(c: Career, p: Profile, conflicts: Conflict[]): DimensionScore {
+  const l = p.lifestyle;
   if (!l.trainingYears) return { id: 'education', score: null, reasons: [] };
-  const max = MAX_YEARS[l.trainingYears];
-  const yrs = c.education.years;
+  // Credit what the person has already finished, when they've told us.
+  const ready = readiness(c, p);
+  const yrs = ready ? ready.years : c.education.years;
   const paid = c.education.routes.includes('apprenticeship') || c.education.level === 'apprenticeship';
+  const reasons: string[] = [];
+  if (l.trainingYears === 'none') {
+    if (yrs === 0) {
+      reasons.push(ready ? ready.summary : 'You can start without more school.');
+      return { id: 'education', score: pct(ready?.note ? 0.85 : 1), reasons };
+    }
+    const s = paid ? 0.55 : clamp(0.45 - (yrs - 1) * 0.12, 0.05);
+    if (paid) reasons.push('Training is usually a paid apprenticeship, so you’d earn while you learn.');
+    else conflicts.push({ dimension: 'education', text: `This would take about ${yrs} more year${yrs === 1 ? '' : 's'} of school or training, and you said no more school than you already have.` });
+    return { id: 'education', score: pct(s), reasons };
+  }
+  const max = MAX_YEARS[l.trainingYears];
   let s = yrs <= max ? 1 : clamp(1 - (yrs - max) * 0.18, 0.1);
   if (paid && yrs > max) s = Math.max(s, 0.7); // paid training changes the math
-  const reasons: string[] = [];
-  if (yrs <= max) reasons.push(yrs === 0 ? 'You can start without a degree.' : `Typical training (about ${yrs} year${yrs === 1 ? '' : 's'}) fits what you’re willing to do.`);
+  if (yrs <= max) reasons.push(ready ? ready.summary : yrs === 0 ? 'You can start without a degree.' : `Typical training (about ${yrs} year${yrs === 1 ? '' : 's'}) fits what you’re willing to do.`);
   if (paid) reasons.push('Training is usually paid through an apprenticeship.');
   if (yrs - max >= 2 && !paid) {
-    conflicts.push({ dimension: 'education', text: `This usually takes about ${yrs} years of education after high school, more than you said you want.` });
+    conflicts.push({ dimension: 'education', text: ready ? `From where you are, this takes about ${yrs} more years of school, more than you said you want.` : `This usually takes about ${yrs} years of education after high school, more than you said you want.` });
   }
   return { id: 'education', score: pct(s), reasons };
+}
+
+/** Tuition still ahead from where this person is (credit for degrees already finished). */
+export function remainingEducationCost(c: Career, p: Profile, rates?: { uni?: number | null; cc?: number | null }): number {
+  const total = estimatedEducationCost(c, rates);
+  const r = readiness(c, p);
+  if (!r) return total;
+  if (r.years === 0) return 0;
+  const held = p.current?.education;
+  const uni = rates?.uni ?? ROUTE_BY_ID.college.annualCost;
+  const level = c.education.level;
+  if ((level === 'master' || level === 'doctoral') && (held === 'bachelor' || held === 'master')) return Math.max(0, total - uni * 4);
+  if (level === 'bachelor' && held === 'associate') return uni * 2;
+  if (c.education.years > 0 && r.years < c.education.years) return Math.round((total * r.years) / c.education.years);
+  return total;
 }
 
 const INCOME_TARGET = { modest: 40000, comfortable: 60000, high: 90000, veryHigh: 130000 } as const;
@@ -327,8 +356,15 @@ function financialScore(c: Career, p: Profile, l: LifestylePrefs, conflicts: Con
     else if (c.pay.high >= target) reasons.push(`Median pay is below your goal, but experienced workers can reach it.`);
     if (ratio < 0.75 && c.pay.high < target) conflicts.push({ dimension: 'financial', text: `Typical ${market.payLabel.toLowerCase()} (about ${money(median)}) is well below the ${money(target)} you said you want.` });
   }
+  const now = p.current?.pay;
+  if (now && now > 0 && p.current?.careerId !== c.id) {
+    const ratio = median / now;
+    parts.push(ratio >= 1 ? 1 : clamp(ratio ** 2));
+    if (ratio >= 1.08) reasons.push(`About ${money(median - now)} more a year than you earn now (${market.payLabel.toLowerCase()}).`);
+    if (ratio < 0.8) conflicts.push({ dimension: 'financial', text: `Typical pay (about ${money(median)}) is about ${money(now - median)} less than you earn now. Starting pay after a switch is often lower still.` });
+  }
   if (l.debt) {
-    const cost = estimatedEducationCost(c);
+    const cost = remainingEducationCost(c, p);
     const limit = DEBT_LIMIT[l.debt];
     const s = cost <= limit ? 1 : clamp(limit / cost, 0.1);
     parts.push(s);
@@ -405,7 +441,7 @@ export function matchCareer(c: Career, p: Profile, ctx: MatchContext = buildCont
     values: valuesScore(c, ctx.values, conflicts),
     lifestyle: lifestyleScore(c, p, conflicts),
     purpose: purposeScore(c, p),
-    education: educationScore(c, p.lifestyle, conflicts),
+    education: educationScore(c, p, conflicts),
     financial: financialScore(c, p, p.lifestyle, conflicts),
   };
   const experience = experienceAdjustment(c, p, conflicts);

@@ -4,13 +4,55 @@ import { Icon } from '../components/Icon';
 import { Callout, PageHeader } from '../components/ui';
 import { CAREERS, CAREER_BY_ID } from '../data/careers';
 import { formatDate } from '../lib/format';
-import { conversationsForCareer, interviewQuestions, localContext, outreachScript, resourcesForCareer, shadowRequestScript } from '../lib/network';
+import { conversationsForCareer, interviewQuestions, localContext, outreachScript, placeSearches, resourcesForCareer, shadowRequestScript } from '../lib/network';
+import { consideredPlaces, homePlace, type Place } from '../lib/places';
 import { uid } from '../lib/profile';
 import { smartSearchScore } from '../lib/smartSearch';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
 import { useStore } from '../state/store';
 
 const today = () => new Date().toISOString().slice(0, 10);
+
+/** "Houston, TX" for a metro, "Texas" for a state: the way people search. */
+const searchName = (p: Place) => (p.kind === 'metro' ? `${p.name.split(', ')[0].split('-')[0]}, ${p.state}` : p.name);
+
+function PlaceLooks({ careerId, careerTitle }: { careerId: string; careerTitle: string }) {
+  const { profile } = useStore();
+  const career = CAREER_BY_ID[careerId];
+  const home = homePlace(profile);
+  const places: { place: Place; role: string }[] = [...(home ? [{ place: home, role: 'Where you live' }] : []), ...consideredPlaces(profile).map((place) => ({ place, role: 'Considering' }))];
+  return (
+    <section className="section section--tight" aria-labelledby="places-look-h">
+      <h2 id="places-look-h" className="h3">Look in each of your places</h2>
+      {places.length ? (
+        <>
+          <p className="small muted">Live map searches for established groups and programs connected to {careerTitle.toLowerCase()}. Called doesn’t keep a directory, so you always see current listings. Check that an organization is legitimate before you reach out.</p>
+          <div className="grid grid--3">
+            {places.map(({ place, role }) => (
+              <article key={place.id} className="card place-look">
+                <span className="tag">{role}</span>
+                <h3 className="h4">{place.label}</h3>
+                <ul className="plain small">
+                  {placeSearches(career, searchName(place)).map((s) => (
+                    <li key={s.url}>
+                      <a href={s.url} target="_blank" rel="noreferrer">
+                        {s.label} <Icon name="external" size={13} />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </>
+      ) : (
+        <p className="small">
+          <Link to="/places">Add where you live and places you’d consider</Link> to get searches for training programs, professional groups, colleges and free career help in each place.
+        </p>
+      )}
+    </section>
+  );
+}
 
 function LocationForm() {
   const { profile, update } = useStore();
@@ -129,6 +171,7 @@ export default function Network() {
           <div className="section-head"><div><h2 id="connect-h">Explore this field near you</h2><p className="small muted">Established organizations and learning opportunities, not a social network. Open each source to check current local options.</p></div></div>
           <div className="grid grid--3">{resources.map((resource) => <article className="card network-resource" key={resource.id}><span className="tag">{resource.kind === 'student' ? 'Student opportunity' : resource.kind === 'career' ? 'Career resource' : 'General resource'}</span><h3>{resource.name}</h3><p className="small muted">{resource.description}</p><a className="btn btn--quiet btn--sm" href={resource.url} target="_blank" rel="noreferrer">Open resource <Icon name="external" size={15} /></a></article>)}</div>
         </section>
+        <PlaceLooks careerTitle={active.title} careerId={active.id} />
         <section className="grid grid--2 network-evidence">
           <div className="card stack"><h2 className="h3">Talk to someone in this field near you</h2><p>Use this as a small evidence-building step. You’re asking to learn what the work is really like, not asking a stranger for a job.</p><div className="callout callout--evidence"><Icon name="journal" size={20} /><div><strong className="callout__title">Ask for a conversation</strong><p>{outreachScript(active, profile)}</p><button type="button" className="btn btn--quiet btn--sm" onClick={() => navigator.clipboard?.writeText(outreachScript(active, profile))}>Copy conversation script</button></div></div><div className="callout"><Icon name="careers" size={20} /><div><strong className="callout__title">Ask for a safe way to observe</strong><p>{shadowRequestScript(active, profile)}</p><button type="button" className="btn btn--quiet btn--sm" onClick={() => navigator.clipboard?.writeText(shadowRequestScript(active, profile))}>Copy job-shadow script</button></div></div>{profile.stage === 'highSchool' && <Callout tone="info" title="A note about safety">Prefer school, employer, union, association, or organization channels. Meet at an official workplace, event, or public place. Tell a parent, teacher, counselor, or trusted adult, and avoid sharing unnecessary private information with strangers.</Callout>}</div>
           <ConversationForm careerId={active.id} />

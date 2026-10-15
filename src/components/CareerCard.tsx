@@ -6,6 +6,8 @@ import { moneyK } from '../lib/format';
 import { useStore } from '../state/store';
 import { EvidenceBadge, FitStrip, OverallScore } from './Match';
 import { Icon } from './Icon';
+import { readinessLabel, type Readiness } from '../lib/readiness';
+import type { LocalPay } from '../lib/places';
 
 export function SaveButton({ careerId, compact }: { careerId: string; compact?: boolean }) {
   const { profile, update } = useStore();
@@ -29,7 +31,7 @@ export function SaveButton({ careerId, compact }: { careerId: string; compact?: 
   );
 }
 
-export function CareerCard({ career, match, showMatch = true }: { career: Career; match?: MatchResult; showMatch?: boolean }) {
+export function CareerCard({ career, match, showMatch = true, ready, pay }: { career: Career; match?: MatchResult; showMatch?: boolean; ready?: Readiness; pay?: LocalPay }) {
   return (
     <article className="ccard">
       <div className="ccard__head">
@@ -44,12 +46,12 @@ export function CareerCard({ career, match, showMatch = true }: { career: Career
       <p className="ccard__summary">{career.summary}</p>
       <dl className="ccard__facts">
         <div>
-          <dt>Median pay</dt>
-          <dd>{moneyK(career.pay.median)}</dd>
+          <dt>{pay && pay.scope !== 'national' ? 'Pay where you live' : 'Median pay'}</dt>
+          <dd>{moneyK(pay?.pay ?? career.pay.median)}</dd>
         </div>
         <div>
-          <dt>Training</dt>
-          <dd>{EDUCATION_LEVELS[career.education.level].label}</dd>
+          <dt>{ready ? 'From where you are' : 'Training'}</dt>
+          <dd>{ready ? readinessLabel(ready) : EDUCATION_LEVELS[career.education.level].label}</dd>
         </div>
       </dl>
       {showMatch && match && match.overall !== null && (

@@ -111,6 +111,18 @@ export function normalizeProfile(input: unknown): Profile {
       if (location) location.considering = location.considering.slice(0, 3).filter((x): x is string => typeof x === 'string');
     }
   }
+  if (out.current !== undefined) {
+    const c = out.current as unknown;
+    if (!c || typeof c !== 'object' || Array.isArray(c)) out.current = undefined;
+    else {
+      const cur = out.current!;
+      const EDU = ['none', 'highSchool', 'certificate', 'associate', 'bachelor', 'master', 'doctoral'];
+      if (cur.education !== undefined && !EDU.includes(cur.education)) cur.education = undefined;
+      if (cur.pay !== undefined && !(Number.isFinite(cur.pay) && cur.pay >= 0)) cur.pay = undefined;
+      if (cur.yearsInRole !== undefined && !(Number.isFinite(cur.yearsInRole) && cur.yearsInRole >= 0)) cur.yearsInRole = undefined;
+      for (const k of ['careerId', 'jobTitle', 'field', 'credentials'] as const) if (cur[k] !== undefined && typeof cur[k] !== 'string') cur[k] = undefined;
+    }
+  }
   if (typeof out.seenLevel !== 'number') out.seenLevel = 0;
   // Older profiles get a code on first load; malformed codes are replaced.
   if (typeof out.code !== 'string' || !normalizeCode(out.code)) out.code = generateCode();

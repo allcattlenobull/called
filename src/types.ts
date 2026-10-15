@@ -220,7 +220,8 @@ export interface ValidatedReasoningResult {
 }
 
 export interface LifestylePrefs {
-  trainingYears?: 'short' | 'two' | 'four' | 'long';
+  /** 'none' means no more school than the person already has (see Profile.current.education). */
+  trainingYears?: 'none' | 'short' | 'two' | 'four' | 'long';
   debt?: 'avoid' | 'small' | 'moderate' | 'comfortable';
   income?: 'modest' | 'comfortable' | 'high' | 'veryHigh' | 'notFactor';
   schedule?: 'regular' | 'flexible' | 'shiftsOk' | 'noPref';
@@ -319,6 +320,25 @@ export interface ExperimentLog {
   notes?: string;
 }
 
+/** Highest education someone has finished. */
+export type CompletedEducation = 'none' | 'highSchool' | 'certificate' | 'associate' | 'bachelor' | 'master' | 'doctoral';
+
+/** Where someone is now: used to credit what they already have, not to judge it. */
+export interface CurrentSituation {
+  /** The Called career closest to their current job, if any. */
+  careerId?: string;
+  /** Their own words for the job, e.g. "8th-grade science teacher". */
+  jobTitle?: string;
+  /** Yearly pay before taxes. */
+  pay?: number;
+  yearsInRole?: number;
+  education?: CompletedEducation;
+  /** Field of study for their highest degree or credential. */
+  field?: string;
+  /** Licenses and certifications they hold, e.g. "EMT-B, Firefighter II". */
+  credentials?: string;
+}
+
 /** Optional place context. Stored locally; no coordinates or inferred location are kept. */
 export interface ProfileLocation {
   city?: string;
@@ -398,6 +418,7 @@ export interface Profile {
   lastName?: string;
   stage?: 'highSchool' | 'graduated' | 'college' | 'working' | 'other';
   location?: ProfileLocation;
+  current?: CurrentSituation;
 
   interests: Record<string, LikeAnswer>;
   skills: Partial<Record<SkillId, SkillLevel>>;

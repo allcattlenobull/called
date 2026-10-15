@@ -172,7 +172,7 @@ One structure, shown two ways: dropdown menus on wide screens and a single secti
 
 | Group | Pages |
 | --- | --- |
-| Discover · know yourself | Assessments, Purpose, Journal |
+| Discover · know yourself | Where you are now, Assessments, Purpose, Journal |
 | Explore · find possibilities | Careers, Places and cost of living, Training costs and payoff, Compare careers |
 | Try it · test the work | Career simulations, Real-world experiments, Talk to people near you |
 | My Path · decide your next step | Paths I’m testing, My Called report, Evidence and achievements, Take your evidence to an AI |
@@ -183,3 +183,14 @@ About, research, feedback and terms stay in the footer.
 ## Place is part of the decision
 
 Location shapes pay, prices and where people train, and many people stay where they study. The Places page records where someone lives and up to three places they’d consider. Career pages show median pay in each place (metro, then state, then U.S., always labeled) next to the cost of living and what that pay buys. The training cost tool prices college by the state of study, adds that state’s room and board when living away, and uses pay where the person expects to work afterward.
+
+## Where you are now: credit for what people already have
+
+Career changers and people with some education shouldn't be treated like they're starting from zero. The **Where you are now** page records the closest Called career to their current job, their pay, years in the work, highest education finished, field of study, licenses, and skills (the same answers as the skills assessment).
+
+- **School still needed** (`src/lib/readiness.ts`): a finished degree counts toward degree careers. In licensed or accredited fields (healthcare, engineering, science, accounting, architecture and similar) the degree must be in a matching field; otherwise Called estimates a bridge or accelerated program, and graduate programs credit any bachelor’s plus prerequisites. Apprenticeships and certificates still need their hands-on training, with a note to ask about credit for prior learning when the current job is related.
+- **“No more school than I already have”** is an option in the lifestyle assessment, a filter in the Career Explorer, and a strong signal in matching.
+- **Pay compared with now:** matching and career pages compare median pay where the person lives with their current pay.
+- **Next moves** (`src/lib/nextMoves.ts`) ranks careers by skills that carry over (35%), school still needed (25%), personal fit (20%) and pay change (20%), plus a bonus for curated related careers. Every card says why.
+- **Training costs and payoff** uses only the tuition still ahead and the person’s current pay as the earnings they’d give up.
+- **Talk to people near you** opens live map searches for training programs, professional groups, colleges and American Job Centers in every place the person lives or is considering.

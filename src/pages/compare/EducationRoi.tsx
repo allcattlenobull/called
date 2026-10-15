@@ -8,6 +8,7 @@ import { money } from '../../lib/format';
 import { Callout, PageHeader } from '../../components/ui';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { useStore } from '../../state/store';
+import { readiness } from '../../lib/readiness';
 import { STATE_NAMES, collegeCosts, consideredPlaces, costWords, homePlace, inUsDollars, localPay, placeById, type Place } from '../../lib/places';
 
 function NumberField({ id, label, value, onChange, step = 1000, suffix, hint }: { id: string; label: string; value: number; onChange: (n: number) => void; step?: number; suffix?: string; hint?: string }) {
@@ -42,8 +43,10 @@ export default function EducationRoi() {
   const college = collegeCosts(study || undefined);
   const outOfState = !!study && !!home && study !== home.state;
   const workPay = localPay(career, workPlace);
-  const plan = { college, outOfState, livingAway: away, workPay: workPay.pay };
-  const planKey = JSON.stringify([career.id, study, away, workId]);
+  const plan = { college, outOfState, livingAway: away, workPay: workPay.pay, profile };
+  const planKey = JSON.stringify([career.id, study, away, workId, profile.current ?? null]);
+  const ready = readiness(career, profile);
+  const currentPay = profile.current?.pay;
   const setParam = (k: string, v: string) => {
     const next = new URLSearchParams(params);
     if (v) next.set(k, v);
@@ -151,6 +154,18 @@ export default function EducationRoi() {
                 </button>
               </p>
             )}
+            {ready && (
+              <p className="small" style={{ margin: 0 }}>
+                <strong>From where you are:</strong> {ready.summary}
+                {ready.years < career.education.years && ready.years > 0 ? ` The model uses about ${ready.years} year${ready.years === 1 ? '' : 's'} instead of ${career.education.years}, and only the tuition still ahead.` : ''}
+                {currentPay ? ` Earnings you’d give up are based on your current pay (${money(currentPay)}).` : ''}
+              </p>
+            )}
+            {!profile.current && (
+              <p className="small muted" style={{ margin: 0 }}>
+                Already have a degree, credential or job? <Link to="/now">Add where you are now</Link> so the model credits it and uses your current pay.
+              </p>
+            )}
             {!home && (
               <p className="small muted" style={{ margin: 0 }}>
                 <Link to="/places">Add where you live and places you’d consider</Link> to compare in-state prices and local pay.
@@ -208,7 +223,7 @@ export default function EducationRoi() {
               <NumberField id="tuition" label="Total tuition and fees" value={a.tuition} onChange={(n) => set('tuition', n)} hint="Before grants and scholarships." />
               <NumberField id="years" label="Years of training" value={a.years} step={1} onChange={(n) => set('years', n)} />
               <NumberField id="living" label="Living costs per year while training" value={a.livingCosts} onChange={(n) => set('livingCosts', n)} hint="Leave at 0 if you’d live at home." />
-              <NumberField id="alt" label="What you’d earn per year instead" value={a.alternativeEarnings} onChange={(n) => set('alternativeEarnings', n)} hint="Full-time work right after high school." />
+              <NumberField id="alt" label="What you’d earn per year instead" value={a.alternativeEarnings} onChange={(n) => set('alternativeEarnings', n)} hint={currentPay ? 'What you earn now. Lower it if you could keep working part-time while training.' : 'Full-time work right after high school.'} />
               <NumberField id="borrow" label="Share you’d borrow" value={Math.round(a.borrowedShare * 100)} step={5} suffix="%" onChange={(n) => set('borrowedShare', Math.min(100, n) / 100)} />
               <NumberField id="rate" label="Loan interest rate" value={Math.round(a.loanRate * 1000) / 10} step={0.5} suffix="%" onChange={(n) => set('loanRate', n / 100)} />
             </div>

@@ -193,6 +193,7 @@ export const LIFESTYLE_QUESTIONS: LifestyleQuestion[] = [
     key: 'trainingYears',
     question: 'How long are you willing to train after high school?',
     options: [
+      { value: 'none', label: 'No more school than I already have' },
       { value: 'short', label: 'As short as possible, a year or less' },
       { value: 'two', label: 'Up to about 2 years' },
       { value: 'four', label: 'Up to about 4 years' },

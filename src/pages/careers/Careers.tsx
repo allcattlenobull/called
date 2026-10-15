@@ -1,3 +1,5 @@
+import { readiness } from '../../lib/readiness';
+import { homePlace, localPay } from '../../lib/places';
 import { AI_BANDS, aiExposure, careerAiBand, type AiBand } from '../../lib/ai';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -8,11 +10,11 @@ import { rankCareers } from '../../lib/matching';
 import { CareerCard } from '../../components/CareerCard';
 import { EmptyState, PageHeader } from '../../components/ui';
 import { Icon } from '../../components/Icon';
-import type { CareerFamily, EducationLevel, InterestId, Career } from '../../types';
+import type { CareerFamily, EducationLevel, InterestId, Career, Profile } from '../../types';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { smartSearchScore } from '../../lib/smartSearch';
 
-type Sort = 'match' | 'az' | 'pay' | 'outlook' | 'training' | 'ai';
+type Sort = 'match' | 'az' | 'pay' | 'outlook' | 'training' | 'ai' | 'raise';
 
 interface Filters {
   maxEducation: EducationLevel | '';
@@ -25,13 +27,14 @@ interface Filters {
   orientation: '' | 'people' | 'data';
   schedule: '' | 'regular';
   ai: '' | AiBand;
+  fromHere: '' | 'none' | 'short';
   entrepreneurial: boolean;
   saved: boolean;
 }
 
-const EMPTY: Filters = { maxEducation: '', minPay: 0, family: '', interest: '', remote: '', physical: '', outlook: '', orientation: '', schedule: '', ai: '', entrepreneurial: false, saved: false };
+const EMPTY: Filters = { maxEducation: '', minPay: 0, family: '', interest: '', remote: '', physical: '', outlook: '', orientation: '', schedule: '', ai: '', fromHere: '', entrepreneurial: false, saved: false };
 
-function applyFilters(c: Career, f: Filters, q: string, saved: string[]): boolean {
+function applyFilters(c: Career, f: Filters, q: string, saved: string[], profile: Profile): boolean {
   if (q) {
     if (careerSearchScore(c, q) < 0) return false;
   }
@@ -48,6 +51,10 @@ function applyFilters(c: Career, f: Filters, q: string, saved: string[]): boolea
   if (f.orientation === 'data' && c.peopleData > -1) return false;
   if (f.schedule === 'regular' && c.schedule !== 'regular') return false;
   if (f.ai && careerAiBand(c.id) !== f.ai) return false;
+  if (f.fromHere) {
+    const r = readiness(c, profile);
+    if (r && r.years > (f.fromHere === 'short' ? 1 : 0)) return false;
+  }
   if (f.entrepreneurial && c.entrepreneurial < 3) return false;
   if (f.saved && !saved.includes(c.id)) return false;
   return true;
@@ -64,11 +71,13 @@ export default function Careers() {
   const [q, setQ] = useState(params.get('q') ?? '');
   const [f, setF] = useState<Filters>(() => ({ ...EMPTY, family: (params.get('family') as CareerFamily) || '' }));
   const ranked = useMemo(() => rankCareers(profile), [profile]);
+  const home = useMemo(() => homePlace(profile), [profile]);
+  const knowsEducation = !!profile.current?.education;
   const hasMatches = ranked.some((r) => r.match.overall !== null);
   const sort = (params.get('sort') as Sort) || (hasMatches ? 'match' : 'az');
 
   const results = useMemo(() => {
-    const list = ranked.filter((r) => applyFilters(r.career, f, q.trim(), profile.saved));
+    const list = ranked.filter((r) => applyFilters(r.career, f, q.trim(), profile.saved, profile));
     const by: Record<Sort, (a: (typeof list)[0], b: (typeof list)[0]) => number> = {
       match: (a, b) => (b.match.overall ?? -1) - (a.match.overall ?? -1),
       az: (a, b) => a.career.title.localeCompare(b.career.title),
@@ -76,9 +85,10 @@ export default function Careers() {
       outlook: (a, b) => OUTLOOK[b.career.outlook].rank - OUTLOOK[a.career.outlook].rank,
       training: (a, b) => a.career.education.years - b.career.education.years,
       ai: (a, b) => (aiExposure(a.career.id) ?? 1) - (aiExposure(b.career.id) ?? 1),
+      raise: (a, b) => localPay(b.career, home).pay - localPay(a.career, home).pay,
     };
     return [...list].sort((a, b) => q.trim() ? careerSearchScore(b.career, q) - careerSearchScore(a.career, q) || by[sort](a, b) : by[sort](a, b));
-  }, [ranked, f, q, sort, profile.saved]);
+  }, [ranked, f, q, sort, profile, home]);
 
   const [limit, setLimit] = useState(24);
   useEffect(() => setLimit(24), [f, q, sort]);
@@ -112,6 +122,12 @@ export default function Careers() {
               <Icon name="filter" size={18} /> Filters {activeCount > 0 && <span className="tag tag--primary">{activeCount} on</span>}
             </summary>
             <div className="filters__body">
+              <FilterSelect id="f-here" label="More school from where I am" value={f.fromHere} onChange={(v) => set('fromHere', v as Filters['fromHere'])} options={[{ value: 'none', label: 'None: use what I have' }, { value: 'short', label: 'Up to about a year' }]} />
+              {f.fromHere && !knowsEducation && (
+                <p className="small muted filters__hint">
+                  <Link to="/now">Add your education</Link> so this filter knows what you already have.
+                </p>
+              )}
               <FilterSelect id="f-edu" label="Most education I’d do" value={f.maxEducation} onChange={(v) => set('maxEducation', v as EducationLevel | '')} options={(Object.keys(EDUCATION_LEVELS) as EducationLevel[]).map((k) => ({ value: k, label: EDUCATION_LEVELS[k].label }))} />
               <FilterSelect
                 id="f-pay"
@@ -168,6 +184,7 @@ export default function Careers() {
                 <option value="outlook">Fastest growing</option>
                 <option value="training">Shortest training</option>
                 <option value="ai">Least exposed to AI</option>
+                <option value="raise">{home ? 'Highest pay where I live' : 'Highest pay'}</option>
               </select>
             </div>
           </div>
@@ -185,7 +202,7 @@ export default function Careers() {
               <div className="grid grid--2">
                 {results.slice(0, limit).map(({ career, match }, i) => (
                   <div key={career.id} className="card-enter" style={{ ['--i' as string]: i % 24 }}>
-                    <CareerCard career={career} match={match} />
+                    <CareerCard career={career} match={match} ready={knowsEducation ? readiness(career, profile) : undefined} pay={home ? localPay(career, home) : undefined} />
                   </div>
                 ))}
               </div>

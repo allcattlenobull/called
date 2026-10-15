@@ -28,6 +28,7 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 const Achievements = lazy(() => import('./pages/Achievements'));
 const Network = lazy(() => import('./pages/Network'));
 const Places = lazy(() => import('./pages/Places'));
+const WhereNow = lazy(() => import('./pages/WhereNow'));
 const ResearchCheckIn = lazy(() => import('./pages/ResearchCheckIn'));
 const SharedReport = lazy(() => import('./pages/SharedReport'));
 const Feedback = lazy(() => import('./pages/Feedback'));
@@ -83,6 +84,7 @@ export function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/network" element={<Network />} />
             <Route path="/places" element={<Places />} />
+            <Route path="/now" element={<WhereNow />} />
             <Route path="/about" element={<About />} />
             <Route path="/research" element={<Research />} />
             <Route path="/data" element={<YourData />} />

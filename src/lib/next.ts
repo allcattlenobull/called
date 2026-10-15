@@ -14,6 +14,9 @@ export interface NextAction {
 /** The single most useful things to do next, so the next step is always visible. */
 export function nextActions(p: Profile, limit = 3): NextAction[] {
   const out: NextAction[] = [];
+  if (!p.current && (p.stage === 'working' || p.stage === 'graduated' || p.stage === 'college')) {
+    out.push({ id: 'now', title: 'Tell Called where you are now', why: 'Your job, pay, education and skills count. Called will show moves that need no more school than you have.', to: '/now', kind: 'discover' });
+  }
   const missing = ASSESSMENTS.filter((a) => !p.completed[a.id]);
   for (const a of missing.slice(0, 2)) {
     out.push({ id: `a-${a.id}`, title: `${a.title}: ${a.question}`, why: `${a.minutes} minutes. ${a.blurb}`, to: `/discover/${a.id}`, kind: 'discover' });

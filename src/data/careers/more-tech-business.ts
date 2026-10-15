@@ -330,7 +330,7 @@ export const moreBusiness = [
     int: 'lead3 organize3 help1', skills: ['leadership', 'organization', 'analysis', 'communication'], apt: ['logical'],
     plus: ['income', 'leadership', 'meaningful', 'stability'], minus: ['familyTime'],
     ws: { social: 2, variety: 1 }, gifts: ['leading', 'organizing'], serves: ['patients', 'organizations', 'communities'], problems: ['health'],
-    edu: ['master', 6, ['college', 'graduate'], 'A bachelor’s plus experience; many have a master’s in health administration (MHA).', ['Health administration', 'Business'], ['MHA (common)']],
+    edu: ['bachelor', 4, ['college', 'graduate'], 'A bachelor’s plus experience is the usual entry; many have a master’s in health administration (MHA), which helps for senior roles.', ['Health administration', 'Business'], ['MHA (common)']],
     pay: [117960, 69000, 216000],
     outlook: 'muchFaster', env: 'Hospitals, clinics, nursing homes', sched: 'regular', remote: 'some', levels: [1, 1, 3, 1], pd: 1,
     does: ['Manage budgets and staff', 'Improve quality and safety', 'Follow regulations', 'Plan services'],

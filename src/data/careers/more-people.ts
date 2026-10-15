@@ -104,7 +104,7 @@ export const morePeople = [
     int: 'create2 help2 organize2', skills: ['teaching', 'writing', 'technology', 'creativity'], apt: ['verbal'],
     plus: ['flexibility', 'creativity', 'familyTime'], minus: [],
     ws: { social: 0, structure: 1, handsIdeas: -2 }, gifts: ['teaching', 'creating', 'organizing'], serves: ['organizations', 'teens'], problems: ['education'],
-    edu: ['master', 5, ['college', 'graduate'], 'A bachelor’s plus teaching or training experience; many have a master’s.', ['Instructional design', 'Education']],
+    edu: ['bachelor', 4, ['college', 'graduate'], 'A bachelor’s plus teaching or training experience is the usual entry; many have a master’s, which helps in K-12 roles.', ['Instructional design', 'Education']],
     pay: [74720, 46000, 115000],
     outlook: 'average', env: 'Offices, universities, remote', sched: 'regular', remote: 'common', levels: [1, 1, 1, 1], pd: 0,
     does: ['Analyze what learners need', 'Design lessons and videos', 'Build online courses', 'Measure results'],
