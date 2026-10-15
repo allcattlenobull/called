@@ -30,7 +30,7 @@ export default function Welcome() {
       p.name = name.trim() || undefined;
       p.lastName = lastName.trim() || undefined;
       p.stage = stage;
-      if (city.trim() || state.trim() || zip.trim()) p.location = { city: city.trim() || undefined, state: state.trim().toUpperCase() || undefined, zip: zip.trim() || undefined, considering: p.location?.considering ?? [] };
+      if (city.trim() || state.trim() || zip.trim()) p.location = { city: city.trim() || undefined, state: state.trim().toUpperCase() || undefined, zip: zip.trim() || undefined, considering: p.location?.considering ?? [], place: p.location?.state === (state.trim().toUpperCase() || undefined) ? p.location?.place : undefined };
     });
     navigate(to);
   };

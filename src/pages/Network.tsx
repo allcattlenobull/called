@@ -27,7 +27,8 @@ function LocationForm() {
       update((p) => { delete p.location; });
     } else {
       update((p) => {
-        p.location = { city: city.trim() || undefined, state: state.trim().toUpperCase() || undefined, zip: zip.trim() || undefined, considering };
+        const nextState = state.trim().toUpperCase() || undefined;
+        p.location = { city: city.trim() || undefined, state: nextState, zip: zip.trim() || undefined, considering, place: p.location?.state === nextState ? p.location?.place : undefined };
       });
     }
     setSaved(true);
@@ -36,7 +37,7 @@ function LocationForm() {
   return (
     <section className="card" aria-labelledby="location-h">
       <h2 id="location-h" className="h3">Where might you live or work?</h2>
-      <p className="small muted">Optional. A city and state help Called show pay, outlook, apprenticeships, associations, and workforce resources without using GPS or requiring an account.</p>
+      <p className="small muted">Optional. A city and state help Called show pay, outlook, apprenticeships, associations, and workforce resources without using GPS or requiring an account. To compare cost of living, college costs and pay across places, use <Link to="/places">Places and cost of living</Link>.</p>
       <div className="grid grid--2">
         <div className="field"><label htmlFor="network-city">City</label><input id="network-city" className="input" value={city} onChange={(e) => setCity(e.target.value)} maxLength={80} autoComplete="address-level2" /></div>
         <div className="field"><label htmlFor="network-state">State</label><input id="network-state" className="input" value={state} onChange={(e) => setState(e.target.value)} maxLength={30} placeholder="MN or Minnesota" autoComplete="address-level1" /></div>
