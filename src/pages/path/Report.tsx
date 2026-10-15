@@ -13,6 +13,7 @@ import { formatDate } from '../../lib/format';
 import { Callout, PageHeader } from '../../components/ui';
 import { Icon } from '../../components/Icon';
 import { Logo } from '../../components/ui';
+import { isDone, learnedInsights, nextBestAction, pathEvidence } from '../../lib/path';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 
 const SECTIONS = [
@@ -25,7 +26,7 @@ const SECTIONS = [
   { id: 'explored', label: 'Careers explored' },
   { id: 'sims', label: 'Simulations completed' },
   { id: 'lessons', label: 'Lessons learned' },
-  { id: 'next', label: 'Next steps' },
+  { id: 'next', label: 'Paths and next steps' },
 ] as const;
 
 type SectionId = (typeof SECTIONS)[number]['id'];
@@ -46,11 +47,23 @@ export default function Report() {
     ];
     const lifestyle = LIFESTYLE_QUESTIONS.filter((q) => profile.lifestyle[q.key]).map((q) => ({ q: q.question, a: q.options.find((o) => o.value === profile.lifestyle[q.key])?.label ?? '' }));
     const lessons = [
+      ...learnedInsights(profile).map((l) => l.text),
       ...insights(profile),
       ...profile.simulations.filter((s) => s.natural).map((s) => `In the ${SIM_BY_ID[s.simulationId]?.role.toLowerCase()} simulation: “${s.natural}”`),
       ...profile.experiments.filter((e) => e.notes).map((e) => `From “${EXPERIMENT_BY_ID[e.experimentId]?.title.toLowerCase()}”: “${e.notes}”`),
     ];
-    const next = profile.roadmaps.flatMap((r) => r.items.filter((i) => !i.done).slice(0, 4).map((i) => `${i.text} (toward ${r.goal})`));
+    const paths = profile.roadmaps
+      .filter((r) => CAREER_BY_ID[r.careerId])
+      .map((r) => {
+        const c = CAREER_BY_ID[r.careerId];
+        const ev = pathEvidence(c, profile);
+        const stage = r.stage === 'leading' ? 'Leading path' : r.stage === 'ruledOut' ? 'Ruled out' : 'Exploring';
+        return `${r.goal}: ${stage}. Evidence: ${ev.level}.${r.stage !== 'ruledOut' ? ` Next best step: ${nextBestAction(c, profile, r, ev).title}.` : ''}`;
+      });
+    const next = [
+      ...paths,
+      ...profile.roadmaps.filter((r) => r.stage !== 'ruledOut' && CAREER_BY_ID[r.careerId]).flatMap((r) => r.items.filter((i) => !isDone(i, CAREER_BY_ID[r.careerId], profile)).slice(0, 3).map((i) => `${i.text} (toward ${r.goal})`)),
+    ];
     return {
       interests: topInterests(profile, 3).map((i) => INTERESTS[i].label),
       strengths,
@@ -60,7 +73,7 @@ export default function Report() {
       top: suggestions(profile, 5),
       explored: Array.from(new Set(profile.careerViews)).slice(0, 12).map((id) => CAREER_BY_ID[id]?.title).filter(Boolean) as string[],
       sims: profile.simulations.map((s) => ({ role: SIM_BY_ID[s.simulationId]?.role, enjoyment: s.enjoyment, regularly: s.regularly })),
-      lessons,
+      lessons: Array.from(new Set(lessons)),
       next,
       counts: progressCounts(profile),
     };
@@ -190,7 +203,7 @@ export default function Report() {
             )}
             {include.next && (
               <section>
-                <h2>Next steps</h2>
+                <h2>Paths being tested and next steps</h2>
                 {data.next.length ? (
                   <ul>
                     {data.next.map((n) => (
@@ -198,7 +211,7 @@ export default function Report() {
                     ))}
                   </ul>
                 ) : (
-                  empty('No roadmap yet.')
+                  empty('No paths being tested yet.')
                 )}
               </section>
             )}

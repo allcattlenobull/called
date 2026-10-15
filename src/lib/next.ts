@@ -29,7 +29,7 @@ export function nextActions(p: Profile, limit = 3): NextAction[] {
   if (!p.problems.length) out.push({ id: 'care', title: 'What problems do you care about?', why: 'Problems you can’t ignore are clues to purpose.', to: '/purpose/care', kind: 'purpose' });
   if (!p.experiments.length) out.push({ id: 'exp', title: 'Run a purpose experiment', why: 'Real-world evidence beats guessing.', to: '/try/experiments', kind: 'try' });
   if (p.saved.length >= 2 && p.comparisons === 0) out.push({ id: 'compare', title: 'Compare your saved careers', why: 'Put pay, training and fit side by side.', to: '/compare', kind: 'careers' });
-  if (p.saved.length && !p.roadmaps.length) out.push({ id: 'path', title: 'Build a roadmap', why: 'Turn one possibility into small next steps.', to: '/path', kind: 'path' });
+  if (p.saved.length && !p.roadmaps.length) out.push({ id: 'path', title: 'Explore a path', why: 'Pick one possibility and gather real evidence about it. Exploring isn’t committing.', to: '/path', kind: 'path' });
   if (!p.statements.length && p.gifts.length && p.serves.length) out.push({ id: 'statement', title: 'Draft your current purpose statement', why: 'It will change, and that’s fine.', to: '/purpose/statement', kind: 'purpose' });
   if (out.length < limit) {
     const remaining = SIMULATIONS.filter((s) => !p.simulations.some((r) => r.simulationId === s.id));

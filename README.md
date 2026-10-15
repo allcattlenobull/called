@@ -55,7 +55,7 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 | **Purpose experiments** | 12 real-world experiments (teach a skill, interview a professional, volunteer, fix something…) with return questions. |
 | **Compare** | Up to three careers side by side across fit, money, education and work-life, with the standout in each row called out. |
 | **Education ROI** | A transparent model of cost, opportunity cost, loan payments, break-even and 10-year net, with every assumption editable. Covers college, community college, certifications, trade school, apprenticeships, military, entrepreneurship and direct-to-work. |
-| **My Path** | Editable roadmaps (Now, Next 6 months, Next 12 months) with progress tracking. |
+| **My Path** | Decision support for the paths you’re testing: evidence level and checklist, why it fits, unanswered questions, the next best step and why, decision gates, leading paths, stage-aware roadmaps (Now, 6 months, 12 months) that check themselves off, and what you’ve learned about yourself. |
 | **My Called report** | A shareable summary for parents and counselors. The user chooses what’s included; the journal is never included. Print, save as PDF, download or copy. |
 | **Achievements** | Levels, 20 badges, weekly quests and celebrations, all earned through real exploration. |
 | **Journey codes** | Every journey has a code like `CALL-7KQ2-M9XD-4HPA-R2TW`. Enter it to return to a journey on a shared device or, with the optional sync service, on any device. |
@@ -84,7 +84,7 @@ Engine (pure functions in src/lib)
    compass.ts   11-dimension Purpose Compass
    matching.ts  8-dimension explainable career match
    roi.ts       education ROI model
-   roadmap.ts   starter roadmaps
+   path.ts      My Path engine: evidence, next best action, gates, stage-aware roadmaps, insights
    │
    ▼
 Data (typed modules in src/data, plus JSON overrides written by automation)
@@ -176,7 +176,7 @@ called/
 │   │   ├── purpose/         journal prompts, purpose sections
 │   │   ├── education/       routes and ROI assumptions
 │   │   └── vocab.ts         skills, values, gifts, interests and other vocabularies
-│   ├── lib/                 engine: signals, compass, matching, roi, roadmap, storage
+│   ├── lib/                 engine: signals, compass, matching, roi, path, storage
 │   ├── pages/               one folder per section
 │   ├── state/store.tsx      profile store and persistence
 │   └── styles/              tokens.css, base.css, components.css, pages.css
@@ -190,8 +190,8 @@ called/
 
 ## Testing
 
-- **Unit (Vitest):** data integrity, brand rules (including an automated check that no warm or beige neutral enters the palette), the matching engine, ROI math, roadmaps, and IndexedDB storage.
-- **End-to-end (Playwright):** every route on desktop and mobile with no console errors, no serious axe accessibility violations, and no horizontal scroll; dark-mode contrast; a full journey from onboarding through an assessment, a reality check, a simulation, a roadmap and the report; export, delete and import; compare and ROI; deep links.
+- **Unit (Vitest):** data integrity, brand rules (including an automated check that no warm or beige neutral enters the palette), the matching engine, ROI math, the My Path engine (evidence, next best action, gates, stage-aware roadmaps, insights), and IndexedDB storage.
+- **End-to-end (Playwright):** every route on desktop and mobile with no console errors, no serious axe accessibility violations, and no horizontal scroll; dark-mode contrast; a full journey from onboarding through an assessment, a reality check, a simulation, exploring a path with a decision gate and reflection, and the report; export, delete and import; compare and ROI; deep links.
 
 ## Future roadmap
 

@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 test.beforeEach(async ({ page }) => {
   await page.addLocatorHandler(page.getByRole('button', { name: 'Keep going', exact: true }), async (btn) => btn.click());
 });
 
-test('a new user can go from onboarding to a roadmap, and it persists', async ({ page }) => {
+test('a new user can go from onboarding to exploring a path, and it persists', async ({ page }) => {
   await page.goto('');
   await expect(page.getByRole('heading', { name: 'You don’t need your whole life figured out.' })).toBeVisible();
   await page.getByRole('link', { name: 'Start your journey' }).first().click();
@@ -69,13 +70,33 @@ test('a new user can go from onboarding to a roadmap, and it persists', async ({
   await page.getByRole('button', { name: 'Save my reflection' }).click();
   await expect(page.getByRole('heading', { name: 'Here’s what changed' })).toBeVisible();
 
-  // Roadmap from the career page
+  // Exploring a path from the career page
   await page.goto('careers/registered-nurse');
-  await page.getByRole('button', { name: 'Create a roadmap' }).click();
+  await page.getByRole('button', { name: 'Explore this path' }).click();
   await expect(page.getByRole('heading', { name: 'Registered nurse' })).toBeVisible();
-  const firstStep = page.locator('.step input[type=checkbox]').first();
-  await firstStep.check();
-  await expect(page.getByText(/1 of \d+ steps done/)).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Paths I’m testing' })).toBeVisible();
+  await expect(page.getByText('Your next best step')).toBeVisible();
+  await expect(page.getByLabel('Evidence checklist')).toContainText('Still interested after the reality check');
+  // Evidence from elsewhere in Called checks steps off automatically.
+  await expect(page.locator('.step__auto', { hasText: 'auto · done' }).first()).toBeVisible();
+  const meter = page.locator('.roadmap__meter .small');
+  const before = await meter.textContent();
+  await page.locator('.step input[type=checkbox]:not([disabled]):not(:checked)').first().check();
+  await expect(meter).not.toHaveText(before!);
+
+  // Decision gate feeds the learning loop
+  if (!(await page.locator('#gate').isVisible())) await page.getByRole('button', { name: 'Check in now' }).click();
+  await page.locator('#gate').getByRole('button', { name: 'Stronger interest' }).click();
+  await expect(page.getByRole('heading', { name: 'How your interest has changed' })).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'your interest grew' })).toBeVisible();
+
+  // Reflection saves to the journal
+  await page.getByLabel('What have you learned that changed the way you think about your future?').fill('Helping people in a crisis gives me energy.');
+  await page.getByRole('button', { name: 'Save to my journal' }).click();
+  await expect(page.getByText('Saved.')).toBeVisible();
+  // A populated My Path stays accessible.
+  const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+  expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).slice(0, 3).join(' | ')}`)).toEqual([]);
 
   // Report includes chosen data, then reload proves persistence on this device
   await page.goto('path/report');

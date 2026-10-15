@@ -28,7 +28,7 @@ DISCOVER → PURPOSE → EXPLORE → EXPERIENCE → REFLECT → COMPARE → PLAN
 | Experience | `/try` | Career simulations and real-world purpose experiments |
 | Reflect | after every simulation and experiment; journal | Record enjoyment, energy, frustration, what felt natural |
 | Compare | `/compare`, `/compare/education` | Side-by-side tradeoffs; education ROI |
-| Plan | `/path` | Editable roadmap: now, 6 months, 12 months |
+| Decide | `/path` | Paths being tested side by side: evidence level, why it fits, open questions, the next best step, decision gates, and a stage-aware roadmap (now, 6 months, 12 months) |
 | Act | roadmap steps, experiments | Do real things; mark progress |
 | Reassess | dashboard, retaking assessments | Recommendations shift as evidence accumulates |
 
@@ -48,7 +48,7 @@ Engine (pure functions)
 ├── compass   11 dimensions × (strength, evidence, summary)
 ├── matching  8 dimensions × (score | null, reasons) + conflicts + confidence + explanation
 ├── roi       cost, opportunity cost, payments, break-even
-├── roadmap   starter steps by career or training route
+├── path      evidence, next best action, decision gates, stage-aware roadmaps, learned insights
 └── next      the next three most useful actions
 ```
 
@@ -132,3 +132,19 @@ Teenagers deserve tools that don’t harvest them. There are no accounts. Everyt
 - Counselor tools that keep the student in control of what’s shared
 - Mentor matching and interview scheduling
 - Translations
+
+
+## My Path: decision support, not a to-do list
+
+My Path is the payoff of everything else in Called. Its job is to answer “What should I explore next, and why?”
+
+- **Paths I’m testing.** Users explore several careers at once. “Explore this path” is deliberately light; exploring isn’t committing.
+- **Evidence, not just progress.** Each path shows an evidence level (Early, Moderate, Strong) built from a transparent checklist: interest match, values match, aptitude or skills, lifestyle fit, the reality check, the simulation, a conversation with a professional, a real-world test, and training costs. Experience counts as much as self-report.
+- **Why this path fits / Still weighing.** Reasons come straight from the matching engine, plus aptitude and simulation results. Conflicts are shown, not hidden.
+- **Biggest unanswered question.** The questions only real experience can answer, most important first.
+- **Next best step, with why.** A fixed priority order (missing assessments → a due check-in → reality check → simulation → interview → real-world test → training costs → roadmap) so the advice is explainable without AI.
+- **Leading paths.** “Make this a leading path” unlocks only once evidence is at least Moderate and includes two kinds of real experience. It can be undone.
+- **Decision gates.** After three new completed steps, Called asks “After what you’ve learned, how interested are you now?” (Stronger, About the same, Less, Rule this path out). Answers update the career’s status, can retire a path (reopenable), and feed “What you’ve learned.”
+- **Smarter roadmaps.** Steps depend on stage of life (high school, college, working), the career’s training route, debt tolerance, staying close to home, and how many careers are saved. Steps that Called can verify (assessments, reality check, simulation, interview, experiments, ROI, comparing) check themselves off. “Re-tailor steps to me” refreshes suggestions while keeping finished and user-written steps.
+- **What you’ve learned.** Patterns that need at least two independent signals, each with its basis shown (for example, “You consistently prefer people-centered work. Seen in your interests and your work style.”).
+- **Reflection.** A quiet closing question about stewardship, with an optional Biblical reflection when the faith lens is on, and a prompt that saves to the journal.

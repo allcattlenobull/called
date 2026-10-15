@@ -6,6 +6,7 @@
 import { ASSESSMENTS, APTITUDE_ITEMS } from '../data/assessments';
 import { SIMULATIONS } from '../data/simulations';
 import type { Profile } from '../types';
+import { stepsDone } from './path';
 
 export interface PointLine {
   id: string;
@@ -23,7 +24,7 @@ const line = (id: string, label: string, count: number, each: number, cap?: numb
 
 export function pointLines(p: Profile): PointLine[] {
   const doneExps = p.experiments.filter((e) => e.status === 'done').length;
-  const steps = p.roadmaps.reduce((s, r) => s + r.items.filter((i) => i.done).length, 0);
+  const steps = stepsDone(p);
   return [
     line('onboard', 'Started your journey', p.onboarded ? 1 : 0, 25),
     line('assess', 'Assessments completed', Object.keys(p.completed).length, 60),
@@ -39,7 +40,7 @@ export function pointLines(p: Profile): PointLine[] {
     line('sims', 'Simulations completed', new Set(p.simulations.map((s) => s.simulationId)).size, 80),
     line('exps', 'Purpose experiments completed', doneExps, 100),
     line('compare', 'Paths compared', p.comparisons, 20, 5),
-    line('roadmaps', 'Roadmaps built', p.roadmaps.length, 40, 3),
+    line('roadmaps', 'Paths explored', p.roadmaps.length, 40, 3),
     line('steps', 'Roadmap steps done', steps, 25, 20),
   ];
 }
@@ -107,8 +108,8 @@ export const BADGES: Badge[] = [
   { id: 'interviewer', name: 'Interviewer', description: 'Interview someone who does the work.', glyph: '?', family: 'life', progress: (p) => [p.experiments.some((e) => e.experimentId === 'interview-pro' && e.status === 'done') ? 1 : 0, 1] },
   { id: 'honest-no', name: 'Honest no', description: 'Rule out a career. Knowing what doesn’t fit is progress.', glyph: '×', family: 'self', progress: (p) => [Object.values(p.careerStatus).includes('notForMe') ? 1 : 0, 1] },
   { id: 'weigher', name: 'Weigh it up', description: 'Compare careers side by side.', glyph: '⇄', family: 'life', progress: (p) => [Math.min(p.comparisons, 1), 1] },
-  { id: 'mapmaker', name: 'Mapmaker', description: 'Build a roadmap.', glyph: '↗', family: 'purpose', progress: (p) => [Math.min(p.roadmaps.length, 1), 1] },
-  { id: 'faithful-steps', name: 'Faithful steps', description: 'Complete five roadmap steps.', glyph: '5', family: 'purpose', progress: (p) => [p.roadmaps.reduce((s, r) => s + r.items.filter((i) => i.done).length, 0), 5] },
+  { id: 'mapmaker', name: 'Mapmaker', description: 'Start exploring a path.', glyph: '↗', family: 'purpose', progress: (p) => [Math.min(p.roadmaps.length, 1), 1] },
+  { id: 'faithful-steps', name: 'Faithful steps', description: 'Complete five steps on paths you’re testing.', glyph: '5', family: 'purpose', progress: (p) => [stepsDone(p), 5] },
   { id: 'steady', name: 'Steady', description: 'Come back three weeks in a row.', glyph: '∞', family: 'self', progress: (p) => [weeklyStreak(p.activeDays), 3] },
 ];
 
@@ -168,7 +169,7 @@ const QUESTS: Quest[] = [
   { id: 'q-feedback', title: 'Ask someone what they see in you', to: '/purpose/feedback', points: 30, available: () => true, done: () => false },
   { id: 'q-experiment', title: 'Commit to a purpose experiment', to: '/try/experiments', points: 100, available: (p) => p.experiments.filter((e) => e.status === 'done').length < 12, done: () => false },
   { id: 'q-explore', title: 'Explore five new careers', to: '/careers', points: 25, available: () => true, done: () => false },
-  { id: 'q-step', title: 'Check off a roadmap step', to: '/path', points: 25, available: (p) => p.roadmaps.length > 0, done: () => false },
+  { id: 'q-step', title: 'Take a step on a path you’re testing', to: '/path', points: 25, available: (p) => p.roadmaps.length > 0, done: () => false },
   { id: 'q-compare', title: 'Compare two careers', to: '/compare', points: 20, available: (p) => p.saved.length >= 2, done: () => false },
 ];
 
@@ -199,7 +200,7 @@ export function questMetric(id: string, p: Profile): number {
     case 'q-explore':
       return new Set(p.careerViews).size;
     case 'q-step':
-      return p.roadmaps.reduce((s, r) => s + r.items.filter((i) => i.done).length, 0);
+      return stepsDone(p);
     case 'q-compare':
       return p.comparisons;
     default:

@@ -12,7 +12,7 @@ import { Stat, EmptyState } from '../components/ui';
 import { CAREER_BY_ID } from '../data/careers';
 import { SIMULATIONS } from '../data/simulations';
 import { formatDate } from '../lib/format';
-import { HORIZONS } from '../lib/roadmap';
+import { learnedInsights, nextBestAction, pathEvidence } from '../lib/path';
 import { LevelCard, Quests } from '../components/Game';
 import { Reveal } from '../components/motion';
 import { unfinished } from '../lib/resume';
@@ -25,11 +25,14 @@ export default function Dashboard() {
   const sugg = useMemo(() => suggestions(profile, 3), [profile]);
   const actions = nextActions(profile, 3);
   const counts = progressCounts(profile);
-  const learned = insights(profile);
+  const learned = useMemo(() => Array.from(new Set([...learnedInsights(profile).map((i) => i.text), ...insights(profile)])), [profile]);
   const exploring = profile.saved.map((id) => CAREER_BY_ID[id]).filter(Boolean).slice(0, 3);
   const newSim = SIMULATIONS.find((s) => !profile.simulations.some((r) => r.simulationId === s.id));
-  const roadmap = profile.roadmaps[0];
-  const openSteps = roadmap?.items.filter((i) => !i.done).slice(0, 3) ?? [];
+  const roadmap = profile.roadmaps.find((r) => r.stage === 'leading') ?? profile.roadmaps.find((r) => r.stage !== 'ruledOut');
+  const pathCareer = roadmap ? CAREER_BY_ID[roadmap.careerId] : undefined;
+  const pathEv = pathCareer ? pathEvidence(pathCareer, profile) : undefined;
+  const pathNext = pathCareer && roadmap && pathEv ? nextBestAction(pathCareer, profile, roadmap, pathEv) : undefined;
+  const testing = profile.roadmaps.filter((r) => r.stage !== 'ruledOut').length;
   const recent = [...profile.journal].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 2);
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
@@ -174,25 +177,21 @@ export default function Dashboard() {
           </Link>
         )}
         <div className="card">
-          <h3>My next steps</h3>
-          {openSteps.length ? (
+          <h3>My path</h3>
+          {pathCareer && pathEv && pathNext ? (
             <>
-              <p className="muted small">Toward {roadmap.goal}</p>
-              <ul className="checklist">
-                {openSteps.map((s) => (
-                  <li key={s.id}>
-                    <Icon name="path" size={16} />
-                    <span>
-                      {s.text} <span className="muted small">({HORIZONS.find((h) => h.id === s.horizon)?.label})</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <Link to="/path">Open My Path</Link>
+              <p className="muted small">
+                {roadmap!.stage === 'leading' ? 'Leading path' : 'Testing'}: <strong>{pathCareer.title}</strong> · Evidence: {pathEv.level}
+                {testing > 1 ? ` · ${testing} paths in testing` : ''}
+              </p>
+              <p className="small">
+                <strong>Next best step:</strong> {pathNext.title}
+              </p>
+              <Link to={`/path?career=${pathCareer.id}`}>Open My Path</Link>
             </>
           ) : (
             <p className="muted">
-              No roadmap yet. <Link to="/path">Build one</Link> when a career feels worth testing.
+              No path yet. <Link to="/path">Explore one</Link> when a career feels worth testing.
             </p>
           )}
         </div>

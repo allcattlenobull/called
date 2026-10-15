@@ -7,6 +7,7 @@ import { computeRoi, defaultAssumptions, type RoiAssumptions } from '../../lib/r
 import { money } from '../../lib/format';
 import { Callout, PageHeader } from '../../components/ui';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
+import { useStore } from '../../state/store';
 
 function NumberField({ id, label, value, onChange, step = 1000, suffix, hint }: { id: string; label: string; value: number; onChange: (n: number) => void; step?: number; suffix?: string; hint?: string }) {
   return (
@@ -28,9 +29,14 @@ export default function EducationRoi() {
   const career = CAREER_BY_ID[careerId];
   const [a, setA] = useState<RoiAssumptions>(() => defaultAssumptions(career));
 
+  const { update } = useStore();
   useEffect(() => {
     setA(defaultAssumptions(career));
-  }, [career]);
+    // Checking the numbers counts as evidence for this path.
+    update((p) => {
+      if (!p.roiChecked.includes(career.id)) p.roiChecked.push(career.id);
+    });
+  }, [career, update]);
 
   const r = useMemo(() => computeRoi(career, a), [career, a]);
   const set = <K extends keyof RoiAssumptions>(k: K, v: RoiAssumptions[K]) => setA((x) => ({ ...x, [k]: v }));

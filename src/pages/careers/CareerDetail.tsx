@@ -7,7 +7,7 @@ import { EXPERIMENT_BY_ID } from '../../data/purpose-experiments';
 import { useStore } from '../../state/store';
 import { estimatedEducationCost, geography, matchCareer } from '../../lib/matching';
 import { money, moneyK } from '../../lib/format';
-import { generateRoadmap } from '../../lib/roadmap';
+import { generateRoadmap } from '../../lib/path';
 import { Conflicts, EvidenceBadge, FitStrip, MatchBars, OverallScore } from '../../components/Match';
 import { SaveButton } from '../../components/CareerCard';
 import { Icon } from '../../components/Icon';
@@ -445,12 +445,18 @@ export default function CareerDetail() {
 
           <section className="card" aria-labelledby="path-h">
             <h2 id="path-h" className="h3">
-              Build a path
+              {roadmap ? (roadmap.stage === 'leading' ? 'A leading path' : roadmap.stage === 'ruledOut' ? 'Ruled out for now' : 'You’re exploring this path') : 'Test this path'}
             </h2>
-            <p className="small muted">Turn this possibility into small, real next steps.</p>
+            <p className="small muted">
+              {roadmap
+                ? roadmap.stage === 'ruledOut'
+                  ? 'You tested it and decided it isn’t for you right now. You can reopen it anytime.'
+                  : 'See your evidence, what’s still unanswered and your next best step.'
+                : 'Exploring isn’t committing. Called drafts a few small steps to gather real evidence, shaped by your stage of life and what you’ve already done.'}
+            </p>
             {roadmap ? (
-              <Link to="/path" className="btn btn--secondary btn--block">
-                Open my roadmap
+              <Link to={`/path?career=${id}`} className="btn btn--secondary btn--block">
+                Open in My Path
               </Link>
             ) : (
               <button
@@ -458,13 +464,14 @@ export default function CareerDetail() {
                 className="btn btn--primary btn--block"
                 onClick={() => {
                   update((p) => {
-                    p.roadmaps.unshift(generateRoadmap(career));
+                    p.roadmaps.unshift(generateRoadmap(career, p));
                     if (!p.saved.includes(id)) p.saved.push(id);
+                    if (!p.careerStatus[id] || p.careerStatus[id] === 'curious') p.careerStatus[id] = 'exploring';
                   });
-                  navigate('/path');
+                  navigate(`/path?career=${id}`);
                 }}
               >
-                Create a roadmap
+                Explore this path
               </button>
             )}
           </section>

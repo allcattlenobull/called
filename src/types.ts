@@ -289,18 +289,42 @@ export interface ExperimentLog {
   notes?: string;
 }
 
+/** Steps that check themselves off when the evidence exists elsewhere in Called. */
+export type AutoCheck = 'sim' | 'interview' | 'reality' | 'experiment' | 'roi' | 'compare' | `assessment:${AssessmentId}`;
+
 export interface RoadmapItem {
   id: string;
   text: string;
   horizon: 'now' | 'six' | 'twelve';
   done: boolean;
+  auto?: AutoCheck;
+  /** Link to where the step can be done in Called. */
+  to?: string;
+  /** Written by the user, so re-tailoring never removes it. */
+  mine?: boolean;
 }
 
+export type GateAnswer = 'stronger' | 'same' | 'less' | 'ruleOut';
+
+export interface DecisionGate {
+  at: string;
+  answer: GateAnswer;
+  /** Evidence level when the user answered, for the interest-over-time line. */
+  evidence: number;
+  /** Roadmap steps done at that moment, so the next gate waits for new evidence. */
+  doneCount?: number;
+  note?: string;
+}
+
+/** A path the user is testing. Exploring is the default; leading is a deliberate later choice. */
 export interface Roadmap {
   careerId: string;
   goal: string;
   createdAt: string;
   items: RoadmapItem[];
+  stage?: 'exploring' | 'leading' | 'ruledOut';
+  gates?: DecisionGate[];
+  stageChangedAt?: string;
 }
 
 /* ---------- The whole stored profile ---------- */
@@ -348,6 +372,8 @@ export interface Profile {
   /** Badges and level the user has already been celebrated for. */
   seenBadges: string[];
   seenLevel: number;
+  /** Careers whose education costs the user has checked in the ROI tool. */
+  roiChecked: string[];
   /** Unfinished work saved so the user can come back and finish it. */
   drafts: Record<string, unknown>;
 }
