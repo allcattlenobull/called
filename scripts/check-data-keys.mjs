@@ -74,6 +74,8 @@ for (const [name, fn] of Object.entries(checks)) {
   }
   rows.push(`| ${name} | ${icon[result[0]]} ${result[0]} | ${result[1].replace(/\|/g, '/')} |`);
   console.log(`${name}: ${result[0]} — ${result[1]}`);
+  // Annotations show on the run page (and through the API) without exposing any key.
+  if (env.GITHUB_ACTIONS) console.log(`::${result[0] === 'ok' ? 'notice' : 'warning'} title=Data key: ${name}::${result[0]} — ${result[1].replace(/[\r\n]/g, ' ')}`);
 }
 const table = ['### Data source keys', '', '| Source | Status | Detail |', '| --- | --- | --- |', ...rows, ''].join('\n');
 if (env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, table);
