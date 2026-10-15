@@ -15,6 +15,7 @@ import { ROUTE_BY_ID } from '../data/education/routes';
 import type { Career, EducationLevel, InterestId, LifestylePrefs, Profile, ValueId, WorkAxis } from '../types';
 import { money } from './format';
 import { aptitudeSignals, average, giftSignals, interestSignals, skillSignals, valueWeights, INTEREST_IDS } from './signals';
+import { marketFor } from './market';
 
 export type DimensionId = 'interest' | 'skills' | 'aptitude' | 'values' | 'lifestyle' | 'purpose' | 'education' | 'financial';
 
@@ -313,16 +314,18 @@ function educationScore(c: Career, l: LifestylePrefs, conflicts: Conflict[]): Di
 const INCOME_TARGET = { modest: 40000, comfortable: 60000, high: 90000, veryHigh: 130000 } as const;
 const DEBT_LIMIT = { avoid: 5000, small: 20000, moderate: 50000, comfortable: 150000 } as const;
 
-function financialScore(c: Career, l: LifestylePrefs, conflicts: Conflict[]): DimensionScore {
+function financialScore(c: Career, p: Profile, l: LifestylePrefs, conflicts: Conflict[]): DimensionScore {
   const parts: number[] = [];
   const reasons: string[] = [];
+  const market = marketFor(c, p);
+  const median = market.pay;
   if (l.income && l.income !== 'notFactor') {
     const target = INCOME_TARGET[l.income];
-    const ratio = c.pay.median / target;
+    const ratio = median / target;
     parts.push(ratio >= 1 ? 1 : clamp(ratio ** 2));
-    if (ratio >= 1) reasons.push(`Median pay around ${money(c.pay.median)} meets your income goal.`);
+    if (ratio >= 1) reasons.push(`${market.payLabel} of about ${money(median)} meets your income goal.`);
     else if (c.pay.high >= target) reasons.push(`Median pay is below your goal, but experienced workers can reach it.`);
-    if (ratio < 0.75 && c.pay.high < target) conflicts.push({ dimension: 'financial', text: `Typical pay (about ${money(c.pay.median)}) is well below the ${money(target)} you said you want.` });
+    if (ratio < 0.75 && c.pay.high < target) conflicts.push({ dimension: 'financial', text: `Typical ${market.payLabel.toLowerCase()} (about ${money(median)}) is well below the ${money(target)} you said you want.` });
   }
   if (l.debt) {
     const cost = estimatedEducationCost(c);
@@ -403,7 +406,7 @@ export function matchCareer(c: Career, p: Profile, ctx: MatchContext = buildCont
     lifestyle: lifestyleScore(c, p, conflicts),
     purpose: purposeScore(c, p),
     education: educationScore(c, p.lifestyle, conflicts),
-    financial: financialScore(c, p.lifestyle, conflicts),
+    financial: financialScore(c, p, p.lifestyle, conflicts),
   };
   const experience = experienceAdjustment(c, p, conflicts);
   const available = DIMENSIONS.filter((d) => dims[d.id].score !== null);

@@ -46,9 +46,9 @@ function simFor(c: Career, p: Profile) {
   return [...p.simulations].reverse().find((s) => s.simulationId === c.simulationId);
 }
 
-/** Interviews aren't tagged by career, so any completed interview counts as evidence. */
-function interviewed(p: Profile) {
-  return p.experiments.some((e) => e.experimentId === 'interview-pro' && e.status === 'done') || p.interviews > 0;
+/** New conversation logs are career-specific; retain the legacy counter as broad evidence. */
+function interviewed(p: Profile, careerId?: string) {
+  return p.conversations.some((entry) => !careerId || entry.careerId === careerId) || p.experiments.some((e) => e.experimentId === 'interview-pro' && e.status === 'done') || p.interviews > 0;
 }
 
 /** A real-world test tied to this career; if none is defined for it, any completed real-world experiment counts. */
@@ -80,7 +80,7 @@ export function pathEvidence(c: Career, p: Profile): PathEvidence {
           },
         ]
       : []),
-    { id: 'interview', label: 'Talked with a professional', met: interviewed(p), missing: 'Haven’t talked with someone who does this work', weight: 2, kind: 'experience' },
+    { id: 'interview', label: 'Talked with a professional', met: interviewed(p, c.id), missing: 'Haven’t talked with someone who does this work', weight: 2, kind: 'experience' },
     { id: 'realworld', label: 'Tested it in the real world', met: realWorld(c, p), missing: 'Haven’t tested it in the real world', weight: 2, kind: 'experience' },
     { id: 'roi', label: 'Checked the cost of training', met: p.roiChecked.includes(c.id) || c.education.years === 0, missing: 'Haven’t looked at training costs', weight: 1, kind: 'experience' },
   ];
@@ -173,10 +173,10 @@ export function nextBestAction(c: Career, p: Profile, r: Roadmap | undefined, ev
   }
   if (!has('interview')) {
     return {
-      title: `Talk to someone who works as a ${job}`,
+      title: 'Talk to someone in this field near you',
       why: `You’ve ${simFor(c, p) ? 'completed the simulation' : 'explored this path'}, but you still have no real-world evidence about what the work environment feels like. One 20-minute conversation can change everything.`,
-      to: '/try/experiments/interview-pro',
-      cta: 'Plan an interview',
+      to: `/network?career=${encodeURIComponent(c.id)}`,
+      cta: 'Find a local connection',
     };
   }
   if (!has('realworld') && c.experimentIds?.length) {
@@ -199,7 +199,7 @@ export function autoDone(auto: AutoCheck, c: Career, p: Profile): boolean {
     case 'sim':
       return !!simFor(c, p);
     case 'interview':
-      return interviewed(p);
+      return interviewed(p, c.id);
     case 'reality':
       return !!p.reality[c.id];
     case 'experiment':
@@ -317,7 +317,7 @@ export function generateRoadmap(c: Career, p?: Profile): Roadmap {
   if (p && !p.completed.values) now.push({ text: 'Finish the values assessment', horizon: 'now', auto: 'assessment:values', to: '/discover/values' });
   now.push({ text: `Read the reality check for ${c.title.toLowerCase()}`, horizon: 'now', auto: 'reality', to: `/careers/${c.id}` });
   if (c.simulationId) now.push({ text: `Complete the “${SIM_BY_ID[c.simulationId].title}” simulation`, horizon: 'now', auto: 'sim', to: `/try/${c.simulationId}` });
-  now.push({ text: `Interview someone who works as a ${c.title.toLowerCase()}`, horizon: 'now', auto: 'interview', to: '/try/experiments/interview-pro' });
+  now.push({ text: `Talk to someone who works as a ${c.title.toLowerCase()}`, horizon: 'now', auto: 'interview', to: `/network?career=${encodeURIComponent(c.id)}` });
   const exp = c.experimentIds?.find((x) => x !== 'interview-pro');
   if (exp && EXPERIMENT_BY_ID[exp]) now.push({ text: `Try a real-world test: ${EXPERIMENT_BY_ID[exp].title.toLowerCase()}`, horizon: 'now', auto: 'experiment', to: `/try/experiments/${exp}` });
 

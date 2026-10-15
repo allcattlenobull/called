@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "data:validate": "vitest run tests/data.test.ts",
-    "data:update": "node scripts/update-career-data.mjs"
+    "data:update": "node scripts/update-career-data.mjs",
+    "data:update:market": "node scripts/update-market-data.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.2.0",

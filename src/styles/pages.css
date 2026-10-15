@@ -20,6 +20,40 @@
 .loading {
   min-height: 60vh;
 }
+
+/* ===== Local connections ===== */
+.network-page .pagehead {
+  margin-bottom: var(--s-6);
+}
+.network-resource {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.network-resource h3 {
+  margin: var(--s-3) 0 var(--s-2);
+}
+.network-resource .btn {
+  margin-top: auto;
+}
+.network-evidence {
+  margin: var(--s-7) 0;
+  align-items: start;
+}
+.network-evidence .callout p {
+  margin: var(--s-2) 0 var(--s-3);
+}
+.network-log {
+  margin-bottom: var(--s-8);
+}
+.network-log__item {
+  padding: var(--s-4) 0;
+  border-top: 1px solid var(--border);
+}
+.network-log__item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
 .form-error {
   color: var(--danger);
   font-weight: 700;

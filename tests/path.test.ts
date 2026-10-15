@@ -58,6 +58,13 @@ describe('next best action', () => {
     const a = nextBestAction(cyber, p, undefined);
     expect(a.title).toMatch(/talk to someone/i);
     expect(a.why).toMatch(/no real-world evidence/);
+    expect(a.to).toBe('/network?career=cybersecurity-analyst');
+  });
+
+  it('satisfies interview evidence with a career-specific conversation log', () => {
+    const p = assessed();
+    p.conversations.push({ id: 'talk_1', careerId: cyber.id, role: 'Security analyst', date: '2026-10-15', notes: 'Learned about the work.' });
+    expect(pathEvidence(cyber, p).checks.find((c) => c.id === 'interview')?.met).toBe(true);
   });
 });
 

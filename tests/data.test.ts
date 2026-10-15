@@ -5,6 +5,7 @@ import { EXPERIMENTS, EXPERIMENT_BY_ID } from '../src/data/purpose-experiments';
 import { INTEREST_ITEMS, APTITUDE_ITEMS, WORK_STYLE_ITEMS } from '../src/data/assessments';
 import { FAMILIES } from '../src/data/vocab';
 import { readFileSync, readdirSync } from 'node:fs';
+import stateMarket from '../src/data/market/state-market.json';
 
 describe('career dataset', () => {
   it('has unique ids', () => {
@@ -43,6 +44,25 @@ describe('career dataset', () => {
       expect(c.imagine.length, c.id).toBeGreaterThan(0);
       expect(c.reality.length, c.id).toBeGreaterThan(1);
       expect(c.responsibilities.length, c.id).toBeGreaterThan(1);
+    }
+  });
+});
+
+describe('market data', () => {
+  it('keeps state records sparse and safe to fall back from', () => {
+    expect(typeof stateMarket.source).toBe('string');
+    const states = stateMarket.states as Record<string, Record<string, { pay?: { median: number }; outlook?: { growth: number; baseYear: number; projectionYear: number } }>>;
+    for (const [state, occupations] of Object.entries(states)) {
+      expect(state).toMatch(/^[A-Z]{2}$/);
+      for (const [soc, record] of Object.entries(occupations)) {
+        expect(soc).toMatch(/^\d{2}-\d{4}$/);
+        if (record.pay) expect(record.pay.median).toBeGreaterThan(0);
+        if (record.outlook) {
+          expect(record.outlook.projectionYear).toBeGreaterThan(record.outlook.baseYear);
+          expect(Number.isFinite(record.outlook.growth)).toBe(true);
+        }
+        expect(record.pay || record.outlook).toBeTruthy();
+      }
     }
   });
 });

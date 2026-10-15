@@ -1,0 +1,6 @@
+{
+  "_comment": "Generated state labor-market data belongs here. Empty state records intentionally fall back to national data; never fill missing values with zero.",
+  "asOf": null,
+  "source": "BLS OEWS state estimates and official state projections (pending refresh)",
+  "states": {}
+}

@@ -143,6 +143,9 @@ test('compare and education ROI work together', async ({ page }) => {
 test('deep links load directly', async ({ page }) => {
   await page.goto('careers/lineworker');
   await expect(page.getByRole('heading', { name: 'Electrical lineworker', level: 1 })).toBeVisible();
+  await page.goto('network?career=electrician');
+  await expect(page.getByRole('heading', { name: 'Local Connections' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Talk to someone in this field near you' })).toBeVisible();
 });
 
 test('unfinished work is saved and offered on return', async ({ page }) => {

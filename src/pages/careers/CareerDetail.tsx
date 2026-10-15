@@ -8,6 +8,7 @@ import { useStore } from '../../state/store';
 import { estimatedEducationCost, geography, matchCareer } from '../../lib/matching';
 import { money, moneyK } from '../../lib/format';
 import { generateRoadmap } from '../../lib/path';
+import { marketFor } from '../../lib/market';
 import { Conflicts, EvidenceBadge, FitStrip, MatchBars, OverallScore } from '../../components/Match';
 import { SaveButton } from '../../components/CareerCard';
 import { Icon } from '../../components/Icon';
@@ -55,6 +56,7 @@ export default function CareerDetail() {
   const simDone = sim && profile.simulations.find((s) => s.simulationId === sim.id);
   const reasons = [...Object.values(match.dimensions).flatMap((d) => d.reasons), ...match.experience.reasons];
   const cost = estimatedEducationCost(career);
+  const market = marketFor(career, profile);
   const range = { min: 20000, max: 240000 };
   const pos = (n: number) => `${Math.max(0, Math.min(100, ((n - range.min) / (range.max - range.min)) * 100))}%`;
   const roadmap = profile.roadmaps.find((r) => r.careerId === id);
@@ -243,12 +245,12 @@ export default function CareerDetail() {
             <div className="card">
               <div className="pay-head">
                 <div>
-                  <span className="stat__value">{money(career.pay.median)}</span>
-                  <span className="stat__label">Median yearly pay in the U.S.</span>
+                  <span className="stat__value">{money(market.pay)}</span>
+                  <span className="stat__label">{market.payLabel}</span>
                 </div>
                 <div>
-                  <span className="pay-outlook">{OUTLOOK[career.outlook].label}</span>
-                  <span className="stat__label">Projected job growth</span>
+                  <span className="pay-outlook">{market.outlookScope === 'state' && market.outlook !== null ? `${market.outlook > 0 ? '+' : ''}${market.outlook}%` : OUTLOOK[career.outlook].label}</span>
+                  <span className="stat__label">{market.outlookScope === 'state' ? 'State 10-year outlook' : 'U.S. outlook'}</span>
                 </div>
               </div>
               <div className="range" aria-label={`Most workers earn between ${money(career.pay.low)} and ${money(career.pay.high)}`} role="img">
@@ -261,9 +263,16 @@ export default function CareerDetail() {
                 <span>Top 10%: {moneyK(career.pay.high)}+</span>
               </div>
               {career.pay.note && <p className="small" style={{ marginTop: 'var(--s-3)' }}>{career.pay.note}</p>}
-              <p className="small muted" style={{ marginTop: 'var(--s-3)', marginBottom: 0 }}>
-                Pay varies a lot by location, experience and employer. Figures are rounded from {DATA_SOURCES.wages}, {DATA_SOURCES.wagesAsOf}.
-              </p>
+              <p className="small muted" style={{ marginTop: 'var(--s-3)', marginBottom: 0 }}>Pay varies by location, experience and employer. {market.payScope === 'state' ? `This uses the ${market.payLabel.toLowerCase()} from ${market.paySource}.` : `No state estimate is available for this occupation yet, so this uses the ${market.payLabel.toLowerCase()} from ${DATA_SOURCES.wages}.`}</p>
+              {market.outlookScope === 'national' && <p className="small muted" style={{ marginTop: 'var(--s-2)', marginBottom: 0 }}>State outlook data is not available for this occupation yet; the U.S. outlook is shown as a category.</p>}
+            </div>
+          </section>
+
+          <section aria-labelledby="nearby-h">
+            <h2 id="nearby-h">Explore this field near you</h2>
+            <div className="card">
+              <p>{profile.location?.city || profile.location?.state ? `Find people, training and organizations connected to ${career.title.toLowerCase()} near ${[profile.location.city, profile.location.state].filter(Boolean).join(', ')}.` : `A short conversation with someone who does this work can answer questions no assessment can. Add a location if you want local pay and resource context.`}</p>
+              <Link to={`/network?career=${encodeURIComponent(career.id)}`} className="btn btn--secondary">Talk to someone in this field near you</Link>
             </div>
           </section>
 

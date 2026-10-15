@@ -24,6 +24,7 @@ const YourData = lazy(() => import('./pages/YourData'));
 const Brand = lazy(() => import('./pages/Brand'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Achievements = lazy(() => import('./pages/Achievements'));
+const Network = lazy(() => import('./pages/Network'));
 
 // The brand system page is an internal tool, not part of the public site. It is available in
 // local development, or in a build made with VITE_SHOW_BRAND=1 (used to render the brand guide PDF).
@@ -60,6 +61,7 @@ export function App() {
             <Route path="/compare/education" element={<EducationRoi />} />
             <Route path="/path" element={<MyPath />} />
             <Route path="/path/report" element={<Report />} />
+            <Route path="/network" element={<Network />} />
             <Route path="/about" element={<About />} />
             <Route path="/data" element={<YourData />} />
             {SHOW_BRAND && <Route path="/brand" element={<Brand />} />}

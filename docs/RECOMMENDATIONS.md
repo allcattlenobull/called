@@ -44,7 +44,7 @@ Each component returns a score from 0 to 100, or **null** when there’s no evid
 | Lifestyle | 1.0 | Average of lookup-table fits for schedule, remote, physical demands, travel, stress vs. balance, business ownership, income stability and location, plus work-style axis similarity `1 − |user − career| / 4`. |
 | Purpose | 1.25 | Average of available parts: gift overlap, service overlap, problem overlap. Each part is `0.15 + 0.85 × min(1, overlap ÷ 2)` (problems ÷ 1.5). |
 | Education fit | 1.0 | 1 if typical years ≤ what the user will do; otherwise −0.18 per extra year (floor 0.1). Paid apprenticeships get a floor of 0.7. |
-| Financial fit | 1.0 | Income: 1 if median ≥ target, else `(median ÷ target)²`. Debt: 1 if estimated tuition ≤ the user’s comfort limit, else `limit ÷ cost` (floor 0.1). |
+| Financial fit | 1.0 | Income: 1 if the market median ≥ target, else `(median ÷ target)²`. The market layer uses a reviewed state median when available and otherwise the national median, without penalizing missing state data. Debt: 1 if estimated tuition ≤ the user’s comfort limit, else `limit ÷ cost` (floor 0.1). |
 
 Income targets: modest $40k, comfortable $60k, high $90k, very high $130k. Debt limits: avoid $5k, small $20k, moderate $50k, comfortable $150k. Tuition estimates use the starting assumptions in `src/data/education/routes.ts`.
 

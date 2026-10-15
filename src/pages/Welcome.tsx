@@ -17,12 +17,16 @@ export default function Welcome() {
   const [step, setStep] = useState<0 | 1>(0);
   const [name, setName] = useState(profile.name ?? '');
   const [stage, setStage] = useState<Profile['stage']>(profile.stage);
+  const [city, setCity] = useState(profile.location?.city ?? '');
+  const [state, setState] = useState(profile.location?.state ?? '');
+  const [zip, setZip] = useState(profile.location?.zip ?? '');
 
   const finish = (to: string) => {
     update((p) => {
       p.onboarded = true;
       p.name = name.trim() || undefined;
       p.stage = stage;
+      if (city.trim() || state.trim() || zip.trim()) p.location = { city: city.trim() || undefined, state: state.trim().toUpperCase() || undefined, zip: zip.trim() || undefined, considering: p.location?.considering ?? [] };
     });
     navigate(to);
   };
@@ -82,6 +86,15 @@ export default function Welcome() {
                 { value: 'other', label: 'Something else' },
               ]}
             />
+            <div className="field">
+              <label>Optional location context</label>
+              <p className="small muted">A city and state help Called show local pay, training and people to learn from. No GPS, birthdate or account required. You can add other places later in <Link to="/network">Local Connections</Link>.</p>
+              <div className="grid grid--2">
+                <input className="input" aria-label="City" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} maxLength={80} />
+                <input className="input" aria-label="State" placeholder="State" value={state} onChange={(e) => setState(e.target.value)} maxLength={30} />
+                <input className="input" aria-label="ZIP code" placeholder="ZIP code (optional)" value={zip} onChange={(e) => setZip(e.target.value.replace(/[^0-9-]/g, '').slice(0, 10))} inputMode="numeric" />
+              </div>
+            </div>
             <label className="check">
               <input type="checkbox" checked={settings.faithLens} onChange={(e) => setSettings({ faithLens: e.target.checked })} />
               <span>

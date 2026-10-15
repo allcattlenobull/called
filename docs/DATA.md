@@ -11,6 +11,8 @@ The catalog contains 178 careers across 15 families and every training level. Ca
 | Field | Source | Notes |
 | --- | --- | --- |
 | Pay | U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OEWS) | National, rounded estimates entered by hand, replaced by official API figures when the update workflow runs |
+| State pay | Official BLS OEWS state estimates, when a reviewed snapshot is configured | Matched by state + SOC; missing records fall back to national and are labeled |
+| State outlook | Official state occupational projections or Projections Central, when a reviewed snapshot is configured | Matched by state + SOC; no local growth value is invented |
 | Outlook | BLS Employment Projections, 2023 to 2033 | Categories: declining, little change, average, faster, much faster |
 | SOC codes | 2018 Standard Occupational Classification | Used to link to O*NET and BLS |
 | Tasks, conditions, reality checks | Written by Called, informed by O*NET OnLine task and work-context data | Rewritten in plain language anyone can follow |
@@ -24,7 +26,7 @@ The catalog contains 178 careers across 15 families and every training level. Ca
 - O*NET® is a trademark of the U.S. Department of Labor, Employment and Training Administration. Called links to O*NET OnLine and uses O*NET information as a reference under its terms; Called is not affiliated with or endorsed by USDOL/ETA.
 - The app shows source attribution on every career page and on the About page.
 
-Called does not scrape websites. Any future data ingestion must use official downloads or APIs within their terms of use.
+Called may use official APIs, bulk downloads, feeds, and responsible web extraction when the source’s terms, robots/access controls, copyright or license, and applicable law permit it. Prefer stable official APIs or downloads when they exist. Do not bypass authentication, paywalls, CAPTCHAs, rate limits, or other technical access controls.
 
 ## Automatic updates
 
@@ -43,6 +45,16 @@ The BLS API works without a key at lower request limits. This repository uses a 
 
 For the workflow to open its pull request, enable **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
 
+### Local market lookup
+
+`src/lib/market.ts` is the single market-data abstraction. Its future lookup order is metro → state → national; the current implementation has a state slot and a national fallback. Career Detail, Financial Fit, and future cost-of-living work all consume `marketFor(career, profile)` instead of reading geography-specific fields directly.
+
+The optional `src/data/market/state-market.json` snapshot is keyed by state abbreviation and SOC. It may contain `pay.median` and/or an `outlook` object with `growth`, `annualOpenings`, `baseYear`, and `projectionYear`. Missing state pay is never treated as zero. The UI explicitly says “U.S. median pay” or “State median pay.”
+
+`npm run data:update:market` imports a reviewed JSON export from `STATE_MARKET_DATA_URL`, validates it, and leaves the existing snapshot untouched on failure. Configure that URL only when it points to an official/state or Projections Central export transformed to the documented shape. The workflow will use it when the repository secret `STATE_MARKET_DATA_URL` is configured. The existing `BLS_GOV` secret continues to serve the national BLS updater.
+
+Cost of living is intentionally not fabricated. The market model leaves room for a future BEA Regional Price Parities layer so nominal salary and local purchasing power remain separate values.
+
 ### Running it locally
 
 ```bash
@@ -57,7 +69,7 @@ If the API call fails, the script exits with an error and leaves the existing da
 
 - **O*NET database import:** generate career skeletons (tasks, work context, interest codes, job zones) from the O*NET database download, then add Called’s plain-language content by hand. The `Career` type already maps onto O*NET concepts (interests ↔ RIASEC, education years ↔ job zones).
 - **Projections:** pull the BLS Employment Projections table to refresh outlook categories.
-- **CareerOneStop:** state-level wages and training providers (requires an API token stored as a secret).
+- **CareerOneStop:** local associations, workforce centers, and training providers. Use an official API or permitted export if state wage data is added later.
 - **College Scorecard:** program-level cost and earnings for the ROI tool (requires an API key stored as a secret).
 
 Each new source should add a section here, a validation test, and a review step before data reaches `main`.

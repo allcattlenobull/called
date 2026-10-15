@@ -132,7 +132,7 @@ How routing works on Pages: GitHub Pages has no single-page-app fallback, so `sc
 | Tasks, reality checks, day in the life | Written by Called, informed by O*NET task and work-context data | Plain-language summaries anyone can follow |
 | Tuition | College Board, *Trends in College Pricing* | Starting assumptions in the ROI tool |
 
-Called does not scrape any website. O*NET is a trademark of the U.S. Department of Labor, Employment and Training Administration; Called is not affiliated with or endorsed by any agency. See [docs/DATA.md](docs/DATA.md) for the update process and attribution.
+Called may use official APIs, bulk downloads, feeds, and responsible public web extraction when the source’s terms, access controls, copyright or license, and applicable law permit it. It never bypasses authentication, paywalls, CAPTCHAs, rate limits, or other technical controls. O*NET is a trademark of the U.S. Department of Labor, Employment and Training Administration; Called is not affiliated with or endorsed by any agency. See [docs/DATA.md](docs/DATA.md) for the update process and attribution.
 
 ## Privacy model
 

@@ -57,7 +57,7 @@ function category(id: EvidenceId, parts: EvidencePart[]): EvidenceCategory {
 
 export function evidenceProfile(p: Profile): EvidenceCategory[] {
   const sims = new Set(p.simulations.map((s) => s.simulationId)).size;
-  const interviewed = p.interviews > 0 || p.experiments.some((e) => e.experimentId === 'interview-pro' && e.status === 'done');
+  const interviewed = p.conversations.length > 0 || p.interviews > 0 || p.experiments.some((e) => e.experimentId === 'interview-pro' && e.status === 'done');
   const experiments = p.experiments.filter((e) => e.status === 'done' && e.experimentId !== 'interview-pro').length;
   const paths = p.roadmaps.filter((r) => CAREER_BY_ID[r.careerId]);
   const bestPath = paths.reduce((best, r) => Math.max(best, pathEvidence(CAREER_BY_ID[r.careerId], p).score), 0);
@@ -79,7 +79,7 @@ export function evidenceProfile(p: Profile): EvidenceCategory[] {
       part('compare', 'Careers compared', p.comparisons, 1, 1, 'Compare two careers side by side', '/compare'),
     ]),
     category('real', [
-      part('interview', 'Talked with a professional', interviewed ? 1 : 0, 1, 3, 'Interview someone who does work you’re curious about', '/try/experiments/interview-pro'),
+      part('interview', 'Talked with a professional', interviewed ? 1 : 0, 1, 3, 'Talk with someone who does work you’re curious about', '/network'),
       part('experiments', 'Real-world experiments', experiments, 3, 3, 'Try a real-world experiment', '/try/experiments'),
       part('experiences', 'Experiences reflected on', p.experiences.length, 3, 2, 'Log something you’ve actually done and how it felt', '/purpose/experiences'),
     ]),

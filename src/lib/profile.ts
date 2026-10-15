@@ -1,6 +1,6 @@
 import type { Profile, Settings } from '../types';
 
-export const PROFILE_VERSION = 1 as const;
+export const PROFILE_VERSION = 2 as const;
 
 export function emptyProfile(): Profile {
   const now = new Date().toISOString();
@@ -15,6 +15,7 @@ export function emptyProfile(): Profile {
     workStyle: {},
     values: {},
     lifestyle: {},
+    location: undefined,
     completed: {},
     gifts: [],
     serves: [],
@@ -34,6 +35,7 @@ export function emptyProfile(): Profile {
     roadmaps: [],
     comparisons: 0,
     interviews: 0,
+    conversations: [],
     code: generateCode(),
     activeDays: [],
     seenBadges: [],
@@ -72,7 +74,7 @@ export function normalizeProfile(input: unknown): Profile {
   const p = input as Partial<Profile>;
   const out: Profile = { ...base, ...p, version: PROFILE_VERSION } as Profile;
   // Guard every array and record so malformed imports degrade gracefully.
-  const arrays: (keyof Profile)[] = ['gifts', 'serves', 'problems', 'experiences', 'feedback', 'journal', 'statements', 'careerViews', 'saved', 'compare', 'simulations', 'experiments', 'roadmaps', 'activeDays', 'seenBadges', 'roiChecked'];
+  const arrays: (keyof Profile)[] = ['gifts', 'serves', 'problems', 'experiences', 'feedback', 'journal', 'statements', 'careerViews', 'saved', 'compare', 'simulations', 'experiments', 'roadmaps', 'activeDays', 'seenBadges', 'roiChecked', 'conversations'];
   for (const k of arrays) if (!Array.isArray(out[k])) (out as unknown as Record<string, unknown>)[k] = [];
   const records: (keyof Profile)[] = ['interests', 'skills', 'aptitudes', 'workStyle', 'values', 'lifestyle', 'completed', 'principleNotes', 'careerStatus', 'reality', 'drafts'];
   for (const k of records) {
@@ -81,6 +83,14 @@ export function normalizeProfile(input: unknown): Profile {
   }
   if (typeof out.comparisons !== 'number') out.comparisons = 0;
   if (typeof out.interviews !== 'number') out.interviews = 0;
+  if (out.location !== undefined) {
+    if (!out.location || typeof out.location !== 'object' || Array.isArray(out.location)) out.location = undefined;
+    else {
+      const location = out.location as Profile['location'];
+      if (location && !Array.isArray(location.considering)) location.considering = [];
+      if (location) location.considering = location.considering.slice(0, 3).filter((x): x is string => typeof x === 'string');
+    }
+  }
   if (typeof out.seenLevel !== 'number') out.seenLevel = 0;
   // Older profiles get a code on first load; malformed codes are replaced.
   if (typeof out.code !== 'string' || !normalizeCode(out.code)) out.code = generateCode();

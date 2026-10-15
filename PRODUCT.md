@@ -14,6 +14,8 @@ Every screen ends with a next step worth exploring. Every score shows its reason
 
 **Secondary: parents, school counselors, teachers, mentors, pastors and youth leaders.** They mostly meet Called through the *My Called report* the person chooses to share, and through the About page’s guidance on asking good questions.
 
+Called adapts language and next steps to stage of life—high school, recently graduated, college or training, working or changing careers, or other—not to a separate age-based scoring system. Exact age appears only when a career page needs to state a legal requirement.
+
 ## User journey
 
 ```
@@ -41,6 +43,7 @@ Profile (one object, stored locally)
 ├── Self-report: interests, skills, aptitudes, workStyle, values, lifestyle
 ├── Purpose: gifts, serves, problems, experiences, feedback, journal, statements, principleNotes
 ├── Experience: simulations, experiments, reality responses, career statuses
+├── Local evidence: optional location context and career-specific conversations
 └── Planning: saved, compare, roadmaps, counters
 
 Engine (pure functions)
@@ -51,6 +54,8 @@ Engine (pure functions)
 ├── path      evidence, next best action, decision gates, stage-aware roadmaps, learned insights
 └── next      the next three most useful actions
 ```
+
+The market layer is one shared abstraction: `marketFor(career, profile)` resolves future metro data first, then reviewed state data, then national data. It returns scope and source labels so local context never masquerades as local certainty.
 
 Because every feature reads and writes the same profile, the product behaves as one system: finishing a simulation changes the compass, the career scores, the dashboard’s suggestions and the report.
 
@@ -125,6 +130,7 @@ The *Achievements* page shows the evidence meters first, then levels, badges and
 - Half-finished assessments, puzzle sets and simulations are saved as drafts. The dashboard opens with **Pick up where you left off**.
 - Every journey has a **journey code**. On a shared device, several people can keep separate journeys and switch with their codes. With the optional sync service, the code restores a journey on any device; the data is encrypted with the code before upload.
 - The app asks the browser for persistent storage so data isn’t evicted.
+- Optional city, state, ZIP and up to three considered places stay in the same local profile. No GPS coordinates, birthdate, account, or public networking notes are collected.
 
 ## Privacy philosophy
 
@@ -133,6 +139,7 @@ No one deserves a tool that harvests them, least of all people still in school. 
 ## Future features
 
 - O*NET-generated catalog with hundreds of careers and state-level wages
+- Metro labor-market data and BEA Regional Price Parities, keeping nominal pay separate from local purchasing power
 - Branching simulations and more fields
 - Optional AI assistance for reflection, purpose statements, explanations, roadmaps and interview prep, grounded in the engine’s structured reasons and never required
 - Counselor tools that keep the student in control of what’s shared

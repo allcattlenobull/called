@@ -289,6 +289,27 @@ export interface ExperimentLog {
   notes?: string;
 }
 
+/** Optional place context. Stored locally; no coordinates or inferred location are kept. */
+export interface ProfileLocation {
+  city?: string;
+  state?: string;
+  zip?: string;
+  /** Other places the person would realistically consider living or working. */
+  considering: string[];
+}
+
+/** A conversation is evidence about a path, not a contact record or CRM entry. */
+export interface ConversationEntry {
+  id: string;
+  careerId: string;
+  name?: string;
+  role: string;
+  organization?: string;
+  location?: string;
+  date: string;
+  notes: string;
+}
+
 /** Steps that check themselves off when the evidence exists elsewhere in Called. */
 export type AutoCheck = 'sim' | 'interview' | 'reality' | 'experiment' | 'roi' | 'compare' | `assessment:${AssessmentId}`;
 
@@ -330,12 +351,13 @@ export interface Roadmap {
 /* ---------- The whole stored profile ---------- */
 
 export interface Profile {
-  version: 1;
+  version: number;
   createdAt: string;
   updatedAt: string;
   onboarded: boolean;
   name?: string;
   stage?: 'highSchool' | 'graduated' | 'college' | 'working' | 'other';
+  location?: ProfileLocation;
 
   interests: Record<string, LikeAnswer>;
   skills: Partial<Record<SkillId, SkillLevel>>;
@@ -364,6 +386,7 @@ export interface Profile {
   roadmaps: Roadmap[];
   comparisons: number;
   interviews: number;
+  conversations: ConversationEntry[];
 
   /** Unique journey code, e.g. CALL-7KQ2-M9XD-4HPA-R2TW. Used to restore this journey. */
   code: string;

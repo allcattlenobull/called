@@ -27,6 +27,12 @@ jobs:
           # Optional. Without a key the BLS API allows fewer requests per day.
           # Stored as the repository secret BLS_GOV (Settings > Secrets and variables > Actions). Never commit keys.
           BLS_API_KEY: ${{ secrets.BLS_GOV }}
+      - name: Fetch reviewed state market data
+        run: npm run data:update:market
+        env:
+          # Optional official/API export transformed to state-market.json's schema.
+          # Keep credentials in the source service or GitHub secret, never in this repo.
+          STATE_MARKET_DATA_URL: ${{ secrets.STATE_MARKET_DATA_URL }}
       - name: Validate data
         run: npm run data:validate
       - name: Open pull request if anything changed
@@ -41,7 +47,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add src/data/careers/overrides/wages.json
+          git add src/data/careers/overrides/wages.json src/data/market/state-market.json
           git commit -m "Update career wage data from BLS"
           git push origin "$branch"
-          gh pr create --title "Update career wage data" --body "Automated refresh from the BLS OEWS public API. Review changes before merging; see docs/DATA.md." --base main --head "$branch"
+          gh pr create --title "Update career market data" --body "Automated refresh from official national/state market sources. Review changes before merging; see docs/DATA.md." --base main --head "$branch"
