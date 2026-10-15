@@ -3,6 +3,7 @@ import { CAREERS, CAREER_BY_ID } from '../src/data/careers';
 import { SIMULATIONS } from '../src/data/simulations';
 import { EXPERIMENTS, EXPERIMENT_BY_ID } from '../src/data/purpose-experiments';
 import { INTEREST_ITEMS, APTITUDE_ITEMS, WORK_STYLE_ITEMS } from '../src/data/assessments';
+import { OMIB_PILOT_ITEMS } from '../src/data/assessments/omibPilot';
 import { FAMILIES } from '../src/data/vocab';
 import { readFileSync, readdirSync } from 'node:fs';
 import stateMarket from '../src/data/market/state-market.json';
@@ -77,6 +78,15 @@ describe('assessments and simulations', () => {
   it('has two work style items per axis and valid aptitude answers', () => {
     expect(WORK_STYLE_ITEMS).toHaveLength(12);
     for (const a of APTITUDE_ITEMS) if (!a.grid) expect(a.answer).toBeLessThan(a.options.length);
+  });
+
+  it('keeps the OMIB pilot item codes and solutions structurally valid', () => {
+    expect(OMIB_PILOT_ITEMS).toHaveLength(10);
+    for (const item of OMIB_PILOT_ITEMS) {
+      expect(item.cells).toHaveLength(9);
+      expect(item.cells.every((cell) => /^[01]{20}$/.test(cell))).toBe(true);
+      expect(item.solution).toMatch(/^[01]{20}$/);
+    }
   });
 
   it('gives every choice step exactly one or more strong options', () => {

@@ -22,8 +22,82 @@ export interface ResearchAudit {
   sources: string[];
 }
 
+export type InstrumentCandidateStatus = 'Best open candidate' | 'Requires permission or registration' | 'Not suitable for production' | 'Adjacent, not aptitude';
+
+export interface InstrumentCandidate {
+  id: string;
+  name: string;
+  construct: string;
+  evidence: string;
+  administration: string;
+  rights: string;
+  decision: string;
+  status: InstrumentCandidateStatus;
+  links: { label: string; url: string }[];
+}
+
 /** Sources are linked to the method they support, not used as borrowed validation. */
 export const RESEARCH_SOURCES: ResearchSource[] = [
+  {
+    id: 'icar-initial-validation',
+    title: 'The International Cognitive Ability Resource: Development and initial validation of a public-domain measure',
+    authors: 'Condon & Revelle',
+    venue: 'Intelligence',
+    year: 2014,
+    url: 'https://doi.org/10.1016/j.intell.2014.01.004',
+    method: 'Development and initial psychometric validation of the public-domain ICAR item resource and 16-item sample test.',
+    relevance: 'The primary source for the ICAR short form under consideration as a replacement for Called’s custom aptitude puzzles.',
+  },
+  {
+    id: 'icar-number-series',
+    title: 'Evaluating an Automated Number Series Item Generator Using Linear Logistic Test Models',
+    authors: 'Arendasy & Sommer',
+    venue: 'Journal of Intelligence',
+    year: 2019,
+    url: 'https://doi.org/10.3390/jintelligence6020020',
+    method: 'Uses the ICAR-16 as a construct-validity benchmark for automatically generated number-series items.',
+    relevance: 'Supports the specific reasoning construct used by ICAR while illustrating that item-generation validity must be tested against an established measure.',
+  },
+  {
+    id: 'icar-mobile-validation',
+    title: 'Validation of International Cognitive Ability Resource (ICAR) Implemented in Mobile Toolbox',
+    authors: 'Young et al.',
+    venue: 'Journal of Intelligence',
+    year: 2025,
+    url: 'https://doi.org/10.3390/jintelligence13120154',
+    method: 'Adult validation study of ICAR Puzzle Completion and Block Rotation with internal consistency, test-retest reliability, and convergent validity against gold-standard measures.',
+    relevance: 'Directly supports web/mobile administration of ICAR components, while showing the evidence is for fluid/nonverbal ability—not occupational fit.',
+  },
+  {
+    id: 'icar-child-validation',
+    title: 'Validation of the Children’s International Cognitive Ability Resource (Ch-ICAR)',
+    authors: 'Dutry et al.',
+    venue: 'Behavior Research Methods',
+    year: 2025,
+    url: 'https://doi.org/10.3758/s13428-024-02591-1',
+    method: 'Validation of an age-specific ICAR form against established cognitive measures for children.',
+    relevance: 'Shows that ICAR forms need population-specific validation; Called should not silently reuse adult evidence for younger users.',
+  },
+  {
+    id: 'omib-validation',
+    title: 'Development and Validation of the Open Matrices Item Bank',
+    authors: 'Koch, Spinath, Greiff & Becker',
+    venue: 'Journal of Intelligence',
+    year: 2022,
+    url: 'https://doi.org/10.3390/jintelligence10030041',
+    method: '220 figural-matrix items evaluated with item-response models, reliability analysis, and measurement-invariance analysis in 2,561 medical-school applicants.',
+    relevance: 'Provides the strongest open item-bank candidate for a faithful web-based reasoning assessment, but the paper reports no predictive or occupational criterion validity.',
+  },
+  {
+    id: 'mars-validation',
+    title: 'An item response theory analysis of the matrix reasoning item bank (MaRs-IB)',
+    authors: 'Zorowitz et al.',
+    venue: 'Behavior Research Methods',
+    year: 2023,
+    url: 'https://doi.org/10.3758/s13428-023-02067-8',
+    method: 'Independent item-response-theory validation of an open matrix-reasoning bank with form construction and convergent validity analysis.',
+    relevance: 'Useful comparison evidence for open reasoning banks, but its reuse terms are non-commercial and its authors caution against treating it as a normative intelligence measure.',
+  },
   {
     id: 'interest-hit-rates',
     title: 'How accurate are interest inventories? A quantitative review of career choice hit rates',
@@ -286,6 +360,81 @@ export const RESEARCH_AUDIT: ResearchAudit[] = [
     limit: 'Called has not demonstrated that points, badges, or journaling cause better career outcomes, and privacy architecture alone does not establish psychological efficacy.',
     next: 'Keep evidence ahead of points, make every claim modest, and evaluate retention and decision quality separately from psychometric validity.',
     sources: ['career-interventions', 'construct-validation'],
+  },
+];
+
+export const INSTRUMENT_CANDIDATES: InstrumentCandidate[] = [
+  {
+    id: 'omib',
+    name: 'Open Matrices Item Bank (OMIB)',
+    construct: 'Figural matrices / fluid reasoning',
+    evidence: '220 items were calibrated with item-response models and reliability analysis in 2,561 medical-school applicants. Internal consistency was high, but the authors report no convergent, discriminant, or predictive validity data yet.',
+    administration: 'Faithful reproduction means using the released 3×3 matrix items, 20 construction elements, the published item solutions, 28-item forms, and the no-time-limit procedure used in the validation study.',
+    rights: 'The paper states that the item bank is available under GPLv3. The OSF repository provides implementation instructions, item data, and vector materials; attribution and license notices must travel with the implementation.',
+    decision: 'Best open candidate for a controlled Called pilot. Its score may describe figural reasoning only; it must not be converted into job-fit points until an occupational-outcome bridge is established.',
+    status: 'Best open candidate',
+    links: [
+      { label: 'Peer-reviewed validation', url: 'https://doi.org/10.3390/jintelligence10030041' },
+      { label: 'Implementation materials', url: 'https://osf.io/4km79/' },
+    ],
+  },
+  {
+    id: 'icar',
+    name: 'International Cognitive Ability Resource (ICAR)',
+    construct: 'General cognitive ability, fluid reasoning, and visual-spatial ability',
+    evidence: 'ICAR has an initial public-domain validation and later studies reporting reliability, test-retest stability, and convergence with established reasoning and spatial measures, including a 2025 mobile/web implementation study.',
+    administration: 'The exact form, instructions, item pool, scoring, and population must be fixed before use. The legacy project page says the sample test requires registration by email, so “public domain” does not by itself settle the exact distribution workflow.',
+    rights: 'Public-domain status is stated by the project and peer-reviewed literature, but Called still needs written confirmation of the exact form and scoring materials it will ship, plus attribution and registration compliance.',
+    decision: 'Strong second candidate, especially if the project confirms a production-safe ICAR-16 package. Do not combine adult ICAR evidence with children’s results or claim career prediction.',
+    status: 'Requires permission or registration',
+    links: [
+      { label: 'Initial validation', url: 'https://doi.org/10.1016/j.intell.2014.01.004' },
+      { label: 'Mobile/web validation', url: 'https://doi.org/10.3390/jintelligence13120154' },
+      { label: 'ICAR project', url: 'https://icar-project.org/' },
+    ],
+  },
+  {
+    id: 'onet-ability',
+    name: 'O*NET Ability Profiler',
+    construct: 'Career-exploration abilities, including verbal, numerical, spatial, and psychomotor abilities',
+    evidence: 'It is the most career-specific ability battery found in this review, with official administration, scoring, and career-exploration materials.',
+    administration: 'It is retired, includes administrator training and apparatus-based tasks, and cannot be reproduced faithfully as a short self-service web quiz from a subset of items.',
+    rights: 'The official archive says the materials are provided as-is for research purposes only and that technical assistance is no longer available.',
+    decision: 'Do not embed. If this battery is important, use the official archive only as a research reference or pursue a qualified assessment-partner arrangement.',
+    status: 'Not suitable for production',
+    links: [
+      { label: 'Official archive', url: 'https://www.onetcenter.org/reports/AP_Archive.html' },
+      { label: 'Tools license', url: 'https://www.onetcenter.org/license_tools.html' },
+    ],
+  },
+  {
+    id: 'mars-ib',
+    name: 'Matrix Reasoning Item Bank (MaRs-IB)',
+    construct: 'Non-verbal reasoning',
+    evidence: 'The original study reports reliability and test-retest evidence, and a later IRT study strengthens the item-level evidence.',
+    administration: 'The published work supports a defined matrix task, but the authors recommend further validation and say the bank should not be treated as a normative intelligence measure yet.',
+    rights: 'The project materials state academic and non-commercial reuse only.',
+    decision: 'Useful research comparator, not a production replacement for Called while the site is public and commercial.',
+    status: 'Not suitable for production',
+    links: [
+      { label: 'Peer-reviewed study', url: 'https://doi.org/10.1098/rsos.190232' },
+      { label: 'Materials and reuse terms', url: 'https://sites.google.com/site/blakemorelab/research/mars-ib' },
+    ],
+  },
+  {
+    id: 'onet-interest',
+    name: 'O*NET Interest Profiler',
+    construct: 'RIASEC vocational interests, not aptitude',
+    evidence: 'The official tool has reliability and validity documentation, a self-administered web version, an embeddable widget, and an API.',
+    administration: 'This is the cleanest immediate replacement for Called’s custom interest prompts, but it does not replace an ability test.',
+    rights: 'The official site provides CC licensing and a developer path for embedding or using the API; attribution and modification notices apply.',
+    decision: 'Strong adjacent integration for interests. Keep it separate from any aptitude score and use the official widget/API rather than recreating the instrument casually.',
+    status: 'Adjacent, not aptitude',
+    links: [
+      { label: 'Official tool', url: 'https://www.onetcenter.org/IP.html' },
+      { label: 'Developer service', url: 'https://services.onetcenter.org/ip' },
+      { label: 'Reliability and validity', url: 'https://www.onetcenter.org/reports/IP_RVS.html' },
+    ],
   },
 ];
 

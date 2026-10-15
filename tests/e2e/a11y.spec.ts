@@ -13,6 +13,7 @@ const ROUTES = [
   'discover/interests',
   'discover/skills',
   'discover/aptitudes',
+  'discover/validated-aptitude',
   'discover/workStyle',
   'discover/values',
   'discover/lifestyle',

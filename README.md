@@ -21,6 +21,7 @@ Live site (after the first deploy): `https://<username>.github.io/called/`
 - [Privacy model](#privacy-model)
 - [Recommendation methodology](#recommendation-methodology)
 - [Research and trust audit](docs/RESEARCH.md)
+- [Instrument selection and validation pilot](docs/INSTRUMENT_SELECTION.md)
 - [Project structure](#project-structure)
 - [Testing](#testing)
 - [Future roadmap](#future-roadmap)

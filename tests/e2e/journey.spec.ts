@@ -148,6 +148,17 @@ test('deep links load directly', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Talk to someone in this field near you' })).toBeVisible();
 });
 
+test('the research-backed reasoning pilot records a result without closing career exploration', async ({ page }) => {
+  await page.goto('discover/validated-aptitude');
+  for (let i = 0; i < 10; i++) {
+    await page.getByRole('button', { name: 'Element 1', exact: true }).click();
+    await page.getByRole('button', { name: i === 9 ? 'Save pilot result' : 'Next item' }).click();
+  }
+  await expect(page.getByRole('heading', { name: 'Your reasoning pilot' })).toBeVisible();
+  await page.goto('careers');
+  await expect(page.locator('.ccard').first()).toBeVisible();
+});
+
 test('unfinished work is saved and offered on return', async ({ page }) => {
   await page.goto('welcome');
   await page.getByRole('button', { name: 'Continue' }).click();

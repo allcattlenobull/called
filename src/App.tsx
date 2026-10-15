@@ -7,6 +7,7 @@ const Home = lazy(() => import('./pages/Home'));
 const Welcome = lazy(() => import('./pages/Welcome'));
 const Discover = lazy(() => import('./pages/discover/Discover'));
 const Assessment = lazy(() => import('./pages/discover/Assessment'));
+const ValidatedAptitudePilot = lazy(() => import('./pages/discover/ValidatedAptitudePilot'));
 const Purpose = lazy(() => import('./pages/purpose/Purpose'));
 const PurposeSection = lazy(() => import('./pages/purpose/PurposeSection'));
 const Careers = lazy(() => import('./pages/careers/Careers'));
@@ -49,6 +50,7 @@ export function App() {
             <Route path="/" element={<Home />} />
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/discover" element={<Discover />} />
+            <Route path="/discover/validated-aptitude" element={<ValidatedAptitudePilot />} />
             <Route path="/discover/:id" element={<Assessment />} />
             <Route path="/purpose" element={<Purpose />} />
             <Route path="/purpose/:section" element={<PurposeSection />} />

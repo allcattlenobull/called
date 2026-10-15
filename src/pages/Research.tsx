@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Callout, PageHeader } from '../components/ui';
-import { RESEARCH_AUDIT, RESEARCH_SOURCES, researchSourceById, type ResearchStatus } from '../data/research';
+import { INSTRUMENT_CANDIDATES, RESEARCH_AUDIT, RESEARCH_SOURCES, researchSourceById, type InstrumentCandidateStatus, type ResearchStatus } from '../data/research';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 const STATUS_TONE: Record<ResearchStatus, string> = {
@@ -8,6 +8,13 @@ const STATUS_TONE: Record<ResearchStatus, string> = {
   'Evidence-informed method': 'tag--purpose',
   'Descriptive source': 'tag--primary',
   'Called-specific evidence missing': 'tag--warn',
+};
+
+const CANDIDATE_TONE: Record<InstrumentCandidateStatus, string> = {
+  'Best open candidate': 'tag--done',
+  'Requires permission or registration': 'tag--purpose',
+  'Not suitable for production': 'tag--warn',
+  'Adjacent, not aptitude': 'tag--primary',
 };
 
 export default function Research() {
@@ -55,6 +62,25 @@ export default function Research() {
                 <div><dt>Higher-evidence next step</dt><dd>{item.next}</dd></div>
               </dl>
               <div className="research-card__sources"><span className="small muted">Relevant literature</span><div className="chips chips--static">{item.sources.map((id) => <a className="tag tag--source" key={id} href={researchSourceById[id].url} target="_blank" rel="noreferrer">{researchSourceById[id].authors.split(' ')[0]} {researchSourceById[id].year}</a>)}</div></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="research-audit" aria-labelledby="candidates-h">
+        <div className="section-heading"><div><span className="eyebrow">Replacement search</span><h2 id="candidates-h">Established instruments we researched</h2></div><span className="small muted">{INSTRUMENT_CANDIDATES.length} candidates</span></div>
+        <p className="prose">These are named instruments, not evidence borrowed from similar tests. A candidate only becomes part of Called after we confirm its exact form, instructions, scoring, population, license, and intended use. “Open” does not mean “validated for career prediction.”</p>
+        <div className="grid grid--2">
+          {INSTRUMENT_CANDIDATES.map((candidate) => (
+            <article className="card research-card" key={candidate.id}>
+              <div className="row row--between research-card__head"><h3 className="h3">{candidate.name}</h3><span className={['tag', CANDIDATE_TONE[candidate.status]].join(' ')}>{candidate.status}</span></div>
+              <dl className="research-card__facts">
+                <div><dt>Construct</dt><dd>{candidate.construct}</dd></div>
+                <div><dt>What the evidence says</dt><dd>{candidate.evidence}</dd></div>
+                <div><dt>Faithful administration</dt><dd>{candidate.administration}</dd></div>
+                <div><dt>Rights and decision</dt><dd>{candidate.rights} {candidate.decision}</dd></div>
+              </dl>
+              <div className="chips chips--static">{candidate.links.map((link) => <a className="tag tag--source" key={link.url} href={link.url} target="_blank" rel="noreferrer">{link.label}</a>)}</div>
             </article>
           ))}
         </div>

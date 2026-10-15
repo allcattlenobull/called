@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { useDraft } from '../../state/useDraft';
 import { APTITUDE_ITEMS, type Grid } from '../../data/assessments';
 import { APTITUDES } from '../../data/vocab';
@@ -82,6 +83,7 @@ export function AptitudesAssessment() {
       <section className="runner">
         <h2>Your practice results</h2>
         <p>Fifteen custom puzzles are practice, not a validated aptitude test. Treat the results as prompts for reflection, not evidence that should rank a career.</p>
+        <Callout tone="evidence" title="Try the research-backed pilot">You can also take a short pilot built from the published Open Matrices Item Bank. It records a separate reasoning result without replacing your career exploration.</Callout>
         <ul className="matchbars" style={{ maxWidth: 560 }}>
           {(Object.keys(APTITUDES) as AptitudeId[]).map((a) => {
             const r = results[a];
@@ -107,6 +109,7 @@ export function AptitudesAssessment() {
           >
             Retake the puzzles
           </button>
+          <Link className="btn btn--primary" to="/discover/validated-aptitude">Take the OMIB pilot</Link>
         </div>
         <NextAssessment current="aptitudes" />
       </section>
@@ -123,7 +126,7 @@ export function AptitudesAssessment() {
         </Callout>
       )}
       {idx === 0 && picked === null && (
-        <Callout title="No timer, no pressure">These practice puzzles cover five kinds of thinking. You’ll see the reasoning after each one; Called does not use the result to rank careers.</Callout>
+        <Callout title="No timer, no pressure">These practice puzzles cover five kinds of thinking. You’ll see the reasoning after each one; Called does not use the result to rank careers. For the research-backed pilot, use the separate OMIB assessment after this practice set.</Callout>
       )}
       <p className="runner__count" style={{ marginTop: 'var(--s-4)' }}>
         Puzzle {idx + 1} of {APTITUDE_ITEMS.length}: {APTITUDES[item.aptitude].label.toLowerCase()}

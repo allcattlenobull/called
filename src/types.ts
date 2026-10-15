@@ -211,6 +211,14 @@ export interface AptitudeResult {
   total: number;
 }
 
+/** A published-instrument pilot result; not a normed score or career prediction. */
+export interface ValidatedReasoningResult {
+  instrument: 'OMIB-pilot';
+  correct: number;
+  total: number;
+  completedAt: string;
+}
+
 export interface LifestylePrefs {
   trainingYears?: 'short' | 'two' | 'four' | 'long';
   debt?: 'avoid' | 'small' | 'moderate' | 'comfortable';
@@ -362,6 +370,7 @@ export interface Profile {
   interests: Record<string, LikeAnswer>;
   skills: Partial<Record<SkillId, SkillLevel>>;
   aptitudes: Partial<Record<AptitudeId, AptitudeResult>>;
+  validatedReasoning?: ValidatedReasoningResult;
   workStyle: Partial<Record<WorkAxis, number>>;
   values: Partial<Record<ValueId, ValueTier>>;
   lifestyle: LifestylePrefs;
