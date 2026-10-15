@@ -324,6 +324,8 @@ export interface ProfileLocation {
   city?: string;
   state?: string;
   zip?: string;
+  /** The home state or metro area chosen on the Places page ('GA' or 'm12060'). */
+  place?: string;
   /** Other places the person would realistically consider living or working. */
   considering: string[];
 }

@@ -2,6 +2,7 @@
 import type { Career } from '../types';
 import { ROI_DEFAULTS } from '../data/education/routes';
 import { estimatedEducationCost } from './matching';
+import type { CollegeCosts } from './places';
 
 export interface RoiAssumptions {
   tuition: number;
@@ -13,6 +14,8 @@ export interface RoiAssumptions {
   loanRate: number;
   repaymentYears: number;
   startingShare: number;
+  /** Median pay where the person expects to work; defaults to the U.S. median. */
+  medianPay?: number;
 }
 
 export interface RoiResult {
@@ -27,13 +30,27 @@ export interface RoiResult {
   tenYearNet: number;
 }
 
-export function defaultAssumptions(c: Career): RoiAssumptions {
+export interface StudyPlan {
+  /** Public college prices for the state where the person would study. */
+  college?: CollegeCosts;
+  outOfState?: boolean;
+  /** Living away from home while training uses that state's typical room and board. */
+  livingAway?: boolean;
+  /** Median pay where they'd work afterward. */
+  workPay?: number;
+}
+
+export function defaultAssumptions(c: Career, plan: StudyPlan = {}): RoiAssumptions {
   const paid = c.education.level === 'apprenticeship' || (c.education.years > 0 && c.education.routes[0] === 'apprenticeship');
+  const col = plan.college;
+  const rates = col ? { uni: plan.outOfState ? col.public4OutOfState : col.public4InState, cc: col.public2InState } : undefined;
+  const living = plan.livingAway && c.education.years > 0 && !paid ? (col?.public4RoomBoard ?? 0) : ROI_DEFAULTS.livingCosts;
   return {
-    tuition: Math.round(estimatedEducationCost(c)),
+    tuition: Math.round(estimatedEducationCost(c, rates)),
     years: c.education.years,
     paidWhileTraining: paid,
-    livingCosts: ROI_DEFAULTS.livingCosts,
+    medianPay: plan.workPay,
+    livingCosts: living,
     alternativeEarnings: ROI_DEFAULTS.alternativeEarnings,
     borrowedShare: ROI_DEFAULTS.borrowedShare,
     loanRate: ROI_DEFAULTS.loanRate,
@@ -53,17 +70,18 @@ export function monthlyPayment(principal: number, annualRate: number, years: num
 export function computeRoi(c: Career, a: RoiAssumptions): RoiResult {
   const totalCost = a.tuition + a.livingCosts * a.years;
   // Apprentices are paid while training, roughly half of journey-level pay on average.
-  const trainingEarnings = a.paidWhileTraining ? c.pay.median * 0.5 * a.years : 0;
+  const median = a.medianPay ?? c.pay.median;
+  const trainingEarnings = a.paidWhileTraining ? median * 0.5 * a.years : 0;
   const opportunityCost = Math.max(0, a.alternativeEarnings * a.years - trainingEarnings);
   const borrowed = totalCost * a.borrowedShare;
   const pay = monthlyPayment(borrowed, a.loanRate, a.repaymentYears);
-  const startingPay = c.pay.median * a.startingShare;
+  const startingPay = median * a.startingShare;
   const paymentShareOfIncome = startingPay > 0 ? (pay * 12) / startingPay : 0;
 
   // Earnings ramp from starting pay to median over 5 years, then flat.
   const earningsInYear = (y: number) => {
     const t = Math.min(1, y / 5);
-    return startingPay + (c.pay.median - startingPay) * t;
+    return startingPay + (median - startingPay) * t;
   };
   let cumulative = -(totalCost + opportunityCost);
   let breakEvenYears: number | null = null;

@@ -27,6 +27,7 @@ const Brand = lazy(() => import('./pages/Brand'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Achievements = lazy(() => import('./pages/Achievements'));
 const Network = lazy(() => import('./pages/Network'));
+const Places = lazy(() => import('./pages/Places'));
 const ResearchCheckIn = lazy(() => import('./pages/ResearchCheckIn'));
 const SharedReport = lazy(() => import('./pages/SharedReport'));
 const Feedback = lazy(() => import('./pages/Feedback'));
@@ -81,6 +82,7 @@ export function App() {
             <Route path="/account/ai-export" element={<AiEvidenceExport />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/network" element={<Network />} />
+            <Route path="/places" element={<Places />} />
             <Route path="/about" element={<About />} />
             <Route path="/research" element={<Research />} />
             <Route path="/data" element={<YourData />} />

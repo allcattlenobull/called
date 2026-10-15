@@ -65,15 +65,28 @@ Keys live in **Settings → Secrets and variables → Actions → Repository sec
 
 | Secret | Used for | Status |
 | --- | --- | --- |
-| `BLS_API_KEY` | Wages (monthly refresh) | In use |
-| `BEA_API_KEY` | Cost of living by state and metro | Checked monthly; ready for location features |
+| `BLS_API_KEY` | National wages (monthly) and state and metro wages (quarterly) | In use |
+| `BEA_API_KEY` | Cost of living by state and metro | In use (location data) |
 | `CAREERONESTOP_USER_ID`, `CAREERONESTOP_TOKEN` | Professional associations, apprenticeships, job centers | Checked monthly; ready for networking features |
-| `COLLEGE_SCORECARD_API_KEY` | School and program costs and earnings | Checked monthly; ready for the ROI tool |
+| `COLLEGE_SCORECARD_API_KEY` | Public college costs by state | In use (location data) |
 | `ONET_API_KEY` | O*NET Web Services (v2) | Checked monthly; ready for task and skills refreshes |
 
 Each monthly run starts with `scripts/check-data-keys.mjs`, which reports in the run summary whether every key is present and accepted, without ever printing a key and without failing the run. To check right away, open **Actions → Update career data → Run workflow**.
 
 For the workflow to open its pull request, enable **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
+
+### Location data: cost of living, college costs, local pay
+
+`.github/workflows/update-location-data.yml` (quarterly, or **Actions → Update location data → Run workflow**) runs [`scripts/update-location-data.mjs`](../scripts/update-location-data.mjs):
+
+| File | Contents | Source |
+| --- | --- | --- |
+| `src/data/market/places.json` | Every state and ~390 metro areas: overall price level and housing price level (100 = U.S. average); for each state, median published tuition and fees at public universities (in and out of state) and community colleges, plus on-campus room and board | BEA Regional Price Parities (`BEA_API_KEY`); College Scorecard (`COLLEGE_SCORECARD_API_KEY`) |
+| `src/data/market/local-wages.json` | Annual median pay for every Called occupation in every state and ~80 large metro areas, stored compactly as one array per area aligned with `socs` | BLS OEWS (`BLS_API_KEY`) |
+
+The BLS API allows about 500 requests a day, so scheduled runs alternate (states in January and July, metros in April and October); a manual run can choose. Results are pushed to a `data/location-YYYY-MM-DD` branch (and a pull request if Actions may open one) for review. Each source is independent: a failure keeps the previous values and is reported as an annotation on the run.
+
+How the app uses it (`src/lib/places.ts`): a person’s home place and up to three places they’d consider (Places page) resolve to a metro area or state. Pay uses the metro median, then the state median, then the U.S. median, and always says which. “What it buys” divides pay by the price level, so places compare fairly. The training cost tool prices tuition by the state of study (out-of-state when it isn’t home), adds that state’s room and board when living away, and uses pay where the person expects to work.
 
 ### Local market lookup
 
@@ -81,7 +94,7 @@ For the workflow to open its pull request, enable **Settings → Actions → Gen
 
 The optional `src/data/market/state-market.json` snapshot is keyed by state abbreviation and SOC. It may contain `pay.median` and/or an `outlook` object with `growth`, `annualOpenings`, `baseYear`, and `projectionYear`. Missing state pay is never treated as zero. The UI explicitly says “U.S. median pay” or “State median pay.”
 
-`npm run data:update:market` imports a reviewed JSON export from `STATE_MARKET_DATA_URL`, validates it, and leaves the existing snapshot untouched on failure. Configure that URL only when it points to an official/state or Projections Central export transformed to the documented shape. The workflow will use it when the repository secret `STATE_MARKET_DATA_URL` is configured. The `BLS_API_KEY` secret continues to serve the national BLS updater.
+`npm run data:update:market` imports a reviewed JSON export from `STATE_MARKET_DATA_URL`, validates it, and leaves the existing snapshot untouched on failure. Configure that URL only when it points to an official/state or Projections Central export transformed to the documented shape. The workflow will use it when the repository secret `STATE_MARKET_DATA_URL` is configured. The `BLS_API_KEY` secret continues to serve the national BLS updater. `marketFor` now prefers the generated metro and state medians from `local-wages.json` before this optional snapshot.
 
 Cost of living is intentionally not fabricated. The market model leaves room for a future BEA Regional Price Parities layer so nominal salary and local purchasing power remain separate values.
 

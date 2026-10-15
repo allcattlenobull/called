@@ -288,19 +288,62 @@ test('guest and account terms are distinct and consent is versioned', async ({ p
   await expect(page.getByRole('button', { name: 'Create my individual account' })).toBeDisabled();
 });
 
-test('navigation uses one responsive menu', async ({ page }) => {
+test('navigation uses one responsive menu that reaches every section', async ({ page }) => {
   await page.goto('');
   await expect(page.getByRole('navigation', { name: 'Quick' })).toHaveCount(0);
   const desktop = (page.viewportSize()?.width ?? 0) >= 1100;
   if (desktop) {
-    await expect(page.getByRole('navigation', { name: 'Primary' })).toBeVisible();
+    const nav = page.getByRole('navigation', { name: 'Primary' });
+    await expect(nav).toBeVisible();
     await expect(page.getByRole('button', { name: 'Open menu' })).toBeHidden();
+    const explore = nav.getByRole('button', { name: 'Explore' });
+    await explore.click();
+    await expect(explore).toHaveAttribute('aria-expanded', 'true');
+    await page.keyboard.press('Escape');
+    await expect(explore).toHaveAttribute('aria-expanded', 'false');
+    await expect(explore).toBeFocused();
+    await explore.click();
+    await nav.getByRole('link', { name: /Training costs and payoff/ }).click();
+    await expect(page).toHaveURL(/compare\/education/);
+    await expect(explore).toHaveClass(/active/);
+    await nav.getByRole('button', { name: 'Try it' }).click();
+    await expect(nav.getByRole('link', { name: /Talk to people near you/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Account' }).first()).toBeVisible();
   } else {
     await expect(page.getByRole('navigation', { name: 'Primary' })).toBeHidden();
     await page.getByRole('button', { name: 'Open menu' }).click();
-    await expect(page.getByRole('dialog', { name: 'Menu' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Account', exact: true })).toBeVisible();
+    const menu = page.getByRole('dialog', { name: 'Menu' });
+    await expect(menu).toBeVisible();
+    for (const name of ['Assessments', 'Careers', 'Places and cost of living', 'Training costs and payoff', 'Compare careers', 'Career simulations', 'Talk to people near you', 'Paths I’m testing', 'My Called report', 'Account']) {
+      await expect(menu.getByRole('link', { name, exact: true })).toBeVisible();
+    }
+    await menu.getByRole('link', { name: 'Places and cost of living', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Places and cost of living', level: 1 })).toBeVisible();
   }
+});
+
+test('places drive pay, cost of living and study costs', async ({ page }) => {
+  await page.goto('places');
+  await page.getByLabel('State').first().selectOption('GA');
+  await page.locator('#home-metro').selectOption({ label: 'Atlanta-Sandy Springs-Roswell, GA' });
+  await page.locator('#consider-0-state').selectOption('TX');
+  await page.getByRole('button', { name: 'Save places' }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Saved' })).toBeVisible();
+  const col = page.locator('section', { has: page.getByRole('heading', { name: 'What life costs there' }) });
+  await expect(col).toContainText('Atlanta area');
+  await expect(col).toContainText('Texas');
+  await expect(page.getByText(/To live like \$50,000 in Atlanta area/)).toBeVisible();
+
+  await page.goto('careers/electrician');
+  const pay = page.locator('.place-pay');
+  await expect(pay).toContainText('Atlanta area');
+  await expect(pay).toContainText('Texas');
+  await expect(page.locator('.pay-head')).toContainText(/Atlanta area, GA median pay|Georgia median pay/);
+
+  await page.goto('compare/education?career=registered-nurse&study=TX');
+  await expect(page.getByLabel('Study or train in')).toHaveValue('TX');
+  await expect(page.locator('.roi-place')).toContainText('out of state');
+  await expect(page.locator('.roi-place')).toContainText('Many people stay where they study');
 });
 
 test('theme toggle cycles auto, light and dark', async ({ page }) => {

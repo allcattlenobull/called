@@ -165,3 +165,21 @@ My Path is the payoff of everything else in Called. Its job is to answer “What
 ## How AI is changing this work
 
 Called's value is helping people gather evidence they can trust, and AI is part of that evidence now. Every career page shows its exposure to AI tools (low, moderate, high) from peer-reviewed research, the actual O*NET tasks AI could speed up and the ones that stay human, whether AI mostly assists or could do parts of the work, and plain guidance on what holds up in that kind of work. It is framed as a direction, not a forecast: exposure often means the same work gets done faster, not that jobs disappear. Users can filter and sort careers by exposure and compare it side by side, and the report includes it for paths being tested. Interviews are encouraged to ask, “How has AI changed your job in the last year?”
+
+## Navigation
+
+One structure, shown two ways: dropdown menus on wide screens and a single sectioned menu on phones. The groups follow the journey.
+
+| Group | Pages |
+| --- | --- |
+| Discover · know yourself | Assessments, Purpose, Journal |
+| Explore · find possibilities | Careers, Places and cost of living, Training costs and payoff, Compare careers |
+| Try it · test the work | Career simulations, Real-world experiments, Talk to people near you |
+| My Path · decide your next step | Paths I’m testing, My Called report, Evidence and achievements, Take your evidence to an AI |
+| Account (top right) | Account, Privacy and data, For counselors |
+
+About, research, feedback and terms stay in the footer.
+
+## Place is part of the decision
+
+Location shapes pay, prices and where people train, and many people stay where they study. The Places page records where someone lives and up to three places they’d consider. Career pages show median pay in each place (metro, then state, then U.S., always labeled) next to the cost of living and what that pay buys. The training cost tool prices college by the state of study, adds that state’s room and board when living away, and uses pay where the person expects to work afterward.

@@ -1,24 +1,20 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Icon, type IconName } from './Icon';
+import { Icon } from './Icon';
+import { ACCOUNT_NAV, NAV, activeGroup, activeItem, type NavItem } from './nav';
 import { Logo } from './ui';
 import { Celebrations } from './Game';
 import { ThemeToggle } from './ThemeToggle';
 import { useStore } from '../state/store';
 import { flushResearchQueue, recordResearchEvent } from '../lib/researchParticipation';
 
-const PRIMARY_NAV: { to: string; label: string; icon: IconName; end?: boolean }[] = [
-  { to: '/', label: 'Home', icon: 'home', end: true },
-  { to: '/discover', label: 'Discover', icon: 'discover' },
-  { to: '/careers', label: 'Explore', icon: 'careers' },
-  { to: '/try', label: 'Try It', icon: 'try' },
-  { to: '/path', label: 'My Path', icon: 'path' },
-  { to: '/account', label: 'Account', icon: 'user' },
-];
-
 export function Layout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [menu, setMenu] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement>(null);
   const location = useLocation();
+  const current = activeItem(location.pathname);
+  const group = activeGroup(location.pathname);
   const { settings } = useStore();
   const mainRef = useRef<HTMLElement>(null);
   const first = useRef(true);
@@ -26,6 +22,7 @@ export function Layout({ children }: { children: ReactNode }) {
   // Close the menu and move focus to the new page on navigation, so screen readers hear the change.
   useEffect(() => {
     setOpen(false);
+    setMenu(null);
     if (first.current) {
       first.current = false;
       return;
@@ -42,6 +39,26 @@ export function Layout({ children }: { children: ReactNode }) {
   useEffect(() => {
     void recordResearchEvent(settings, 'page_view', { path: location.pathname });
   }, [location.pathname, settings]);
+
+  // Dropdowns close on Escape (returning focus to their button) and on a click elsewhere.
+  useEffect(() => {
+    if (!menu) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      const trigger = navRef.current?.querySelector<HTMLButtonElement>(`[aria-controls="menu-${menu}"]`);
+      setMenu(null);
+      trigger?.focus();
+    };
+    const onClick = (e: MouseEvent) => {
+      if (!navRef.current?.contains(e.target as Node)) setMenu(null);
+    };
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('mousedown', onClick);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('mousedown', onClick);
+    };
+  }, [menu]);
 
   useEffect(() => {
     if (!open) return;
@@ -64,15 +81,43 @@ export function Layout({ children }: { children: ReactNode }) {
           <Link to="/" className="topbar__brand" aria-label="Called home">
             <Logo />
           </Link>
-          <nav className="topnav" aria-label="Primary">
-            {PRIMARY_NAV.map((n) => (
-              <NavLink key={n.to} to={n.to} end={n.end} className="topnav__link">
-                {n.label}
-              </NavLink>
+          <nav className="topnav" aria-label="Primary" ref={navRef}>
+            <NavLink to="/" end className="topnav__link">
+              Home
+            </NavLink>
+            {NAV.map((g) => (
+              <div key={g.id} className="topnav__group">
+                <button
+                  type="button"
+                  className={`topnav__link topnav__trigger${group === g.id ? ' active' : ''}`}
+                  aria-expanded={menu === g.id}
+                  aria-controls={`menu-${g.id}`}
+                  onClick={() => setMenu((m) => (m === g.id ? null : g.id))}
+                >
+                  {g.label}
+                  <Icon name="down" size={14} aria-hidden="true" />
+                </button>
+                {menu === g.id && (
+                  <div className="topnav__panel" id={`menu-${g.id}`}>
+                    <p className="topnav__tagline">{g.tagline}</p>
+                    <ul>
+                      {g.items.map((item) => (
+                        <li key={item.to}>
+                          <MenuLink item={item} current={current} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
           <div className="topbar__actions">
             <ThemeToggle />
+            <NavLink to="/account" className={`btn btn--quiet topbar__account${group === 'account' ? ' active' : ''}`}>
+              <Icon name="user" size={18} />
+              <span>Account</span>
+            </NavLink>
             <button type="button" className="btn btn--icon topbar__menu" aria-expanded={open} aria-controls="menu-sheet" onClick={() => setOpen(true)}>
               <Icon name="menu" />
               <span className="visually-hidden">Open menu</span>
@@ -92,18 +137,47 @@ export function Layout({ children }: { children: ReactNode }) {
                 <span className="visually-hidden">Close menu</span>
               </button>
             </div>
-            <nav aria-label="All sections">
+            <nav aria-label="All sections" className="sheet__sections">
               <ul className="sheet__nav">
-                {PRIMARY_NAV.map((n) => (
-                  <li key={n.to}>
-                    <NavLink to={n.to} end={n.end}>
-                      <Icon name={n.icon} />
-                      {n.label}
-                    </NavLink>
-                  </li>
-                ))}
+                <li>
+                  <NavLink to="/" end>
+                    <Icon name="home" />
+                    Home
+                  </NavLink>
+                </li>
               </ul>
-              <p className="small muted sheet__note">Compare, reports, settings and counselor sharing now live inside the pages where you use them.</p>
+              {NAV.map((g) => (
+                <section key={g.id} className="sheet__group" aria-labelledby={`sheet-${g.id}`}>
+                  <h2 id={`sheet-${g.id}`} className="sheet__heading">
+                    {g.label} <span>{g.tagline}</span>
+                  </h2>
+                  <ul className="sheet__nav">
+                    {g.items.map((item) => (
+                      <li key={item.to}>
+                        <NavLink to={item.to} end aria-current={current === item ? 'page' : undefined} className={current === item ? 'active' : ''}>
+                          <Icon name={item.icon} />
+                          {item.label}
+                        </NavLink>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+              <section className="sheet__group" aria-labelledby="sheet-account">
+                <h2 id="sheet-account" className="sheet__heading">
+                  Account <span>Yours, private</span>
+                </h2>
+                <ul className="sheet__nav">
+                  {ACCOUNT_NAV.map((item) => (
+                    <li key={item.to}>
+                      <NavLink to={item.to} end>
+                        <Icon name={item.icon} />
+                        {item.label}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </section>
             </nav>
           </div>
         </div>
@@ -136,5 +210,17 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </footer>
     </>
+  );
+}
+
+function MenuLink({ item, current }: { item: NavItem; current?: NavItem }) {
+  return (
+    <Link to={item.to} className={`menu-link${current === item ? ' is-current' : ''}`} aria-current={current === item ? 'page' : undefined}>
+      <Icon name={item.icon} size={20} />
+      <span>
+        <strong>{item.label}</strong>
+        <span>{item.blurb}</span>
+      </span>
+    </Link>
   );
 }

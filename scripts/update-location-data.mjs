@@ -8,7 +8,8 @@
  *   src/data/market/local-wages.json  median pay for every Called occupation by state and by the
  *                                      largest metro areas (BLS Occupational Employment and Wage Statistics)
  *
- * Env: BLS_API_KEY, BEA_API_KEY, COLLEGE_SCORECARD_API_KEY. Optional METRO_LIMIT (default 60).
+ * Env: BLS_API_KEY, BEA_API_KEY, COLLEGE_SCORECARD_API_KEY. Optional WAGE_SCOPE (states | metros | all)
+ * and METRO_LIMIT (extra metros by population, beyond the built-in list of large metros).
  * Each source is independent: if one fails, the others still update and the old values are kept.
  * Prints ::notice/::warning annotations so results are visible on the run page. Never prints keys.
  */
@@ -18,7 +19,7 @@ import { join } from 'node:path';
 const env = process.env;
 const PLACES = 'src/data/market/places.json';
 const WAGES = 'src/data/market/local-wages.json';
-const METRO_LIMIT = Number(env.METRO_LIMIT || 60);
+const METRO_LIMIT = Number(env.METRO_LIMIT || 0);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const note = (level, title, msg) => console.log(env.GITHUB_ACTIONS ? `::${level} title=${title}::${msg}` : `${title}: ${msg}`);
 const readJson = (p, fallback) => (existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : fallback);
@@ -74,35 +75,47 @@ async function beaSeries(table, line, geo, year = 'LAST5') {
   return latest;
 }
 
-async function costOfLiving(places) {
-  if (!env.BEA_API_KEY) return note('warning', 'Cost of living', 'BEA_API_KEY is not set; kept existing values');
+/** Large metro areas always included, so pay and prices exist for them even if a BEA call fails. */
+const CORE_METROS = {
+  35620: 'New York-Newark-Jersey City, NY-NJ', 31080: 'Los Angeles-Long Beach-Anaheim, CA', 16980: 'Chicago-Naperville-Elgin, IL-IN', 19100: 'Dallas-Fort Worth-Arlington, TX', 26420: 'Houston-Pasadena-The Woodlands, TX', 47900: 'Washington-Arlington-Alexandria, DC-VA-MD-WV', 37980: 'Philadelphia-Camden-Wilmington, PA-NJ-DE-MD', 33100: 'Miami-Fort Lauderdale-West Palm Beach, FL', 12060: 'Atlanta-Sandy Springs-Roswell, GA', 14460: 'Boston-Cambridge-Newton, MA-NH', 38060: 'Phoenix-Mesa-Chandler, AZ', 41860: 'San Francisco-Oakland-Fremont, CA', 40140: 'Riverside-San Bernardino-Ontario, CA', 19820: 'Detroit-Warren-Dearborn, MI', 42660: 'Seattle-Tacoma-Bellevue, WA', 33460: 'Minneapolis-St. Paul-Bloomington, MN-WI', 41740: 'San Diego-Chula Vista-Carlsbad, CA', 45300: 'Tampa-St. Petersburg-Clearwater, FL', 19740: 'Denver-Aurora-Centennial, CO', 12580: 'Baltimore-Columbia-Towson, MD', 41180: 'St. Louis, MO-IL', 36740: 'Orlando-Kissimmee-Sanford, FL', 16740: 'Charlotte-Concord-Gastonia, NC-SC', 41700: 'San Antonio-New Braunfels, TX', 38900: 'Portland-Vancouver-Hillsboro, OR-WA', 40900: 'Sacramento-Roseville-Folsom, CA', 38300: 'Pittsburgh, PA', 12420: 'Austin-Round Rock-San Marcos, TX', 29820: 'Las Vegas-Henderson-North Las Vegas, NV', 17140: 'Cincinnati, OH-KY-IN', 28140: 'Kansas City, MO-KS', 18140: 'Columbus, OH', 26900: 'Indianapolis-Carmel-Greenwood, IN', 17460: 'Cleveland, OH', 41940: 'San Jose-Sunnyvale-Santa Clara, CA', 34980: 'Nashville-Davidson--Murfreesboro--Franklin, TN', 47260: 'Virginia Beach-Chesapeake-Norfolk, VA-NC', 39300: 'Providence-Warwick, RI-MA', 27260: 'Jacksonville, FL', 33340: 'Milwaukee-Waukesha, WI', 39580: 'Raleigh-Cary, NC', 36420: 'Oklahoma City, OK', 32820: 'Memphis, TN-MS-AR', 40060: 'Richmond, VA', 31140: 'Louisville/Jefferson County, KY-IN', 35380: 'New Orleans-Metairie, LA', 41620: 'Salt Lake City-Murray, UT', 25540: 'Hartford-West Hartford-East Hartford, CT', 15380: 'Buffalo-Cheektowaga, NY', 13820: 'Birmingham, AL', 40380: 'Rochester, NY', 24340: 'Grand Rapids-Wyoming-Kentwood, MI', 46060: 'Tucson, AZ', 46520: 'Urban Honolulu, HI', 46140: 'Tulsa, OK', 23420: 'Fresno, CA', 36540: 'Omaha, NE-IA', 10740: 'Albuquerque, NM', 24860: 'Greenville-Anderson-Greer, SC', 21340: 'El Paso, TX', 12940: 'Baton Rouge, LA', 14260: 'Boise City, ID', 19780: 'Des Moines-West Des Moines, IA', 30780: 'Little Rock-North Little Rock-Conway, AR', 31540: 'Madison, WI', 16700: 'Charleston-North Charleston, SC', 17900: 'Columbia, SC', 28940: 'Knoxville, TN', 16860: 'Chattanooga, TN-GA', 12260: 'Augusta-Richmond County, GA-SC', 42340: 'Savannah, GA', 11260: 'Anchorage, AK', 13740: 'Billings, MT', 22020: 'Fargo, ND-MN', 43620: 'Sioux Falls, SD-MN', 15540: 'Burlington-South Burlington, VT', 38860: 'Portland-South Portland, ME', 31700: 'Manchester-Nashua, NH', 16940: 'Cheyenne, WY', 16620: 'Charleston, WV', 27140: 'Jackson, MS', 44060: 'Spokane-Spokane Valley, WA', 29460: 'Lakeland-Winter Haven, FL',
+};
+
+async function step(title, fn) {
   try {
-    const lines = await beaLineCodes('SARPP');
-    const desc = (re) => lines.find((l) => re.test(l.Desc))?.Key;
-    const all = desc(/all items/i) ?? '1';
-    const housing = desc(/housing|rents/i) ?? '3';
-    const sAll = await beaSeries('SARPP', all, 'STATE');
-    const sHouse = await beaSeries('SARPP', housing, 'STATE');
-    let year = null;
-    for (const [fips5, v] of Object.entries(sAll)) {
-      const code = FIPS_TO_STATE[fips5.slice(0, 2)];
-      if (!code) continue;
-      places.states[code] = { ...(places.states[code] ?? {}), name: STATES[code][1], rpp: v.value, rppHousing: sHouse[fips5]?.value ?? null };
-      year = v.year;
-    }
-    const mAll = await beaSeries('MARPP', all, 'MSA');
-    const mHouse = await beaSeries('MARPP', housing, 'MSA');
-    const pop = await beaSeries('CAINC1', '2', 'MSA', 'LAST');
-    for (const [cbsa, v] of Object.entries(mAll)) {
-      const name = v.name.replace(/\s*\((Metropolitan|Micropolitan) Statistical Area\)\s*$/i, '').replace(/\s*\*$/, '');
-      const states = (name.split(', ')[1] ?? '').split('-').filter((s) => STATES[s]);
-      places.metros[cbsa] = { ...(places.metros[cbsa] ?? {}), name, states, rpp: v.value, rppHousing: mHouse[cbsa]?.value ?? null, population: pop[cbsa]?.value ?? places.metros[cbsa]?.population ?? null };
-    }
-    places.sources.costOfLiving = `U.S. Bureau of Economic Analysis, Regional Price Parities (${year ?? 'latest'}). 100 = U.S. average.`;
-    note('notice', 'Cost of living', `${Object.keys(sAll).length} states and ${Object.keys(mAll).length} metros (${year})`);
+    return await fn();
   } catch (e) {
-    note('warning', 'Cost of living', `BEA failed: ${e.message}`);
+    note('warning', 'Cost of living', `${title}: ${e.message}`);
+    return null;
   }
+}
+
+async function costOfLiving(places) {
+  for (const [cbsa, name] of Object.entries(CORE_METROS)) {
+    const states = (name.split(', ')[1] ?? '').split('-').filter((s) => STATES[s]);
+    places.metros[cbsa] = { name, states, ...(places.metros[cbsa] ?? {}), core: true };
+  }
+  if (!env.BEA_API_KEY) return note('warning', 'Cost of living', 'BEA_API_KEY is not set; kept existing values');
+  // RPP line codes: 1 = all items, 3 = housing (rents).
+  const sAll = await step('state prices', () => beaSeries('SARPP', '1', 'STATE'));
+  const sHouse = await step('state housing', () => beaSeries('SARPP', '3', 'STATE'));
+  let year = null;
+  for (const [fips5, v] of Object.entries(sAll ?? {})) {
+    const code = FIPS_TO_STATE[fips5.slice(0, 2)];
+    if (!code) continue;
+    places.states[code] = { ...(places.states[code] ?? {}), name: STATES[code][1], rpp: v.value, rppHousing: sHouse?.[fips5]?.value ?? places.states[code]?.rppHousing ?? null };
+    year = v.year;
+  }
+  let mAll = await step('metro prices', () => beaSeries('MARPP', '1', 'MSA'));
+  if (!mAll || !Object.keys(mAll).length) mAll = await step('metro prices (by year)', () => beaSeries('MARPP', '1', 'MSA', String(Number(year ?? 2024))));
+  const mHouse = (await step('metro housing', () => beaSeries('MARPP', '3', 'MSA'))) ?? (await step('metro housing (by year)', () => beaSeries('MARPP', '3', 'MSA', String(Number(year ?? 2024)))));
+  const pop = (await step('metro population', () => beaSeries('CAINC1', '2', 'MSA', 'LAST5'))) ?? (await step('metro population (by year)', () => beaSeries('CAINC1', '2', 'MSA', String(Number(year ?? 2024))))) ?? {};
+  for (const [cbsa, v] of Object.entries(mAll ?? {})) {
+    const name = v.name.replace(/\s*\((Metropolitan|Micropolitan) Statistical Area\)\s*$/i, '').replace(/\s*\*$/, '');
+    const states = (name.split(', ')[1] ?? '').split('-').filter((s) => STATES[s]);
+    places.metros[cbsa] = { ...(places.metros[cbsa] ?? {}), name, states, rpp: v.value, rppHousing: mHouse?.[cbsa]?.value ?? null, population: pop[cbsa]?.value ?? places.metros[cbsa]?.population ?? null };
+  }
+  if (sAll) places.sources.costOfLiving = `U.S. Bureau of Economic Analysis, Regional Price Parities (${year ?? 'latest'}). 100 = U.S. average.`;
+  note('notice', 'Cost of living', `${Object.keys(sAll ?? {}).length} states and ${Object.keys(mAll ?? {}).length} metros with prices (${year})`);
 }
 
 /* ---------- College Scorecard: public college costs by state ---------- */
@@ -171,14 +184,17 @@ async function localWages(places) {
   if (!env.BLS_API_KEY) return note('warning', 'Local wages', 'BLS_API_KEY is not set; kept existing values');
   const socs = socCodes();
   const prev = readJson(WAGES, { socs: [], states: {}, metros: {} });
-  const metros = Object.entries(places.metros)
+  const byPop = Object.entries(places.metros)
     .filter(([, m]) => m.population)
     .sort((a, b) => b[1].population - a[1].population)
     .slice(0, METRO_LIMIT)
     .map(([cbsa]) => cbsa);
+  const metros = [...new Set([...Object.keys(CORE_METROS), ...byPop])];
+  // BLS allows 500 requests a day, so scheduled runs alternate: states in Jan/Jul, metros in Apr/Oct.
+  const scope = env.WAGE_SCOPE || ([1, 7].includes(new Date().getUTCMonth() + 1) ? 'states' : 'metros');
   const areas = [...Object.entries(STATES).map(([code, [fips]]) => ({ key: code, kind: 'states', series: (soc) => `OEUS${fips}00000000000${soc.replace('-', '')}13` })), ...metros.map((cbsa) => ({ key: cbsa, kind: 'metros', series: (soc) => `OEUM00${cbsa}000000${soc.replace('-', '')}13` }))];
   const wanted = new Map();
-  for (const a of areas) for (const soc of socs) wanted.set(a.series(soc), [a.kind, a.key, soc]);
+  for (const a of areas.filter((x) => scope === 'all' || x.kind === scope)) for (const soc of socs) wanted.set(a.series(soc), [a.kind, a.key, soc]);
   const out = { states: {}, metros: {} };
   let year = null;
   let found = 0;
@@ -207,6 +223,11 @@ async function localWages(places) {
     note('warning', 'Local wages', `only ${found} of ${ids.length} values returned; keeping existing file`);
     return;
   }
+  // Keep previous values for areas not refreshed this run.
+  const unpack = (table) => Object.fromEntries(Object.entries(table ?? {}).map(([k, arr]) => [k, Object.fromEntries(prev.socs.map((s, i) => [s, arr[i]]).filter(([, v]) => v))]));
+  if (scope !== 'states') out.states = { ...unpack(prev.states), ...out.states };
+  else out.metros = { ...unpack(prev.metros), ...out.metros };
+  if (scope === 'metros') out.states = { ...unpack(prev.states), ...out.states };
   // Compact: one array per area, aligned with `socs`; null where BLS publishes no estimate.
   const pack = (rec) => Object.fromEntries(Object.entries(rec).map(([k, v]) => [k, socs.map((s) => v[s] ?? null)]));
   writeFileSync(

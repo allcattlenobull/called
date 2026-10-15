@@ -12,6 +12,7 @@ import { marketFor } from '../../lib/market';
 import { Conflicts, EvidenceBadge, FitStrip, MatchBars, OverallScore } from '../../components/Match';
 import { SaveButton } from '../../components/CareerCard';
 import { AiImpact } from '../../components/AiImpact';
+import { PlacePay } from '../../components/PlacePay';
 import { Icon } from '../../components/Icon';
 import { Callout, OptionGroup } from '../../components/ui';
 import type { CareerStatus, RealityResponse } from '../../types';
@@ -264,20 +265,21 @@ export default function CareerDetail() {
                 <span className="range__median" style={{ left: pos(career.pay.median) }} />
               </div>
               <div className="range__labels">
-                <span>Lower 10%: {moneyK(career.pay.low)}</span>
-                <span>Top 10%: {moneyK(career.pay.high)}+</span>
+                <span>U.S. lower 10%: {moneyK(career.pay.low)}</span>
+                <span>U.S. top 10%: {moneyK(career.pay.high)}+</span>
               </div>
               {career.pay.note && <p className="small" style={{ marginTop: 'var(--s-3)' }}>{career.pay.note}</p>}
-              <p className="small muted" style={{ marginTop: 'var(--s-3)', marginBottom: 0 }}>Pay varies by location, experience and employer. {market.payScope === 'state' ? `This uses the ${market.payLabel.toLowerCase()} from ${market.paySource}.` : `No state estimate is available for this occupation yet, so this uses the ${market.payLabel.toLowerCase()} from ${DATA_SOURCES.wages}.`}</p>
-              {market.outlookScope === 'national' && <p className="small muted" style={{ marginTop: 'var(--s-2)', marginBottom: 0 }}>State outlook data is not available for this occupation yet; the U.S. outlook is shown as a category.</p>}
+              <p className="small muted" style={{ marginTop: 'var(--s-3)', marginBottom: 0 }}>Pay varies by location, experience and employer. {market.payScope !== 'national' ? `The figure above is the ${market.payLabel.replace(/ median pay$/, '')} median, from ${market.paySource}. The range below is for the whole U.S.` : `The figure above is the U.S. median, from ${DATA_SOURCES.wages}.`}</p>
+              {market.outlookScope === 'national' && market.payScope !== 'national' && <p className="small muted" style={{ marginTop: 'var(--s-2)', marginBottom: 0 }}>Job growth is shown for the whole U.S.</p>}
             </div>
+            <PlacePay career={career} profile={profile} />
           </section>
 
           <section aria-labelledby="nearby-h">
             <h2 id="nearby-h">Explore this field near you</h2>
             <div className="card">
               <p>{profile.location?.city || profile.location?.state ? `Find people, training and organizations connected to ${career.title.toLowerCase()} near ${[profile.location.city, profile.location.state].filter(Boolean).join(', ')}.` : `A short conversation with someone who does this work can answer questions no assessment can. Add a location if you want local pay and resource context.`}</p>
-              <Link to={`/network?career=${encodeURIComponent(career.id)}`} className="btn btn--secondary">Talk to someone in this field near you</Link>
+              <Link to={`/network?career=${encodeURIComponent(career.id)}`} className="btn btn--secondary btn--wrap">Talk to someone in this field near you</Link>
             </div>
           </section>
 
@@ -324,7 +326,7 @@ export default function CareerDetail() {
                 </ul>
               </div>
               <Link to={`/compare/education?career=${id}`} className="btn btn--secondary">
-                Check the education ROI
+                Check the training cost and payoff
               </Link>
             </div>
           </section>

@@ -38,7 +38,9 @@ export type IconName =
   | 'external'
   | 'mail'
   | 'copy'
-  | 'user';
+  | 'user'
+  | 'pin'
+  | 'money';
 
 const paths: Record<IconName, ReactElement> = {
   home: <path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" />,
@@ -146,6 +148,19 @@ const paths: Record<IconName, ReactElement> = {
   external: <path d="M14 5h5v5M19 5l-8 8M17 14v5H5V7h5" />,
   mail: <path d="M4 6h16v12H4zM4 7l8 6 8-6" />,
   copy: <path d="M9 8h10v12H9zM5 16H4V4h10v1" />,
+  pin: (
+    <>
+      <path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z" />
+      <circle cx="12" cy="9.8" r="2.4" />
+    </>
+  ),
+  money: (
+    <>
+      <rect x="3" y="6" width="18" height="12" rx="2" />
+      <circle cx="12" cy="12" r="2.6" />
+      <path d="M6.5 9.5v.01M17.5 14.5v.01" />
+    </>
+  ),
   user: (
     <>
       <circle cx="12" cy="8" r="4" />

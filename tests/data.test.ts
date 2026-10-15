@@ -172,3 +172,25 @@ describe('brand rules', () => {
     }
   });
 });
+
+describe('location data', () => {
+  it('keeps generated cost-of-living, college and local pay files well formed', async () => {
+    const places = (await import('../src/data/market/places.json')).default as { states: Record<string, { rpp?: number; college?: Record<string, number | null> }>; metros: Record<string, { name: string; states: string[]; rpp?: number }> };
+    const wages = (await import('../src/data/market/local-wages.json')).default as { socs: string[]; states: Record<string, (number | null)[]>; metros: Record<string, (number | null)[]> };
+    for (const [code, s] of Object.entries(places.states)) {
+      expect(code).toMatch(/^[A-Z]{2}$/);
+      if (s.rpp !== undefined) expect(s.rpp).toBeGreaterThan(60);
+      for (const v of Object.values(s.college ?? {})) if (v !== null) expect(v).toBeGreaterThanOrEqual(0);
+    }
+    for (const [cbsa, m] of Object.entries(places.metros)) {
+      expect(cbsa).toMatch(/^\d{5}$/);
+      expect(m.name.length).toBeGreaterThan(3);
+    }
+    for (const table of [wages.states, wages.metros]) {
+      for (const values of Object.values(table)) {
+        expect(values.length).toBe(wages.socs.length);
+        for (const v of values) if (v !== null) expect(v).toBeGreaterThan(10000);
+      }
+    }
+  });
+});

@@ -66,10 +66,11 @@ const list = (items: string[]) =>
 
 /* ---------- Estimated education cost, used for debt considerations ---------- */
 
-export function estimatedEducationCost(c: Career): number {
+/** Tuition and fees for the whole route. `rates` swaps in a specific state's public college prices. */
+export function estimatedEducationCost(c: Career, rates?: { uni?: number | null; cc?: number | null }): number {
   const level: EducationLevel = c.education.level;
-  const uni = ROUTE_BY_ID.college.annualCost;
-  const cc = ROUTE_BY_ID.communityCollege.annualCost;
+  const uni = rates?.uni ?? ROUTE_BY_ID.college.annualCost;
+  const cc = rates?.cc ?? ROUTE_BY_ID.communityCollege.annualCost;
   const grad = ROUTE_BY_ID.graduate.annualCost;
   switch (level) {
     case 'none':

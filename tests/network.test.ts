@@ -16,13 +16,16 @@ describe('local context and networking evidence', () => {
     expect(withPlaces.location?.considering).toEqual(['A', 'B', 'C']);
   });
 
-  it('uses an explicit national fallback when state data is missing', () => {
+  it('uses local official pay when it exists and an explicit national fallback when it does not', () => {
     const p = emptyProfile();
     p.location = { city: 'Minneapolis', state: 'MN', considering: [] };
-    const market = marketFor(CAREER_BY_ID.electrician, p);
-    expect(market.pay).toBe(CAREER_BY_ID.electrician.pay.median);
-    expect(market.payScope).toBe('national');
-    expect(market.payLabel).toBe('U.S. median pay');
+    const local = marketFor(CAREER_BY_ID.electrician, p);
+    expect(['metro', 'state']).toContain(local.payScope);
+    expect(local.pay).toBeGreaterThan(30000);
+    const none = marketFor(CAREER_BY_ID['small-business-owner'], p);
+    expect(none.pay).toBe(CAREER_BY_ID['small-business-owner'].pay.median);
+    expect(none.payScope).toBe('national');
+    expect(none.payLabel).toBe('U.S. median pay');
   });
 
   it('maps relevant organizations without making Called a social network', () => {

@@ -1,5 +1,6 @@
 import stateMarket from '../data/market/state-market.json';
 import type { Career, Profile } from '../types';
+import { WAGE_SOURCE, homePlace, localPay } from './places';
 
 export type MarketScope = 'metro' | 'state' | 'national';
 
@@ -50,14 +51,31 @@ function outlookLabel(growth: number | null, scope: MarketScope): string {
  */
 export function marketFor(career: Career, profile: Profile): MarketResult {
   const code = stateCode(profile.location?.state);
+  // Official BLS metro and state medians (generated) come first.
+  const place = homePlace(profile);
+  const local = place ? localPay(career, place) : undefined;
+  if (local && local.scope !== 'national') {
+    return {
+      pay: local.pay,
+      payScope: local.scope,
+      payLabel: local.label.replace(/ median$/, ' median pay'),
+      paySource: `${WAGE_SOURCE.source}, ${WAGE_SOURCE.asOf ?? 'latest'}`,
+      outlook: null,
+      outlookScope: 'national',
+      outlookLabel: outlookLabel(null, 'national'),
+      outlookSource: 'U.S. Bureau of Labor Statistics, Employment Projections',
+      asOf: WAGE_SOURCE.asOf,
+      state: place?.state ?? code,
+    };
+  }
   const record = code && career.soc ? DATA.states?.[code]?.[career.soc] : undefined;
-  const place = [profile.location?.city, code].filter(Boolean).join(', ');
+  const placeName = [profile.location?.city, code].filter(Boolean).join(', ');
   if (record?.pay?.median) {
     const growth = record.outlook?.growth ?? null;
     return {
       pay: record.pay.median,
       payScope: 'state',
-      payLabel: code ? `${place || code} median pay` : 'State median pay',
+      payLabel: code ? `${placeName || code} median pay` : 'State median pay',
       paySource: DATA.source,
       outlook: growth,
       outlookScope: record.outlook ? 'state' : 'national',
@@ -82,5 +100,5 @@ export function marketFor(career: Career, profile: Profile): MarketResult {
 }
 
 export function dataSourceLabel(market: MarketResult): string {
-  return market.payScope === 'state' ? 'State estimate' : 'National fallback';
+  return market.payScope === 'metro' ? 'Metro estimate' : market.payScope === 'state' ? 'State estimate' : 'National fallback';
 }

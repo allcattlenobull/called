@@ -37,7 +37,7 @@ export const PRINCIPLES: Principle[] = [
       },
     ],
     reflect: ['What opportunities do you have that others around you don’t?', 'What gift have you been tempted to bury because it seemed small?'],
-    inPractice: 'In Called, stewardship shows up in your Skills, Aptitudes and Gifts, and in the Education ROI tool, which treats time and money as things worth investing wisely.',
+    inPractice: 'In Called, stewardship shows up in your Skills, Aptitudes and Gifts, and in the training cost and payoff tool, which treats time and money as things worth investing wisely.',
   },
   {
     id: 'gifts',

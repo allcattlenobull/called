@@ -184,7 +184,7 @@ export function nextBestAction(c: Career, p: Profile, r: Roadmap | undefined, ev
     if (e) return { title: e.title, why: `${e.hypothesis} A small real-world test tells you more than any assessment.`, to: `/try/experiments/${e.id}`, cta: 'See the experiment' };
   }
   if (!has('roi') && c.education.years > 0) {
-    return { title: 'Check whether the training is worth it', why: `This path usually takes about ${c.education.years} years after high school. See the real costs, earnings and debt before you invest.`, to: `/compare/education?career=${c.id}`, cta: 'Open the ROI tool' };
+    return { title: 'Check whether the training is worth it', why: `This path usually takes about ${c.education.years} years after high school. See the real costs, earnings and debt before you invest.`, to: `/compare/education?career=${c.id}`, cta: 'See cost and payoff' };
   }
   const step = r?.items.find((i) => !isDone(i, c, p));
   if (step) return { title: step.text, why: 'Your evidence is building. The next step on your roadmap keeps it moving.', to: step.to ?? '#roadmap', cta: step.to ? 'Go' : 'See roadmap' };

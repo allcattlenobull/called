@@ -8,6 +8,7 @@ import { money } from '../../lib/format';
 import { Callout, PageHeader } from '../../components/ui';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { useStore } from '../../state/store';
+import { STATE_NAMES, collegeCosts, consideredPlaces, costWords, homePlace, inUsDollars, localPay, placeById, type Place } from '../../lib/places';
 
 function NumberField({ id, label, value, onChange, step = 1000, suffix, hint }: { id: string; label: string; value: number; onChange: (n: number) => void; step?: number; suffix?: string; hint?: string }) {
   return (
@@ -23,20 +24,47 @@ function NumberField({ id, label, value, onChange, step = 1000, suffix, hint }: 
 }
 
 export default function EducationRoi() {
-  useDocumentTitle('Education ROI');
+  useDocumentTitle('Training costs and payoff');
   const [params, setParams] = useSearchParams();
   const careerId = params.get('career') && CAREER_BY_ID[params.get('career')!] ? params.get('career')! : 'registered-nurse';
   const career = CAREER_BY_ID[careerId];
-  const [a, setA] = useState<RoiAssumptions>(() => defaultAssumptions(career));
+  const { update, profile } = useStore();
+  const home = homePlace(profile);
+  const studyParam = params.get('study');
+  const study = studyParam === 'us' ? '' : (studyParam ?? home?.state ?? '');
+  const studyPlace = study ? placeById(study) : undefined;
+  const awayDefault = !!study && study !== home?.state;
+  const away = params.get('away') === null ? awayDefault : params.get('away') === '1';
+  const workOptions: Place[] = [...(home ? [home] : []), ...consideredPlaces(profile), ...(studyPlace && !(home?.state === study) ? [studyPlace] : [])].filter((p, i, arr) => arr.findIndex((x) => x.id === p.id) === i);
+  const workParam = params.get('work');
+  const workId = workParam === 'us' ? '' : (workParam ?? workOptions[0]?.id ?? '');
+  const workPlace = workId ? placeById(workId) : undefined;
+  const college = collegeCosts(study || undefined);
+  const outOfState = !!study && !!home && study !== home.state;
+  const workPay = localPay(career, workPlace);
+  const plan = { college, outOfState, livingAway: away, workPay: workPay.pay };
+  const planKey = JSON.stringify([career.id, study, away, workId]);
+  const setParam = (k: string, v: string) => {
+    const next = new URLSearchParams(params);
+    if (v) next.set(k, v);
+    else next.delete(k);
+    setParams(next, { replace: true });
+  };
 
-  const { update } = useStore();
+  const [a, setA] = useState<RoiAssumptions>(() => defaultAssumptions(career, plan));
+
   useEffect(() => {
-    setA(defaultAssumptions(career));
+    setA(defaultAssumptions(career, plan));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planKey]);
+
+  useEffect(() => {
     // Checking the numbers counts as evidence for this path.
     update((p) => {
       if (!p.roiChecked.includes(career.id)) p.roiChecked.push(career.id);
     });
   }, [career, update]);
+
 
   const r = useMemo(() => computeRoi(career, a), [career, a]);
   const set = <K extends keyof RoiAssumptions>(k: K, v: RoiAssumptions[K]) => setA((x) => ({ ...x, [k]: v }));
@@ -53,7 +81,7 @@ export default function EducationRoi() {
         <div className="stack-lg">
           <div className="field">
             <label htmlFor="roi-career">Career</label>
-            <select id="roi-career" className="select" value={careerId} onChange={(e) => setParams({ career: e.target.value }, { replace: true })}>
+            <select id="roi-career" className="select" value={careerId} onChange={(e) => setParam('career', e.target.value)}>
               {CAREERS.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.title} ({EDUCATION_LEVELS[c.education.level].label.toLowerCase()})
@@ -61,6 +89,74 @@ export default function EducationRoi() {
               ))}
             </select>
           </div>
+
+          <section className="card stack roi-place" aria-labelledby="place-h">
+            <h2 id="place-h" className="h3">
+              Where you’d study, live and work
+            </h2>
+            <div className="grid grid--2">
+              <div className="field">
+                <label htmlFor="study-state">Study or train in</label>
+                <select id="study-state" className="select" value={study || 'us'} onChange={(e) => setParam('study', e.target.value)}>
+                  <option value="us">U.S. averages</option>
+                  {Object.entries(STATE_NAMES)
+                    .sort((x, y) => x[1].localeCompare(y[1]))
+                    .map(([code, name]) => (
+                      <option key={code} value={code}>
+                        {name}
+                        {home?.state === code ? ' (where you live)' : ''}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="field">
+                <label htmlFor="work-place">Work afterward in</label>
+                <select id="work-place" className="select" value={workId || 'us'} onChange={(e) => setParam('work', e.target.value)}>
+                  <option value="us">Anywhere in the U.S. (U.S. median)</option>
+                  {workOptions.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.label}
+                      {p.id === home?.id ? ' (where you live)' : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {study && career.education.years > 0 && (
+              <label className="check">
+                <input type="checkbox" checked={away} onChange={(e) => setParam('away', e.target.checked ? '1' : '0')} />
+                I’d live away from home while training (adds {STATE_NAMES[study]}’s typical room and board)
+              </label>
+            )}
+            {study && (
+              <p className="small" style={{ margin: 0 }}>
+                <strong>{STATE_NAMES[study]}:</strong>{' '}
+                {college?.public4InState ? `public universities about ${money(college.public4InState)}/yr in state` : 'no public university figure'}
+                {college?.public4OutOfState ? ` (${money(college.public4OutOfState)} out of state)` : ''}
+                {college?.public2InState ? `, community colleges about ${money(college.public2InState)}/yr` : ''}
+                {college?.public4RoomBoard ? `, room and board about ${money(college.public4RoomBoard)}/yr` : ''}. Living costs there: {costWords(studyPlace?.rpp).toLowerCase()}.
+                {outOfState ? ' Out-of-state prices are used because it isn’t where you live; residency rules vary.' : ''}
+              </p>
+            )}
+            <p className="small" style={{ margin: 0 }}>
+              <strong>After training:</strong> median pay for {career.title.toLowerCase()} {workPlace ? `in ${workPlace.label}` : 'in the U.S.'} is {money(workPay.pay)}
+              {workPlace && workPay.scope !== workPlace.kind ? ` (${workPay.scope === 'national' ? 'U.S. figure; no local estimate' : 'statewide figure'})` : ''}
+              {workPlace?.rpp ? `, which buys about what ${money(inUsDollars(workPay.pay, workPlace.rpp)!)} does in an average U.S. place` : ''}.
+            </p>
+            {study && studyPlace && workPlace?.state !== study && (
+              <p className="small muted" style={{ margin: 0 }}>
+                Many people stay where they study. In {studyPlace.label}, the median for this work is {money(localPay(career, studyPlace).pay)}.{' '}
+                <button type="button" className="linkish" onClick={() => setParam('work', study)}>
+                  Use {studyPlace.label} for work too
+                </button>
+              </p>
+            )}
+            {!home && (
+              <p className="small muted" style={{ margin: 0 }}>
+                <Link to="/places">Add where you live and places you’d consider</Link> to compare in-state prices and local pay.
+              </p>
+            )}
+          </section>
 
           <section className="roi-results" aria-live="polite" aria-labelledby="roi-h">
             <h2 id="roi-h" className="visually-hidden">
@@ -120,13 +216,13 @@ export default function EducationRoi() {
               <input type="checkbox" checked={a.paidWhileTraining} onChange={(e) => set('paidWhileTraining', e.target.checked)} />
               I’d be paid while training (apprenticeship, military, employer program)
             </label>
-            <button type="button" className="btn btn--quiet" onClick={() => setA(defaultAssumptions(career))}>
+            <button type="button" className="btn btn--quiet" onClick={() => setA(defaultAssumptions(career, plan))}>
               Reset to defaults
             </button>
           </section>
 
           <Callout title="What this model leaves out">
-            Grants and scholarships, raises beyond the median, location, the value of enjoying your work, and the chance of changing careers. It assumes pay ramps from {Math.round(a.startingShare * 100)}% of the median to the median over five years. Use it to compare paths, not to predict your future.
+            Grants and scholarships, raises beyond the median, differences between schools in the same state, the value of enjoying your work, and the chance of changing careers. It assumes pay ramps from {Math.round(a.startingShare * 100)}% of the median to the median over five years, using pay where you’d work. Use it to compare paths, not to predict your future.
           </Callout>
         </div>
 

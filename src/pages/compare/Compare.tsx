@@ -96,7 +96,7 @@ export default function Compare() {
     <div className="wrap">
       <PageHeader title="Compare paths side by side" lead="Put up to three careers next to each other. Differences are called out so you can see the tradeoffs, not just the totals.">
         <Link to="/compare/education" className="btn btn--secondary">
-          <Icon name="compare" size={18} /> Education ROI tool
+          <Icon name="money" size={18} /> Training cost and payoff
         </Link>
       </PageHeader>
 
@@ -238,7 +238,7 @@ export default function Compare() {
           </div>
           <div style={{ marginTop: 'var(--s-5)' }}>
             <Callout>
-              Tuition and debt figures are rough starting estimates. Use the <Link to={`/compare/education?career=${careers[0].id}`}>Education ROI tool</Link> to adjust assumptions for your situation, and check specific schools on College Scorecard.
+              Tuition and debt figures are rough starting estimates. Use the <Link to={`/compare/education?career=${careers[0].id}`}>training cost and payoff tool</Link> to adjust assumptions for your situation, and check specific schools on College Scorecard.
             </Callout>
           </div>
         </>
