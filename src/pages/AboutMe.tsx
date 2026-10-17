@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useStore } from '../state/store';
 import { computeCompass, compassCompleteness, insights } from '../lib/compass';
 import { suggestions, matchCareer } from '../lib/matching';
-import { nextActions, progressCounts } from '../lib/next';
+import { progressCounts } from '../lib/next';
 import { CompassBloom } from '../components/CompassBloom';
 import { CompassList } from '../components/CompassList';
 import { CareerCard } from '../components/CareerCard';
@@ -15,16 +15,17 @@ import { formatDate } from '../lib/format';
 import { learnedInsights, nextBestAction, pathEvidence } from '../lib/path';
 import { LevelCard, Quests } from '../components/Game';
 import { Reveal } from '../components/motion';
-import { unfinished } from '../lib/resume';
 import { JourneyCodeCard } from '../components/JourneyCode';
-import { dueOutcomeCheckIns } from '../lib/outcomes';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
+import { COMPLETED_EDUCATION } from '../lib/readiness';
+import { ASSESSMENTS } from '../data/assessments';
 
-export default function Dashboard() {
+export default function AboutMe() {
+  useDocumentTitle('About me');
   const { profile } = useStore();
   const dims = useMemo(() => computeCompass(profile), [profile]);
   const completeness = Math.round(compassCompleteness(dims) * 100);
   const sugg = useMemo(() => suggestions(profile, 3), [profile]);
-  const actions = nextActions(profile, 3);
   const counts = progressCounts(profile);
   const learned = useMemo(() => Array.from(new Set([...learnedInsights(profile).map((i) => i.text), ...insights(profile)])), [profile]);
   const exploring = profile.saved.map((id) => CAREER_BY_ID[id]).filter(Boolean).slice(0, 3);
@@ -35,52 +36,46 @@ export default function Dashboard() {
   const pathNext = pathCareer && roadmap && pathEv ? nextBestAction(pathCareer, profile, roadmap, pathEv) : undefined;
   const testing = profile.roadmaps.filter((r) => r.stage !== 'ruledOut').length;
   const recent = [...profile.journal].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 2);
-  const hour = new Date().getHours();
-  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
-  const resume = unfinished(profile);
-  const followUps = useMemo(() => dueOutcomeCheckIns(profile), [profile]);
 
   return (
     <div className="wrap dash">
       <header className="pagehead">
-        <h1>
-          {greeting}
-          {profile.name ? `, ${profile.name}` : ''}.
-        </h1>
-        <p className="lead">Here’s what you’ve learned so far, and what’s worth exploring next.</p>
+        <h1>About me</h1>
+        <p className="lead">Everything Called has learned about you, in one place. It grows as you reflect, try things and hear from others.</p>
       </header>
 
-      {resume.length > 0 && (
-        <section className="resume" aria-labelledby="resume-h">
-          <h2 id="resume-h" className="h4">
-            Pick up where you left off
-          </h2>
-          <ul className="resume-list">
-            {resume.slice(0, 4).map((r) => (
-              <li key={r.id}>
-                <Link to={r.to} className="resume-item">
-                  <span className="resume-item__ring" style={{ ['--p' as string]: r.progress }} aria-hidden="true" />
-                  <span>
-                    <span className="resume-item__title">{r.title}</span>
-                    <span className="resume-item__detail">{r.detail}</span>
-                  </span>
-                  <Icon name="arrowRight" size={18} />
-                </Link>
+      <section className="grid grid--2 me__basics" aria-label="Where you are and what you’ve done">
+        <div className="card">
+          <div className="row row--between">
+            <h2 className="h4" style={{ margin: 0 }}>Where you are now</h2>
+            <Link to="/now" className="small">{profile.current ? 'Edit' : 'Add'}</Link>
+          </div>
+          {profile.current ? (
+            <ul className="plain small">
+              {(profile.current.jobTitle || profile.current.careerId) && <li>Work: {profile.current.jobTitle || CAREER_BY_ID[profile.current.careerId!]?.title}</li>}
+              {profile.current.education && <li>Education: {COMPLETED_EDUCATION.find((e) => e.value === profile.current!.education)?.label}{profile.current.field ? `, ${profile.current.field}` : ''}</li>}
+              {profile.current.credentials && <li>Licenses: {profile.current.credentials}</li>}
+            </ul>
+          ) : (
+            <p className="small muted">Your job, pay, education and skills. Called credits what you already have.</p>
+          )}
+        </div>
+        <div className="card">
+          <div className="row row--between">
+            <h2 className="h4" style={{ margin: 0 }}>Assessments</h2>
+            <Link to="/discover" className="small">All assessments</Link>
+          </div>
+          <ul className="plain small me__assess">
+            {ASSESSMENTS.map((a) => (
+              <li key={a.id}>
+                <Icon name={profile.completed[a.id] ? 'check' : 'arrowRight'} size={14} />{' '}
+                <Link to={`/discover/${a.id}`}>{a.title}</Link>
+                {profile.completed[a.id] ? <span className="muted"> · done</span> : null}
               </li>
             ))}
           </ul>
-        </section>
-      )}
-
-      {followUps.length > 0 && (
-        <section className="callout callout--evidence dash__follow-up" aria-labelledby="follow-up-h">
-          <Icon name="check" size={20} />
-          <div>
-            <strong id="follow-up-h" className="callout__title">A follow-up is ready</strong>
-            <div>Tell us what happened after a simulation. It takes about one minute and never changes your match score. <Link to="/research/check-in">Check in now</Link></div>
-          </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       <section className="dash__game">
         <LevelCard />
@@ -105,37 +100,21 @@ export default function Dashboard() {
         </div>
 
         <div className="dash__next">
-          <h2 className="h3">Best next step</h2>
-          <ol className="next-list">
-            {actions.map((a) => (
-              <li key={a.id} className={a === actions[0] ? 'is-best' : ''}>
-                <Link to={a.to} className="next-item">
-                  <span className={`next-item__kind kind-${a.kind}`} aria-hidden="true">
-                    <Icon name={a.kind === 'path' ? 'path' : a.kind === 'careers' ? 'careers' : a.kind} size={18} />
-                  </span>
-                  <span>
-                    <span className="next-item__title">{a === actions[0] ? `Recommended: ${a.title}` : a.title}</span>
-                    <span className="next-item__why">{a.why}</span>
-                  </span>
-                  <Icon name="arrowRight" size={18} />
-                </Link>
-              </li>
-            ))}
-          </ol>
-
-          {learned.length > 0 && (
-            <div className="card learned">
-              <h3>What I’ve learned</h3>
+          <div className="card learned">
+            <h2 className="h3">What I’ve learned</h2>
+            {learned.length > 0 ? (
               <ul className="reasons">
-                {learned.slice(0, 4).map((l) => (
+                {learned.slice(0, 6).map((l) => (
                   <li key={l}>
                     <Icon name="check" size={16} />
                     {l}
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
+            ) : (
+              <p className="small muted">Patterns show up here as you take assessments, try simulations and reflect.</p>
+            )}
+          </div>
         </div>
       </section>
 

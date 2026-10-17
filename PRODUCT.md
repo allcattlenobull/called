@@ -32,9 +32,24 @@ DISCOVER → PURPOSE → EXPLORE → EXPERIENCE → REFLECT → COMPARE → PLAN
 | Compare | `/compare`, `/compare/education` | Side-by-side tradeoffs; education ROI |
 | Decide | `/path` | Paths being tested side by side: evidence level, why it fits, open questions, the next best step, decision gates, and a stage-aware roadmap (now, 6 months, 12 months) |
 | Act | roadmap steps, experiments | Do real things; mark progress |
-| Reassess | dashboard, retaking assessments | Recommendations shift as evidence accumulates |
+| Reassess | About me (`/me`), retaking assessments | Recommendations shift as evidence accumulates |
 
-Nobody has to follow this order. Onboarding offers two doors: **Build my Purpose Compass** or **Start exploring now**, and nothing requires a long questionnaire up front.
+Nobody has to follow this order, and nothing requires a long questionnaire up front.
+
+### Journeys start from why someone came
+
+The stages above describe Called's pages. People arrive with a question of their own, so the home page asks **“What brings you here?”** and offers four doors in their words. Each door starts a short guided journey whose steps check themselves off from evidence already in the profile, so the next step is always known.
+
+| Door | Who it serves | Journey (`goal`) |
+| --- | --- | --- |
+| Discover my gifts and purpose | People who want to understand their gifts, with or without a career question | `purpose`: learn what gifts are (`/gifts`), name yours, ask others, who you want to help, use a gift this month, write a purpose statement |
+| Find careers that fit me | One question: “Are you working now?” | **No** → `fit`: interests, values, the life you want, save 2–3 careers, try one, pick a path. **Yes** → `change`: where you are now, interests and values, save 2 realistic moves, talk to someone, plan the switch |
+| Look up a career | Researchers who don’t want to enter anything about themselves | `lookup`: a search box right on the door; no setup, no terms screen. Then the reality check, places and pay, try it |
+| Decide between options | People weighing specific careers, schools or places | `decide`: add options, compare, check costs and payoff, compare places, fill the biggest evidence gap, choose a leading path |
+
+People helping someone else (parents, counselors, pastors, mentors) get a link under the doors to `/helping`.
+
+Returning people land on **Your journey** (`/`): a greeting, anything unfinished, the journey card with one next step, saved careers and paths, and the evidence meter. A slim journey bar under the header on every other page shows progress and the next step, and links home. The journey can be changed at any time; nothing is lost.
 
 ## Feature architecture
 
@@ -57,7 +72,7 @@ Engine (pure functions)
 
 The market layer is one shared abstraction: `marketFor(career, profile)` resolves future metro data first, then reviewed state data, then national data. It returns scope and source labels so local context never masquerades as local certainty.
 
-Because every feature reads and writes the same profile, the product behaves as one system: finishing a simulation changes the compass, the career scores, the dashboard’s suggestions and the report.
+Because every feature reads and writes the same profile, the product behaves as one system: finishing a simulation changes the compass, the career scores, the journey home, About me and the report.
 
 ## The Purpose Compass
 
@@ -127,7 +142,7 @@ The *Achievements* page shows the evidence meters first, then levels, badges and
 
 ## Coming back
 
-- Half-finished assessments, puzzle sets and simulations are saved as drafts. The dashboard opens with **Pick up where you left off**.
+- Half-finished assessments, puzzle sets and simulations are saved as drafts. The journey home opens with **Pick up where you left off**.
 - Every journey has a **journey code**. On a shared device, several people can keep separate journeys and switch with their codes. With the optional sync service, the code restores a journey on any device; the data is encrypted with the code before upload.
 - The app asks the browser for persistent storage so data isn’t evicted.
 - Optional city, state, ZIP and up to three considered places stay in the same private profile. No GPS coordinates, birthdate or public networking notes are collected.
@@ -168,17 +183,18 @@ Called's value is helping people gather evidence they can trust, and AI is part 
 
 ## Navigation
 
-One structure, shown two ways: dropdown menus on wide screens and a single sectioned menu on phones. The groups follow the journey.
+One structure, shown two ways: dropdown menus on wide screens and a single sectioned menu on phones. The first link is **Start here** for new visitors and **My journey** once someone has started.
 
 | Group | Pages |
 | --- | --- |
-| Discover · know yourself | Where you are now, Assessments, Purpose, Journal |
-| Explore · find possibilities | Careers, Places and cost of living, Training costs and payoff, Compare careers |
-| Try it · test the work | Career simulations, Real-world experiments, Talk to people near you |
-| My Path · decide your next step | Paths I’m testing, My Called report, Evidence and achievements, Take your evidence to an AI |
-| Account (top right) | Account, Privacy and data, For counselors |
+| Purpose & gifts · who you’re made to be | Understanding gifts, My gifts, My purpose statement, Everything in purpose |
+| Careers · explore and try the work | Find careers, Try a career, Real-world experiments, Talk to people near you, Compare careers |
+| My plan · decide your next step | Paths I’m testing, Next moves from where I am, Training costs and payoff, Places and cost of living, My Called report |
+| About me (top right, private) | About me, My assessments, Evidence and achievements, Account, Privacy and data |
 
-About, research, feedback and terms stay in the footer.
+**Accessibility** sits beside About me: appearance (auto, light, dark), text size, and Spanish, with every label in English and Spanish. It opens as a popover on computers and a bottom sheet on phones, moves focus into the panel and returns it on Escape.
+
+About, research, feedback, “For parents and counselors” and terms stay in the footer.
 
 ## Place is part of the decision
 

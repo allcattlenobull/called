@@ -6,16 +6,20 @@ import { Logo } from './ui';
 import { Celebrations } from './Game';
 import { AccessibilityMenu } from './AccessibilityMenu';
 import { useStore } from '../state/store';
+import { hasStarted } from '../lib/profile';
+import { JourneyBar } from './JourneyBar';
 import { flushResearchQueue, recordResearchEvent } from '../lib/researchParticipation';
 
 export function Layout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
+  const meRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const current = activeItem(location.pathname);
   const group = activeGroup(location.pathname);
-  const { settings } = useStore();
+  const { settings, profile } = useStore();
+  const started = hasStarted(profile);
   const mainRef = useRef<HTMLElement>(null);
   const first = useRef(true);
 
@@ -45,12 +49,12 @@ export function Layout({ children }: { children: ReactNode }) {
     if (!menu) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
-      const trigger = navRef.current?.querySelector<HTMLButtonElement>(`[aria-controls="menu-${menu}"]`);
+      const trigger = document.querySelector<HTMLButtonElement>(`[aria-controls="menu-${menu}"]`);
       setMenu(null);
       trigger?.focus();
     };
     const onClick = (e: MouseEvent) => {
-      if (!navRef.current?.contains(e.target as Node)) setMenu(null);
+      if (!navRef.current?.contains(e.target as Node) && !meRef.current?.contains(e.target as Node)) setMenu(null);
     };
     document.addEventListener('keydown', onKey);
     document.addEventListener('mousedown', onClick);
@@ -83,7 +87,7 @@ export function Layout({ children }: { children: ReactNode }) {
           </Link>
           <nav className="topnav" aria-label="Primary" ref={navRef}>
             <NavLink to="/" end className="topnav__link">
-              Home
+              {started ? 'My journey' : 'Start here'}
             </NavLink>
             {NAV.map((g) => (
               <div key={g.id} className="topnav__group">
@@ -114,10 +118,31 @@ export function Layout({ children }: { children: ReactNode }) {
           </nav>
           <div className="topbar__actions">
             <AccessibilityMenu />
-            <NavLink to="/account" className={`btn btn--quiet topbar__account${group === 'account' ? ' active' : ''}`}>
-              <Icon name="user" size={18} />
-              <span>Account</span>
-            </NavLink>
+            <div className="topnav__group topbar__me" ref={meRef}>
+              <button
+                type="button"
+                className={`btn btn--quiet topbar__account${group === 'me' ? ' active' : ''}`}
+                aria-expanded={menu === 'me'}
+                aria-controls="menu-me"
+                onClick={() => setMenu((m) => (m === 'me' ? null : 'me'))}
+              >
+                <Icon name="user" size={18} />
+                <span>About me</span>
+                <Icon name="down" size={14} aria-hidden="true" />
+              </button>
+              {menu === 'me' && (
+                <div className="topnav__panel topnav__panel--right" id="menu-me">
+                  <p className="topnav__tagline">Yours, private</p>
+                  <ul>
+                    {ACCOUNT_NAV.map((item) => (
+                      <li key={item.to}>
+                        <MenuLink item={item} current={current} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
             <button type="button" className="btn btn--icon topbar__menu" aria-expanded={open} aria-controls="menu-sheet" onClick={() => setOpen(true)}>
               <Icon name="menu" />
               <span className="visually-hidden">Open menu</span>
@@ -142,7 +167,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 <li>
                   <NavLink to="/" end>
                     <Icon name="home" />
-                    Home
+                    {started ? 'My journey' : 'Start here'}
                   </NavLink>
                 </li>
               </ul>
@@ -165,12 +190,12 @@ export function Layout({ children }: { children: ReactNode }) {
               ))}
               <section className="sheet__group" aria-labelledby="sheet-account">
                 <h2 id="sheet-account" className="sheet__heading">
-                  Account <span>Yours, private</span>
+                  About me <span>Yours, private</span>
                 </h2>
                 <ul className="sheet__nav">
                   {ACCOUNT_NAV.map((item) => (
                     <li key={item.to}>
-                      <NavLink to={item.to} end>
+                      <NavLink to={item.to} end aria-current={current === item ? 'page' : undefined} className={current === item ? 'active' : ''}>
                         <Icon name={item.icon} />
                         {item.label}
                       </NavLink>
@@ -183,6 +208,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       )}
 
+      <JourneyBar />
       <main id="main" ref={mainRef} tabIndex={-1} className="main">
         <div className="page-enter" key={location.pathname}>
           {children}
@@ -203,7 +229,8 @@ export function Layout({ children }: { children: ReactNode }) {
             <Link to="/about">About</Link>
             <Link to="/research">Research and trust</Link>
             <Link to="/feedback">Give feedback</Link>
-            <Link to="/counselor">For counselors</Link>
+            <Link to="/helping">For parents and counselors</Link>
+            <Link to="/counselor">Counselor accounts</Link>
             <Link to="/data">Privacy and data</Link>
             <Link to="/terms">Terms of use</Link>
           </nav>

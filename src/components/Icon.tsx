@@ -42,7 +42,11 @@ export type IconName =
   | 'user'
   | 'pin'
   | 'briefcase'
-  | 'money';
+  | 'money'
+  | 'sun'
+  | 'moon'
+  | 'contrast'
+  | 'globe';
 
 const paths: Record<IconName, ReactElement> = {
   home: <path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" />,
@@ -150,6 +154,25 @@ const paths: Record<IconName, ReactElement> = {
   external: <path d="M14 5h5v5M19 5l-8 8M17 14v5H5V7h5" />,
   mail: <path d="M4 6h16v12H4zM4 7l8 6 8-6" />,
   copy: <path d="M9 8h10v12H9zM5 16H4V4h10v1" />,
+  sun: (
+    <>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+    </>
+  ),
+  moon: <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />,
+  contrast: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor" stroke="none" />
+    </>
+  ),
+  globe: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M3.5 12h17M12 3.5c2.4 2.5 3.5 5.3 3.5 8.5s-1.1 6-3.5 8.5c-2.4-2.5-3.5-5.3-3.5-8.5s1.1-6 3.5-8.5z" />
+    </>
+  ),
   accessibility: (
     <>
       <circle cx="12" cy="12" r="9" />

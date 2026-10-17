@@ -49,7 +49,7 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 
 | Area | What it does |
 | --- | --- |
-| **Onboarding** | Explains that Called collects evidence rather than handing down answers. A private account is created without requiring email; the journey code is its access key. Start exploring or build a Purpose Compass. |
+| **Onboarding** | Explains that Called collects evidence rather than handing down answers. A private account is created without requiring email; the journey code is its access key. Then choose what you’re here for, or just look around. |
 | **Discover** | Six exploration activities: interests, self-rated skills, unscored reasoning practice plus a separate OMIB pilot, work style, values and lifestyle. Every activity links to its evidence status and limits. |
 | **Purpose Compass** | A living profile with 11 dimensions (including explicitly labeled reasoning practice), each with a strength and an evidence level, drawn as a signature “bloom”. |
 | **Purpose** | Guided reflections: gifts, problems I care about, who I want to help, experiences, what others see in me, biblical principles, a private journal, and a versioned *current* purpose statement. |
@@ -57,6 +57,8 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 | **Career pages** | Explainable match on 8 visible dimensions, reasons, potential conflicts, a reality check (“what people imagine” vs. “what the work looks like”), day-to-day, pay range, outlook, training routes, working conditions, related careers, sources. |
 | **Try It** | 20 searchable and filterable career simulations across six work categories. Versioned evidence labels are public; reflections update recommendations while unvalidated response scoring stays in a consent-only shadow validation stream. |
 | **Purpose experiments** | 12 real-world experiments (teach a skill, interview a professional, volunteer, fix something…) with return questions. |
+| **Journeys** | The home page asks “What brings you here?” with four doors: discover my gifts and purpose, find careers that fit me (school or starting out, or changing careers), look up a career with no setup, and decide between options. Each starts a guided journey whose steps check themselves off; returning people land on **Your journey** with one next step, and a journey bar on every page shows progress. Parents, counselors and mentors get their own page (`/helping`), and anyone can read **Understanding gifts** (`/gifts`). |
+| **Accessibility** | Appearance, text size and Spanish in one bilingual panel: a popover on computers and a bottom sheet on phones, keyboard and screen-reader accessible. |
 | **Compare** | Up to three careers side by side across fit, money, education and work-life, with the standout in each row called out. |
 | **Education ROI** | A transparent model of cost, opportunity cost, loan payments, break-even and 10-year net, with every assumption editable. Covers college, community college, certifications, trade school, apprenticeships, military, entrepreneurship and direct-to-work. |
 | **My Path** | Decision support for the paths you’re testing: evidence level and checklist, why it fits, unanswered questions, the next best step and why, decision gates, leading paths, stage-aware roadmaps (Now, 6 months, 12 months) that check themselves off, and what you’ve learned about yourself. |
@@ -68,7 +70,7 @@ Called is built on Christian principles: stewardship, service, wisdom, diligence
 | **How AI is changing this work** | On every career: exposure to AI (low, moderate, high) from peer-reviewed research, the real tasks AI tools could speed up and the ones that stay human, and what that means for someone considering the work. Filter and sort careers by it; compare it side by side. |
 | **Achievements** | Your career evidence (self-understanding, career exposure, real-world experience, decision readiness) first; levels, 20 insight-led badges, weekly quests and evidence points underneath. |
 | **Journey codes** | Every journey has a code like `CALL-7KQ2-M9XD-4HPA-R2TW`. Enter it to return to a journey on a shared device or, with the optional sync service, on any device. |
-| **Resume** | Half-finished assessments and simulations are saved; the dashboard offers to pick them back up. |
+| **Resume** | Half-finished assessments and simulations are saved; the journey home offers to pick them back up. |
 | **Your data** | Export, import, switch and delete journeys. Research and analytics are separate explicit opt-ins with withdrawal/deletion controls. Includes auto/light/dark themes, plain reading mode, faith-lens and backup settings. |
 
 Career and simulation search is typo-tolerant and synonym-aware: close spellings and common related terms are ranked by relevance instead of requiring an exact substring.

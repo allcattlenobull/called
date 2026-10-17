@@ -8,14 +8,23 @@ test.beforeEach(async ({ page }) => {
 test('a new user can go from onboarding to exploring a path, and it persists', async ({ page }) => {
   await page.goto('');
   await expect(page.getByRole('heading', { name: 'You don’t need your whole life figured out.' })).toBeVisible();
-  await page.getByRole('link', { name: 'Start your journey' }).first().click();
+  // Front door: “Find careers that fit me” asks one question, then starts the fit journey.
+  const doors = page.getByRole('region', { name: 'What brings you here?' });
+  await doors.getByRole('button', { name: /Find my fit/ }).click();
+  await doors.getByRole('button', { name: 'No, I’m in school or starting out' }).click();
 
   // Onboarding
   await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.getByRole('heading', { name: 'You’re starting: Find careers that fit me' })).toBeVisible();
   await page.getByLabel('What should we call you?').fill('Jordan');
   await page.getByText('In high school').click();
-  await page.getByRole('button', { name: /Build my Purpose Compass/ }).click();
+  await page.getByRole('button', { name: /Start my journey/ }).click();
+
+  // Journey home: one clear next step.
+  await expect(page.getByRole('heading', { name: /Jordan\./, level: 1 })).toBeVisible();
+  await expect(page.getByText('Step 1: What you enjoy')).toBeVisible();
+  await page.getByRole('link', { name: /Start interests/ }).click();
 
   // Interests: answer all 30
   for (let i = 0; i < 30; i++) {
@@ -216,7 +225,7 @@ test('unfinished work is saved and offered on return', async ({ page }) => {
   await page.goto('welcome');
   await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
-  await page.getByRole('button', { name: /Start exploring now/ }).click();
+  await page.getByRole('button', { name: 'Just let me look around' }).click();
   await page.goto('try/software');
   await page.getByRole('button', { name: 'Start simulation' }).click();
   await page.locator('.sim-option').first().click();
@@ -235,7 +244,7 @@ test('a journey code switches between journeys on a shared device', async ({ pag
   await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByLabel('What should we call you?').fill('Ana');
-  await page.getByRole('button', { name: /Start exploring now/ }).click();
+  await page.getByRole('button', { name: 'Just let me look around' }).click();
   await page.goto('data');
   const anaCode = (await page.locator('.code-display__code').first().innerText()).trim();
   expect(anaCode).toMatch(/^CALL(-[2-9A-Z]{4}){4}$/);
@@ -244,7 +253,7 @@ test('a journey code switches between journeys on a shared device', async ({ pag
   await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByLabel('What should we call you?').fill('Ben');
-  await page.getByRole('button', { name: /Start exploring now/ }).click();
+  await page.getByRole('button', { name: 'Just let me look around' }).click();
   await page.goto('');
   await expect(page.getByRole('heading', { name: /Ben\./ })).toBeVisible();
 
@@ -260,7 +269,7 @@ test('an individual account shows identity, results and a stable member ID', asy
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByLabel('What should we call you?').fill('Jordan');
   await page.getByLabel('Last name').fill('Lee');
-  await page.getByRole('button', { name: /Start exploring now/ }).click();
+  await page.getByRole('button', { name: 'Just let me look around' }).click();
   await page.goto('account');
   await page.getByLabel('I have read and agree to the Individual Account Terms').check();
   await page.getByRole('button', { name: 'Create my individual account' }).click();
@@ -296,7 +305,7 @@ test('navigation uses one responsive menu that reaches every section', async ({ 
     const nav = page.getByRole('navigation', { name: 'Primary' });
     await expect(nav).toBeVisible();
     await expect(page.getByRole('button', { name: 'Open menu' })).toBeHidden();
-    const explore = nav.getByRole('button', { name: 'Explore' });
+    const explore = nav.getByRole('button', { name: 'My plan' });
     await explore.click();
     await expect(explore).toHaveAttribute('aria-expanded', 'true');
     await page.keyboard.press('Escape');
@@ -306,15 +315,21 @@ test('navigation uses one responsive menu that reaches every section', async ({ 
     await nav.getByRole('link', { name: /Training costs and payoff/ }).click();
     await expect(page).toHaveURL(/compare\/education/);
     await expect(explore).toHaveClass(/active/);
-    await nav.getByRole('button', { name: 'Try it' }).click();
+    await nav.getByRole('button', { name: 'Careers' }).click();
     await expect(nav.getByRole('link', { name: /Talk to people near you/ })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Account' }).first()).toBeVisible();
+    await nav.getByRole('button', { name: 'Purpose & gifts' }).click();
+    await expect(nav.getByRole('link', { name: /Understanding gifts/ })).toBeVisible();
+    // Personal pages live under “About me” on the right.
+    const me = page.getByRole('button', { name: /About me/ });
+    await me.click();
+    await expect(page.getByRole('link', { name: /My assessments/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Privacy and data/ }).first()).toBeVisible();
   } else {
     await expect(page.getByRole('navigation', { name: 'Primary' })).toBeHidden();
     await page.getByRole('button', { name: 'Open menu' }).click();
     const menu = page.getByRole('dialog', { name: 'Menu' });
     await expect(menu).toBeVisible();
-    for (const name of ['Assessments', 'Careers', 'Places and cost of living', 'Training costs and payoff', 'Compare careers', 'Career simulations', 'Talk to people near you', 'Paths I’m testing', 'My Called report', 'Account']) {
+    for (const name of ['Start here', 'Understanding gifts', 'My gifts', 'Find careers', 'Try a career', 'Talk to people near you', 'Compare careers', 'Paths I’m testing', 'Next moves from where I am', 'Training costs and payoff', 'Places and cost of living', 'My Called report', 'About me', 'My assessments', 'Account']) {
       await expect(menu.getByRole('link', { name, exact: true })).toBeVisible();
     }
     await menu.getByRole('link', { name: 'Places and cost of living', exact: true }).click();
@@ -406,4 +421,53 @@ test('the accessibility menu controls appearance, text size and Spanish access',
   await page.getByRole('button', { name: 'Accessibility options' }).click();
   await page.getByRole('dialog', { name: 'Accessibility options' }).getByRole('button', { name: 'Auto', exact: true }).click();
   await expect(page.locator('html')).not.toHaveAttribute('data-theme', /.+/);
+});
+
+test('the front door looks up a career with no setup', async ({ page }) => {
+  await page.goto('');
+  const doors = page.getByRole('region', { name: 'What brings you here?' });
+  await doors.getByRole('searchbox', { name: 'Search careers' }).fill('acountant');
+  await doors.getByRole('button', { name: 'Search careers' }).click();
+  await expect(page).toHaveURL(/careers\?q=acountant/);
+  await expect(page.getByRole('link', { name: 'Accountant', exact: true }).first()).toBeVisible();
+});
+
+test('a career changer gets a guided journey with a progress bar on every page', async ({ page }) => {
+  await page.goto('');
+  const doors = page.getByRole('region', { name: 'What brings you here?' });
+  await doors.getByRole('button', { name: /Find my fit/ }).click();
+  await doors.getByRole('button', { name: 'Yes, and I want a change' }).click();
+  await page.getByLabel('I agree to the Guest Terms of Use').check();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.getByRole('heading', { name: 'You’re starting: Change careers without starting over' })).toBeVisible();
+  await page.getByLabel('What should we call you?').fill('Dana');
+  await page.getByRole('button', { name: /Start my journey/ }).click();
+
+  const card = page.getByRole('region', { name: 'Change careers without starting over' });
+  await expect(card).toContainText('0 of 5 done');
+  await expect(card.getByText('Step 1: Tell Called where you are now')).toBeVisible();
+  await card.getByRole('link', { name: /Add where I am now/ }).click();
+  await expect(page).toHaveURL(/\/now/);
+
+  // The journey bar follows people around the site and links back home.
+  await page.goto('careers');
+  const bar = page.getByRole('navigation', { name: 'Your journey' });
+  await expect(bar).toContainText('Tell Called where you are now');
+  await bar.getByRole('link', { name: /Your journey/ }).click();
+  await expect(page.getByRole('heading', { name: /Dana\./, level: 1 })).toBeVisible();
+
+  // People can switch journeys at any time.
+  await page.getByRole('button', { name: /Change what I’m working on/ }).click();
+  await page.getByRole('button', { name: /Start with my gifts/ }).click();
+  await expect(page.getByRole('region', { name: 'Discover my gifts and purpose' })).toContainText('Step 1: Learn what gifts are');
+  await page.getByRole('link', { name: /Read the guide/ }).click();
+  await expect(page.getByRole('heading', { name: 'Understanding gifts', level: 1 })).toBeVisible();
+  await page.goto('');
+  await expect(page.getByRole('region', { name: 'Discover my gifts and purpose' })).toContainText('1 of 6 done');
+});
+
+test('helpers have their own starting page', async ({ page }) => {
+  await page.goto('');
+  await page.getByRole('region', { name: 'What brings you here?' }).getByRole('link', { name: 'Start here', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Helping someone find their way', level: 1 })).toBeVisible();
 });

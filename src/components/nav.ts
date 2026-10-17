@@ -18,60 +18,55 @@ export interface NavGroup {
 }
 
 /**
- * One navigation structure, shown two ways: dropdowns on wide screens and a single
- * sectioned sheet on narrow ones. Groups follow the journey: know yourself, find
- * possibilities, test them, decide.
+ * One navigation structure, shown two ways: dropdowns on wide screens and one sectioned menu on
+ * phones. It's organized by what people come to do (see src/lib/journeys.ts), not by feature:
+ * My journey (home) · Purpose & gifts · Careers · My plan, with About me on the right.
  */
 export const NAV: NavGroup[] = [
   {
-    id: 'discover',
-    label: 'Discover',
-    tagline: 'Know yourself',
+    id: 'purpose',
+    label: 'Purpose & gifts',
+    tagline: 'Who you’re made to be',
     items: [
-      { to: '/now', label: 'Where you are now', blurb: 'Your current job, pay, education and skills, and moves you could make from here', icon: 'briefcase' },
-      { to: '/discover', label: 'Assessments', blurb: 'Interests, skills, aptitudes, work style, values and lifestyle', icon: 'discover', match: ['/discover/'] },
-      { to: '/purpose', label: 'Purpose', blurb: 'Your gifts, who you want to serve and what you care about', icon: 'purpose', match: ['/purpose/'] },
-      { to: '/purpose/journal', label: 'Journal', blurb: 'Private reflections, kept on this device', icon: 'journal' },
+      { to: '/gifts', label: 'Understanding gifts', blurb: 'What gifts are, how they show up, and what the Bible says about them', icon: 'info' },
+      { to: '/purpose/gifts', label: 'My gifts', blurb: 'Choose the strengths that show up again and again', icon: 'spark' },
+      { to: '/purpose/statement', label: 'My purpose statement', blurb: 'Where your gifts and the world’s needs might meet', icon: 'journal' },
+      { to: '/purpose', label: 'Everything in purpose', blurb: 'Who you want to help, what others see in you, experiences, principles and journal', icon: 'purpose', match: ['/purpose/'] },
     ],
   },
   {
-    id: 'explore',
-    label: 'Explore',
-    tagline: 'Find possibilities',
+    id: 'careers',
+    label: 'Careers',
+    tagline: 'Explore and try the work',
     items: [
-      { to: '/careers', label: 'Careers', blurb: 'Search every career, matched to you with the reasons shown', icon: 'careers', match: ['/careers/'] },
-      { to: '/places', label: 'Places and cost of living', blurb: 'Where you live or might move, what pay is worth there, college costs by state', icon: 'pin' },
-      { to: '/compare/education', label: 'Training costs and payoff', blurb: 'College, trade school, apprenticeships: cost, debt and break-even', icon: 'money' },
-      { to: '/compare', label: 'Compare careers', blurb: 'Up to three careers side by side', icon: 'compare', match: [] },
-    ],
-  },
-  {
-    id: 'try',
-    label: 'Try it',
-    tagline: 'Test the work',
-    items: [
-      { to: '/try', label: 'Career simulations', blurb: 'Short, realistic decisions from real jobs', icon: 'try', match: ['/try/'] },
+      { to: '/careers', label: 'Find careers', blurb: 'Search any career, or see your matches with the reasons shown', icon: 'careers', match: ['/careers/'] },
+      { to: '/try', label: 'Try a career', blurb: 'Short, realistic simulations from real jobs', icon: 'try', match: ['/try/'] },
       { to: '/try/experiments', label: 'Real-world experiments', blurb: 'Small tests in real life: shadow, volunteer, build', icon: 'flask', match: ['/try/experiments/'] },
-      { to: '/network', label: 'Talk to people near you', blurb: 'Associations, apprenticeships, interview scripts and practice', icon: 'mail' },
+      { to: '/network', label: 'Talk to people near you', blurb: 'Groups, programs and scripts for a first conversation', icon: 'mail' },
+      { to: '/compare', label: 'Compare careers', blurb: 'Up to three careers side by side', icon: 'compare' },
     ],
   },
   {
-    id: 'path',
-    label: 'My Path',
+    id: 'plan',
+    label: 'My plan',
     tagline: 'Decide your next step',
     items: [
-      { to: '/path', label: 'Paths I’m testing', blurb: 'Evidence, next best step and your roadmap', icon: 'path' },
-      { to: '/path/report', label: 'My Called report', blurb: 'A summary to share with a parent, counselor or mentor', icon: 'print' },
-      { to: '/achievements', label: 'Your evidence and achievements', blurb: 'Evidence meters, levels, badges and quests', icon: 'spark' },
-      { to: '/account/ai-export', label: 'Take your evidence to an AI', blurb: 'A privacy-reduced summary for your own assistant', icon: 'copy' },
+      { to: '/path', label: 'Paths I’m testing', blurb: 'Your evidence, next best step and roadmap', icon: 'path' },
+      { to: '/now', label: 'Next moves from where I am', blurb: 'Credit for your job, pay, education and skills', icon: 'briefcase' },
+      { to: '/compare/education', label: 'Training costs and payoff', blurb: 'College, trade school or apprenticeship: cost, debt and break-even', icon: 'money' },
+      { to: '/places', label: 'Places and cost of living', blurb: 'Pay, prices and college costs where you might live', icon: 'pin' },
+      { to: '/path/report', label: 'My Called report', blurb: 'A summary to share with someone you trust', icon: 'print' },
     ],
   },
 ];
 
+/** “About me”: the person’s own profile, results and settings. */
 export const ACCOUNT_NAV: NavItem[] = [
-  { to: '/account', label: 'Account', blurb: 'Your profile, progress and backups', icon: 'user' },
+  { to: '/me', label: 'About me', blurb: 'Your compass, what you’ve learned and what you’ve done', icon: 'user' },
+  { to: '/discover', label: 'My assessments', blurb: 'Interests, values, the life you want, skills and more', icon: 'discover', match: ['/discover/'] },
+  { to: '/achievements', label: 'Evidence and achievements', blurb: 'Evidence meters, levels and badges', icon: 'spark' },
+  { to: '/account', label: 'Account', blurb: 'Your member ID, backups and sharing', icon: 'lock', match: ['/account/'] },
   { to: '/data', label: 'Privacy and data', blurb: 'Journey code, export, import and delete', icon: 'lock' },
-  { to: '/counselor', label: 'For counselors', blurb: 'Receive reports people choose to share', icon: 'about' },
 ];
 
 /** The most specific nav item for a path (so /purpose/journal highlights Journal, not Purpose). */
@@ -87,6 +82,6 @@ export function activeItem(pathname: string): NavItem | undefined {
 export function activeGroup(pathname: string): string | undefined {
   const item = activeItem(pathname);
   if (!item) return undefined;
-  if (ACCOUNT_NAV.includes(item)) return 'account';
+  if (ACCOUNT_NAV.includes(item)) return 'me';
   return NAV.find((g) => g.items.includes(item))?.id;
 }

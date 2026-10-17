@@ -8,6 +8,10 @@ test.beforeEach(async ({ page }) => {
 
 const ROUTES = [
   '',
+  'me',
+  'gifts',
+  'helping',
+  'now',
   'welcome',
   'discover',
   'discover/interests',
@@ -92,7 +96,7 @@ test('celebration dialog is accessible', async ({ page }) => {
   await page.goto('welcome');
   await page.getByLabel('I agree to the Guest Terms of Use').check();
   await page.getByRole('button', { name: 'Continue' }).click();
-  await page.getByRole('button', { name: /Start exploring now/ }).click();
+  await page.getByRole('button', { name: 'Just let me look around' }).click();
   // Celebrations lead with what was learned, not the reward.
   const dialog = page.getByRole('dialog', { name: 'You started gathering evidence.' });
   await expect(dialog).toBeVisible();
@@ -110,8 +114,31 @@ test('the accessibility options panel is keyboard and screen-reader accessible',
   await expect(panel).toBeVisible();
   const results = await new AxeBuilder({ page }).include('#accessibility-panel').withTags(['wcag2a', 'wcag2aa']).analyze();
   expect(results.violations.filter((violation) => violation.impact === 'serious' || violation.impact === 'critical').map((violation) => violation.id)).toEqual([]);
+  // Focus moves into the panel and returns to the toggle on Escape.
+  await expect(panel.getByRole('button', { name: 'Auto', exact: true })).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(panel).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Accessibility options' })).toBeFocused();
+});
+
+test('the accessibility panel fits the screen on every device', async ({ page }) => {
+  await page.goto('');
+  await page.getByRole('button', { name: 'Accessibility options' }).click();
+  const box = await page.locator('#accessibility-panel').boundingBox();
+  const vp = page.viewportSize()!;
+  expect(box).not.toBeNull();
+  expect(box!.x).toBeGreaterThanOrEqual(0);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(vp.width + 1);
+  expect(box!.y).toBeGreaterThanOrEqual(0);
+  if (vp.width <= 700) {
+    // A bottom sheet on phones.
+    expect(Math.round(box!.y + box!.height)).toBeGreaterThanOrEqual(vp.height - 1);
+    expect(box!.width).toBeGreaterThanOrEqual(vp.width - 1);
+  } else {
+    // A popover under the header on larger screens.
+    expect(box!.y).toBeGreaterThan(40);
+    expect(box!.y).toBeLessThan(120);
+  }
 });
 
 test('supported browsers can translate the current page on-device and restore English', async ({ page }) => {

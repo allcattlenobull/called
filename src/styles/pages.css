@@ -3178,3 +3178,434 @@ html[data-reading='plain'] .panel {
 .filters__hint {
   margin: calc(var(--s-2) * -1) 0 var(--s-2);
 }
+
+/* ===== Front doors ===== */
+.section--doors {
+  padding-top: 0;
+}
+.doors__heading {
+  font-size: var(--fs-2xl);
+  margin-bottom: var(--s-4);
+}
+.doors__grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+}
+.doors__grid li + li {
+  margin-top: 0;
+}
+.door {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-5);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+}
+.door:hover,
+.door:focus-within {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-2);
+}
+.door.is-current {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.door__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--primary-tint);
+  color: var(--primary);
+}
+.door--purpose .door__icon {
+  background: var(--purpose-tint);
+  color: var(--purpose);
+}
+.door--lookup .door__icon {
+  background: var(--evidence-tint);
+  color: var(--evidence-text);
+}
+.door__title {
+  font-size: var(--fs-lg);
+  margin: var(--s-1) 0 0;
+}
+.door__text {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin: 0;
+  flex: 1;
+}
+.door__go {
+  align-self: flex-start;
+  margin-top: var(--s-2);
+}
+.door__branch {
+  display: grid;
+  gap: var(--s-2);
+  margin-top: var(--s-2);
+  animation: riseIn var(--dur-med) var(--ease-out) both;
+}
+.door__branch .btn {
+  justify-content: flex-start;
+  text-align: left;
+  white-space: normal;
+}
+.door__search {
+  display: flex;
+  gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.door__search .input {
+  flex: 1;
+  min-width: 0;
+}
+.door__search .btn {
+  flex: none;
+  width: 48px;
+  padding: 0;
+  justify-content: center;
+}
+.doors__helper {
+  margin: var(--s-4) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  display: flex;
+  gap: var(--s-2);
+  align-items: flex-start;
+}
+.doors__helper svg {
+  flex: none;
+  margin-top: 3px;
+}
+@media (max-width: 700px) {
+  /* Get people to the doors sooner on phones. */
+  .hero__art > svg,
+  .hero__art > div > svg {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+/* ===== Home for visitors ===== */
+.how__title {
+  margin-bottom: var(--s-4);
+}
+.how {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+.how__step {
+  margin: 0;
+}
+.how__step svg {
+  color: var(--primary);
+}
+.how__step h3 {
+  margin: var(--s-2) 0 var(--s-1);
+}
+.how__step p {
+  margin: 0;
+  color: var(--text-muted);
+}
+.how__note {
+  margin: var(--s-5) 0 0;
+}
+
+/* ===== Your journey (returning home) ===== */
+.home-journey .resume,
+.home-journey > .callout {
+  margin-bottom: var(--s-5);
+}
+.journey-card {
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  background: linear-gradient(160deg, var(--primary-tint), var(--surface) 60%);
+  padding: clamp(var(--s-4), 3vw, var(--s-6));
+  display: grid;
+  gap: var(--s-4);
+  margin-bottom: var(--s-5);
+}
+.journey-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+.journey-card__title {
+  font-size: var(--fs-2xl);
+  margin: var(--s-1) 0 0;
+}
+.eyebrow {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.journey-next {
+  display: grid;
+  gap: var(--s-2);
+  justify-items: start;
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.journey-next__label {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  line-height: var(--lh-snug);
+}
+.journey-next__why {
+  margin: 0;
+  color: var(--text-muted);
+}
+.journey-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-2);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  /* One row of steps, left to right, like a path. */
+  .journey-steps {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+}
+.journey-steps li + li {
+  margin-top: 0;
+}
+.journey-step {
+  display: flex;
+  gap: var(--s-2);
+  align-items: flex-start;
+  font-size: var(--fs-sm);
+}
+.journey-step__mark {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  border: 2px solid var(--border-strong);
+  color: var(--text-muted);
+  background: var(--surface);
+}
+.journey-step.is-done .journey-step__mark {
+  background: var(--evidence);
+  border-color: var(--evidence);
+  color: #fff;
+}
+.journey-step.is-current .journey-step__mark {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.journey-step__label {
+  color: var(--text);
+  text-decoration: none;
+  padding-top: 2px;
+}
+.journey-step__label:hover {
+  text-decoration: underline;
+}
+.journey-step.is-done .journey-step__label {
+  color: var(--text-muted);
+}
+.journey-step.is-current .journey-step__label {
+  font-weight: 700;
+}
+.journey-card .linkish {
+  justify-self: start;
+}
+.journey-switch {
+  margin-bottom: var(--s-5);
+  display: grid;
+  gap: var(--s-3);
+  justify-items: start;
+}
+.journey-switch .doors {
+  width: 100%;
+}
+.home-journey__row {
+  align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+}
+.home-journey__row .card {
+  display: grid;
+  gap: var(--s-3);
+}
+.saved-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+.saved-list li {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-2);
+  align-items: center;
+}
+.saved-list a {
+  display: inline-flex;
+  gap: var(--s-2);
+  align-items: center;
+}
+.home-journey__more {
+  margin-top: var(--s-5);
+}
+
+/* ===== Journey bar ===== */
+.journey-bar {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+.journey-bar__inner {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: var(--s-2) var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  font-size: var(--fs-sm);
+  min-height: 44px;
+}
+.journey-bar__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.journey-bar__progress {
+  display: inline-flex;
+  gap: 3px;
+}
+.journey-bar__progress i {
+  width: 14px;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--border-strong);
+}
+.journey-bar__progress i.is-done {
+  background: var(--evidence);
+}
+.journey-bar__progress i.is-current {
+  background: var(--primary);
+}
+.journey-bar__text {
+  color: var(--text-muted);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.journey-bar__text strong {
+  color: var(--text);
+}
+@media (max-width: 640px) {
+  .journey-bar__progress {
+    display: none;
+  }
+}
+
+/* ===== Gifts guide and helpers ===== */
+.guide-points {
+  padding-left: 1.1em;
+  display: grid;
+  gap: var(--s-2);
+}
+.guide-points li + li {
+  margin-top: 0;
+}
+.guide-compare .card p {
+  margin: 0;
+}
+.guide-quote {
+  margin: var(--s-3) 0;
+  padding: var(--s-3) var(--s-4);
+  border-left: 3px solid var(--purpose);
+  background: var(--purpose-tint);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+}
+.guide-quote p {
+  margin: 0;
+}
+.guide-quote__text {
+  font-style: italic;
+  margin-bottom: var(--s-1) !important;
+}
+.guide-gifts {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--s-2) var(--s-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+}
+.guide-gifts li {
+  margin: 0;
+  display: grid;
+  font-size: var(--fs-sm);
+}
+.guide-gifts span {
+  color: var(--text-muted);
+}
+.guide-next {
+  margin-top: var(--s-5);
+  display: grid;
+  gap: var(--s-3);
+  justify-items: start;
+}
+.guide-steps {
+  margin: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+.guide-steps li + li {
+  margin-top: 0;
+}
+.helping .grid {
+  margin-top: var(--s-5);
+}
+.welcome__start {
+  margin-top: var(--s-7);
+  padding: var(--s-5);
+  border-radius: var(--r-xl);
+  background: var(--primary-tint);
+}
+.me__basics {
+  margin-bottom: var(--s-5);
+}
+.me__basics .card {
+  display: grid;
+  gap: var(--s-2);
+  align-content: start;
+}
+.me__assess {
+  columns: 2;
+}

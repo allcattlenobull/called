@@ -419,6 +419,8 @@ export interface Profile {
   stage?: 'highSchool' | 'graduated' | 'college' | 'working' | 'other';
   location?: ProfileLocation;
   current?: CurrentSituation;
+  /** Why they came: the journey Called guides them through. Changeable anytime. */
+  goal?: 'purpose' | 'fit' | 'change' | 'lookup' | 'decide';
 
   interests: Record<string, LikeAnswer>;
   skills: Partial<Record<SkillId, SkillLevel>>;

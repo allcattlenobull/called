@@ -112,6 +112,7 @@ export function normalizeProfile(input: unknown): Profile {
       if (location) location.considering = location.considering.slice(0, 3).filter((x): x is string => typeof x === 'string');
     }
   }
+  if (out.goal !== undefined && !['purpose', 'fit', 'change', 'lookup', 'decide'].includes(out.goal)) out.goal = undefined;
   if (out.current !== undefined) {
     const c = out.current as unknown;
     if (!c || typeof c !== 'object' || Array.isArray(c)) out.current = undefined;
@@ -146,6 +147,7 @@ export function uid(prefix = 'id'): string {
 export function hasStarted(p: Profile): boolean {
   return (
     p.onboarded ||
+    !!p.goal ||
     Object.keys(p.completed).length > 0 ||
     p.saved.length > 0 ||
     p.simulations.length > 0 ||

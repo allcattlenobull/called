@@ -8,6 +8,8 @@ import { useDocumentTitle } from '../lib/useDocumentTitle';
 import { RestoreForm } from '../components/JourneyCode';
 import type { Profile } from '../types';
 import { TERMS_VERSION } from '../lib/terms';
+import { Doors } from '../components/Doors';
+import { JOURNEYS } from '../lib/journeys';
 
 const EVIDENCE = ['who you are', 'what you value', 'what you’re good at', 'what you’re curious about', 'what kind of life you want', 'and what work might fit'];
 
@@ -15,10 +17,11 @@ export default function Welcome() {
   useDocumentTitle('Welcome');
   const { profile, update, settings, setSettings } = useStore();
   const navigate = useNavigate();
+  const journey = profile.goal ? JOURNEYS[profile.goal] : undefined;
   const [step, setStep] = useState<0 | 1>(0);
   const [name, setName] = useState(profile.name ?? '');
   const [lastName, setLastName] = useState(profile.lastName ?? '');
-  const [stage, setStage] = useState<Profile['stage']>(profile.stage);
+  const [stage, setStage] = useState<Profile['stage']>(profile.stage ?? (profile.goal === 'change' ? 'working' : undefined));
   const [city, setCity] = useState(profile.location?.city ?? '');
   const [state, setState] = useState(profile.location?.state ?? '');
   const [zip, setZip] = useState(profile.location?.zip ?? '');
@@ -29,7 +32,7 @@ export default function Welcome() {
       p.onboarded = true;
       p.name = name.trim() || undefined;
       p.lastName = lastName.trim() || undefined;
-      p.stage = stage;
+      p.stage = stage ?? (p.goal === 'change' ? 'working' : undefined);
       if (city.trim() || state.trim() || zip.trim()) p.location = { city: city.trim() || undefined, state: state.trim().toUpperCase() || undefined, zip: zip.trim() || undefined, considering: p.location?.considering ?? [], place: p.location?.state === (state.trim().toUpperCase() || undefined) ? p.location?.place : undefined };
     });
     navigate(to);
@@ -125,25 +128,39 @@ export default function Welcome() {
               </span>
             </label>
           </div>
-          <h2 className="h3" style={{ marginTop: 'var(--s-7)' }}>
-            How do you want to begin?
-          </h2>
-          <div className="grid grid--2 welcome__choices">
-            <button type="button" className="choice-card" onClick={() => finish('/discover/interests')}>
-              <span className="choice-card__title">Build my Purpose Compass</span>
-              <span className="choice-card__text">Start with a 4-minute interests check, then keep going at your own pace.</span>
-              <span className="choice-card__go">
-                Start with interests <Icon name="arrowRight" size={16} />
-              </span>
-            </button>
-            <button type="button" className="choice-card" onClick={() => finish('/careers')}>
-              <span className="choice-card__title">Start exploring now</span>
-              <span className="choice-card__text">Browse careers, read reality checks, and try simulations. Add evidence whenever you want.</span>
-              <span className="choice-card__go">
-                Browse careers <Icon name="arrowRight" size={16} />
-              </span>
-            </button>
-          </div>
+          {journey ? (
+            <div className="welcome__start">
+              <h2 className="h3">You’re starting: {journey.goal === 'change' ? 'Change careers without starting over' : journey.door}</h2>
+              <p className="muted">{journey.blurb}</p>
+              <div className="row">
+                <button type="button" className="btn btn--primary btn--lg" onClick={() => finish('/')}>
+                  Start my journey <Icon name="arrowRight" size={18} />
+                </button>
+                <button type="button" className="btn btn--quiet" onClick={() => update((p) => void (p.goal = undefined))}>
+                  Choose something else
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div style={{ marginTop: 'var(--s-7)' }}>
+              <Doors
+                heading="What brings you here?"
+                onChoose={(goal) => {
+                  update((p) => void (p.goal = goal));
+                  finish('/');
+                }}
+                onSearch={(q) => {
+                  update((p) => void (p.goal = 'lookup'));
+                  finish(q ? `/careers?q=${encodeURIComponent(q)}` : '/careers');
+                }}
+              />
+              <p className="small" style={{ marginTop: 'var(--s-3)' }}>
+                <button type="button" className="linkish" onClick={() => finish('/careers')}>
+                  Just let me look around
+                </button>
+              </p>
+            </div>
+          )}
           <p className="small muted" style={{ marginTop: 'var(--s-5)' }}>
             <Link to="/about">Read how Called works</Link> before you begin.
           </p>

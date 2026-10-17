@@ -29,6 +29,9 @@ const Achievements = lazy(() => import('./pages/Achievements'));
 const Network = lazy(() => import('./pages/Network'));
 const Places = lazy(() => import('./pages/Places'));
 const WhereNow = lazy(() => import('./pages/WhereNow'));
+const AboutMe = lazy(() => import('./pages/AboutMe'));
+const GiftsGuide = lazy(() => import('./pages/GiftsGuide'));
+const Helping = lazy(() => import('./pages/Helping'));
 const ResearchCheckIn = lazy(() => import('./pages/ResearchCheckIn'));
 const SharedReport = lazy(() => import('./pages/SharedReport'));
 const Feedback = lazy(() => import('./pages/Feedback'));
@@ -85,6 +88,9 @@ export function App() {
             <Route path="/network" element={<Network />} />
             <Route path="/places" element={<Places />} />
             <Route path="/now" element={<WhereNow />} />
+            <Route path="/me" element={<AboutMe />} />
+            <Route path="/gifts" element={<GiftsGuide />} />
+            <Route path="/helping" element={<Helping />} />
             <Route path="/about" element={<About />} />
             <Route path="/research" element={<Research />} />
             <Route path="/data" element={<YourData />} />
