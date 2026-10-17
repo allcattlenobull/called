@@ -137,7 +137,7 @@ export default function JourneyHome() {
         </section>
       ) : (
         <div className="journey-switch">
-          <Doors heading={journey ? 'What are you here for now?' : 'What brings you here?'} current={profile.goal} onChoose={setGoal} />
+          <Doors heading="What would you like to explore today?" current={profile.goal} onChoose={setGoal} />
           {journey && (
             <button type="button" className="btn btn--quiet btn--sm" onClick={() => setSwitching(false)}>
               Keep my current journey

@@ -9,7 +9,7 @@ test('a new user can go from onboarding to exploring a path, and it persists', a
   await page.goto('');
   await expect(page.getByRole('heading', { name: 'You don’t need your whole life figured out.' })).toBeVisible();
   // Front door: “Find careers that fit me” asks one question, then starts the fit journey.
-  const doors = page.getByRole('region', { name: 'What brings you here?' });
+  const doors = page.getByRole('region', { name: 'What would you like to explore today?' });
   await doors.getByRole('button', { name: /Find my fit/ }).click();
   await doors.getByRole('button', { name: 'No, I’m in school or starting out' }).click();
 
@@ -425,7 +425,7 @@ test('the accessibility menu controls appearance, text size and Spanish access',
 
 test('the front door looks up a career with no setup', async ({ page }) => {
   await page.goto('');
-  const doors = page.getByRole('region', { name: 'What brings you here?' });
+  const doors = page.getByRole('region', { name: 'What would you like to explore today?' });
   await doors.getByRole('searchbox', { name: 'Search careers' }).fill('acountant');
   await doors.getByRole('button', { name: 'Search careers' }).click();
   await expect(page).toHaveURL(/careers\?q=acountant/);
@@ -434,7 +434,7 @@ test('the front door looks up a career with no setup', async ({ page }) => {
 
 test('a career changer gets a guided journey with a progress bar on every page', async ({ page }) => {
   await page.goto('');
-  const doors = page.getByRole('region', { name: 'What brings you here?' });
+  const doors = page.getByRole('region', { name: 'What would you like to explore today?' });
   await doors.getByRole('button', { name: /Find my fit/ }).click();
   await doors.getByRole('button', { name: 'Yes, and I want a change' }).click();
   await page.getByLabel('I agree to the Guest Terms of Use').check();
@@ -468,6 +468,6 @@ test('a career changer gets a guided journey with a progress bar on every page',
 
 test('helpers have their own starting page', async ({ page }) => {
   await page.goto('');
-  await page.getByRole('region', { name: 'What brings you here?' }).getByRole('link', { name: 'Start here', exact: true }).click();
+  await page.getByRole('region', { name: 'What would you like to explore today?' }).getByRole('link', { name: 'Start here', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Helping someone find their way', level: 1 })).toBeVisible();
 });

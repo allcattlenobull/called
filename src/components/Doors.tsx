@@ -6,7 +6,7 @@ import { TERMS_VERSION } from '../lib/terms';
 import { Icon } from './Icon';
 
 /**
- * “What brings you here?” Four doors in people’s own words, plus a link for helpers.
+ * “What would you like to explore today?” Four doors in people’s own words, plus a link for helpers.
  * Choosing a door saves the goal (changeable anytime). By default, journeys start after the
  * guest terms are accepted; looking up a career needs no setup at all.
  */
@@ -14,7 +14,7 @@ export function Doors({
   onChoose,
   onSearch,
   current,
-  heading = 'What brings you here?',
+  heading = 'What would you like to explore today?',
   headingLevel = 2,
 }: {
   onChoose?: (goal: Goal) => void;

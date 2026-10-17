@@ -144,7 +144,7 @@ export default function Welcome() {
           ) : (
             <div style={{ marginTop: 'var(--s-7)' }}>
               <Doors
-                heading="What brings you here?"
+                heading="What would you like to explore today?"
                 onChoose={(goal) => {
                   update((p) => void (p.goal = goal));
                   finish('/');

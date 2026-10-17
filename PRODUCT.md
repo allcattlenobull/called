@@ -38,7 +38,7 @@ Nobody has to follow this order, and nothing requires a long questionnaire up fr
 
 ### Journeys start from why someone came
 
-The stages above describe Called's pages. People arrive with a question of their own, so the home page asks **“What brings you here?”** and offers four doors in their words. Each door starts a short guided journey whose steps check themselves off from evidence already in the profile, so the next step is always known.
+The stages above describe Called's pages. People arrive with a question of their own, so the home page asks **“What would you like to explore today?”** and offers four doors in their words. “Today” is deliberate: any door can be a complete visit, not step one of a program. Each door starts a short guided journey whose steps check themselves off from evidence already in the profile, so the next step is always known.
 
 | Door | Who it serves | Journey (`goal`) |
 | --- | --- | --- |
